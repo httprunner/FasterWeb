@@ -1,0 +1,129 @@
+<template>
+    <el-table
+        highlight-current-row
+        strpe
+        max-height="470"
+        :data="tableData"
+        style="width: 100%;"
+        @cell-mouse-enter="cellMouseEnter"
+        @cell-mouse-leave="cellMouseLeave"
+    >
+        <el-table-column
+            fixed
+            label="标签"
+            width="300">
+            <template slot-scope="scope">
+                <el-input clearable v-model="scope.row.key" placeholder="定义变量名"></el-input>
+            </template>
+        </el-table-column>
+        <el-table-column
+            label="内容"
+            width="420">
+            <template slot-scope="scope">
+                <el-input clearable v-model="scope.row.value" placeholder="要抽取的key"></el-input>
+
+            </template>
+        </el-table-column>
+
+        <el-table-column
+            label="描述"
+            width="200">
+            <template slot-scope="scope">
+                <el-input clearable v-model="scope.row.desc" placeholder="抽取值简要描述"></el-input>
+            </template>
+        </el-table-column>
+
+        <el-table-column
+            width="130">
+            <template slot-scope="scope">
+                <el-row v-show="scope.row === currentRow">
+                    <el-button
+                        icon="el-icon-circle-plus-outline"
+                        size="mini"
+                        type="info"
+                        @click="handleEdit(scope.$index, scope.row)">
+                    </el-button>
+
+                    <el-button
+                        icon="el-icon-delete"
+                        size="mini"
+                        type="danger"
+                        v-show="scope.$index !== 0"
+                        @click="handleDelete(scope.$index, scope.row)">
+                    </el-button>
+                </el-row>
+
+            </template>
+        </el-table-column>
+    </el-table>
+
+</template>
+
+<script>
+    export default {
+        props: {
+            save: Boolean
+        },
+
+        watch: {
+            save: function () {
+                this.$emit('extract', this.parseExtract());
+            }
+        },
+
+        methods: {
+            cellMouseEnter(row) {
+                this.currentRow = row;
+            },
+
+            cellMouseLeave(row) {
+                this.currentRow = '';
+            },
+
+            handleEdit(index, row) {
+                this.tableData.push({
+                    key: '',
+                    value: '',
+                    desc: ''
+                });
+            },
+
+            handleDelete(index, row) {
+                this.tableData.splice(index, 1);
+            },
+            // 抽取格式化
+            parseExtract() {
+                let extract = {
+                    extract: [],
+                    desc: {}
+                };
+                for (let content of this.tableData) {
+                    const key = content['key'] ;
+                    const value = content['value'];
+                    if (key !== '' && value !== '') {
+                        let obj = {};
+                        obj[key] = value;
+                        extract.extract.push(obj);
+                        extract.desc[key] = content['desc'];
+                    }
+                }
+                return extract;
+            }
+        },
+
+        data() {
+            return {
+                currentRow: '',
+                tableData: [{
+                    key: '',
+                    value: '',
+                    desc: ''
+                }]
+            }
+        },
+        name: "Extract"
+    }
+</script>
+
+<style scoped>
+</style>
