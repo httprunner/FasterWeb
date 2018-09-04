@@ -1,17 +1,14 @@
 <template>
     <el-container>
-        <el-header style="background: #fff; padding: 0; height: 50px">
-            <div>
-                <div style="padding-top: 10px; margin-left: 10px">
-                    <el-button type="success"
-                               size="small"
-                               icon="el-icon-circle-check-outline"
-                               @click="handleConfirm"
-                    >
-                        点击保存
-                    </el-button>
-
-                </div>
+        <el-header style="background-color: #F7F7F7;; padding: 0; height: 50px">
+            <div style="padding-top: 10px; margin-left: 10px">
+                <el-button type="success"
+                           size="small"
+                           icon="el-icon-circle-check-outline"
+                           @click="handleConfirm"
+                >
+                    点击保存
+                </el-button>
             </div>
 
         </el-header>
@@ -50,10 +47,11 @@
             handleConfirm() {
                 this.$api.updateDebugtalk(this.code).then(res => {
                     this.getDebugTalk();
+                    this.$message.success("debugtalk.py保存成功");
                 }).catch(resp => {
                     this.$message.error({
-                        message:'服务器连接超时，请重试',
-                        duration:1000
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
                     })
                 })
             },
@@ -68,8 +66,8 @@
                     this.code = res;
                 }).catch(resp => {
                     this.$message.error({
-                        message:'服务器连接超时，请重试',
-                        duration:1000
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
                     })
                 })
             }

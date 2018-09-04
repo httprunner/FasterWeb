@@ -62,12 +62,18 @@
 <script>
     export default {
         props: {
-            save: Boolean
+            save: Boolean,
+            extract: {
+                require: false
+            }
         },
 
         watch: {
             save: function () {
                 this.$emit('extract', this.parseExtract());
+            },
+            extract: function () {
+                this.tableData = this.extract;
             }
         },
 
@@ -114,11 +120,7 @@
         data() {
             return {
                 currentRow: '',
-                tableData: [{
-                    key: '',
-                    value: '',
-                    desc: ''
-                }]
+                tableData: this.extract
             }
         },
         name: "Extract"

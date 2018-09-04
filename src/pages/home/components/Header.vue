@@ -67,12 +67,6 @@
 
 <style scoped>
 
-    .search-input {
-        border: 1px solid #ddd;
-        width: 200px;
-        height: 26px;
-        border-radius: 3px;
-    }
 
     .header {
         margin: 0;
@@ -85,7 +79,7 @@
     }
 
     .li-second {
-        width: 145px;
+        width: 125px;
         padding: 10px auto;
         border-right: 1px solid #ddd;
     }

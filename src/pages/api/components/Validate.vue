@@ -96,12 +96,19 @@
 <script>
     export default {
         props:{
-            save: Boolean
+            save: Boolean,
+            validate: {
+                require: false
+            }
         },
 
         watch: {
             save: function () {
                 this.$emit('validate', this.parseValidate());
+            },
+
+            validate: function () {
+                this.tableData = this.validate;
             }
         },
 
@@ -154,10 +161,10 @@
                         tempValue = parseFloat(value);
                         break;
                     case 4:
-                        if (value === 'false' || value === 'true') {
+                        if (value === 'False' || value === 'True') {
                             let bool = {
-                                'true': true,
-                                'false': false
+                                'True': true,
+                                'False': false
                             };
                             tempValue = bool[value];
                         } else{
@@ -212,12 +219,7 @@
             return {
                 currentValidate:'',
                 currentRow: '',
-                tableData: [{
-                    expect: '',
-                    actual: '',
-                    comparator: 'equals',
-                    type: 1
-                }],
+                tableData: this.validate,
 
                 dataTypeOptions: [{
                     label: 'String',

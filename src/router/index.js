@@ -8,6 +8,7 @@ import DataBase from '@/pages/common/DataBase'
 import ProjectDetail from '@/pages/project/ProjectDetail'
 import DebugTalk from '@/pages/project/DebugTalk'
 import RecordApi from '@/pages/common/RecordApi'
+import TestSuite from '@/pages/common/TestSuite'
 
 Vue.use(Router)
 
@@ -79,7 +80,16 @@ export default new Router({
                         title: '接口'
                     }
 
-                }]
+                },
+                {
+                    name: 'TestSuite',
+                    path: 'test_suite/:id',
+                    component: TestSuite,
+                    meta: {
+                        title: '测试套件'
+                    }
+                }
+            ]
         }
     ]
 })

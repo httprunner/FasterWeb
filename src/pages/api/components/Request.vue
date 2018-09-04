@@ -146,7 +146,10 @@
 <script>
     export default {
         props: {
-            save: Boolean
+            save: Boolean,
+            request:{
+                require:false
+            },
         },
 
         name: "Request",
@@ -163,6 +166,12 @@
                     params: this.parseParams(),
                     files: this.parseFile()
                 });
+            },
+
+            request: function () {
+                this.formData = this.request.data;
+                this.jsonData = this.request.json_data;
+                this.paramsData = this.request.params;
             }
         },
 
@@ -323,10 +332,10 @@
                         tempValue = parseFloat(value);
                         break;
                     case 4:
-                        if (value === 'false' || value === 'true') {
+                        if (value === 'False' || value === 'True') {
                             let bool = {
-                                'true': true,
-                                'false': false
+                                'True': true,
+                                'False': false
                             };
                             tempValue = bool[value];
                         } else {
@@ -358,21 +367,9 @@
                 tempFileList: [],
                 fileList: [],
                 currentRow: '',
-                jsonData: '',
-
-                formData: [{
-                    key: '',
-                    value: '',
-                    type: 1,
-                    desc: ''
-                }],
-
-                paramsData: [{
-                    key: '',
-                    value: '',
-                    type: 1,
-                    desc: ''
-                }],
+                jsonData: this.request.json_data,
+                formData: this.request.data,
+                paramsData: this.request.params,
 
                 dataTypeOptions: [{
                     label: 'String',

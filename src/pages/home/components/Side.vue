@@ -82,7 +82,7 @@
     .item-li {
         height: 50px;
         line-height: 50px;
-        width: 200px;
+        width: 180px;
         cursor: pointer;
 
     }

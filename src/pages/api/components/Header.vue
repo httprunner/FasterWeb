@@ -67,9 +67,13 @@
 </template>
 
 <script>
+
     export default {
-        props: {
-            save: Boolean
+        props:{
+            save:Boolean,
+            header:{
+                require:false
+            }
         },
         methods: {
             querySearch(queryString, cb) {
@@ -122,6 +126,10 @@
         watch: {
             save: function () {
                 this.$emit('header', this.parseHeader());
+            },
+
+            header: function () {
+                this.tableData = this.header;
             }
         },
         data() {
@@ -191,11 +199,7 @@
                 }],
 
                 currentRow: '',
-                tableData: [{
-                    key: '',
-                    value: '',
-                    desc: ''
-                }]
+                tableData: this.header
             }
         },
         name: "Header"

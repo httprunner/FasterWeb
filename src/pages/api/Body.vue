@@ -63,33 +63,90 @@
                 v-model="activeTag"
             >
                 <el-tab-pane label="Header" name="first">
-                    <api-header :save="save" v-on:header="handleHeader"></api-header>
+                    <api-header :save="save"
+                                v-on:header="handleHeader"
+                                :header="response ? response.body.header: [{key:'', value:'', desc:''}] ">
+                    </api-header>
                 </el-tab-pane>
 
                 <el-tab-pane label="Request" name="second">
-                    <api-request :save="save" v-on:request="handleRequest"></api-request>
+                    <api-request
+                        :save="save"
+                        v-on:request="handleRequest"
+                        :request="response ? response.body.request: {
+                            data: [{
+                                key: '',
+                                value: '',
+                                type: 1,
+                                desc: ''
+                            }],
+                            params: [{
+                                key: '',
+                                value: '',
+                                type: '',
+                                desc: ''
+                            }],
+                            json_data:''
+                        } "
+                    >
+                    </api-request>
                 </el-tab-pane>
 
                 <el-tab-pane label="Extract" name="third">
-                    <api-extract :save="save" v-on:extract="handleExtract"></api-extract>
+                    <api-extract
+                        :save="save"
+                        v-on:extract="handleExtract"
+                        :extract="response ? response.body.extract : [{
+                            key: '',
+                            value: '',
+                            desc: ''
+                        }]"
+                    >
+                    </api-extract>
                 </el-tab-pane>
 
                 <el-tab-pane label="Validate" name="fourth">
-                    <api-validate :save="save" v-on:validate="handleValidate"></api-validate>
+                    <api-validate
+                        :save="save"
+                        v-on:validate="handleValidate"
+                        :validate="response ? response.body.validate: [{
+                            expect: '',
+                            actual: '',
+                            comparator: 'equals',
+                            type: 1
+                        }]"
+                    >
+
+                    </api-validate>
                 </el-tab-pane>
 
                 <el-tab-pane label="Variables" name="five">
-                    <api-variables :save="save" v-on:variables="handleVariables"></api-variables>
+                    <api-variables
+                        :save="save"
+                        v-on:variables="handleVariables"
+                        :variables="response ? response.body.variables : [{
+                            key: '',
+                            value: '',
+                            type: 1,
+                            desc: ''
+                        }]"
+                    >
+
+                    </api-variables>
                 </el-tab-pane>
 
                 <el-tab-pane label="Hooks" name="six">
-                    <api-hooks :save="save" v-on:hooks="handleHooks"></api-hooks>
+                    <api-hooks
+                        :save="save"
+                        v-on:hooks="handleHooks"
+                        :hooks="response ? response.body.hooks: [{
+                            setup: '',
+                            teardown: ''
+                        }]"
+                    >
+                    </api-hooks>
                 </el-tab-pane>
             </el-tabs>
-        </div>
-
-        <div class="response">
-
         </div>
     </div>
 
@@ -116,12 +173,13 @@
 
         props: {
             nodeId: {
-                type: Number,
-                require: true
+                require: false
             },
             project: {
-                type: Number,
-                require:true
+                require: false
+            },
+            response: {
+                require: false
             }
         },
         methods: {
@@ -193,6 +251,15 @@
                         })
                     })
                 }
+            }
+        },
+
+        watch: {
+            response: function () {
+                this.name = this.response.body.name;
+                this.method = this.response.body.method;
+                this.url = this.response.body.url;
+                this.times = this.response.body.times;
             }
         },
         data() {

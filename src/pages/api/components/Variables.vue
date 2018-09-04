@@ -82,12 +82,19 @@
         name: "Variables",
 
         props:{
-            save: Boolean
+            save: Boolean,
+            variables: {
+                require: false
+            }
         },
 
         watch: {
             save: function () {
                 this.$emit('variables', this.parseVariables());
+            },
+
+            variables: function () {
+                this.tableData = this.variables;
             }
         },
 
@@ -128,10 +135,10 @@
                         tempValue = parseFloat(value);
                         break;
                     case 4:
-                        if (value === 'false' || value === 'true') {
+                        if (value === 'True' || value === 'False') {
                             let bool = {
-                                'true': true,
-                                'false': false
+                                'True': true,
+                                'False': false
                             };
                             tempValue = bool[value];
                         } else{
@@ -189,13 +196,7 @@
         data() {
             return {
                 currentRow: '',
-                tableData: [{
-                    key: '',
-                    value: '',
-                    type: 1,
-                    desc: ''
-                }],
-
+                tableData: this.variables,
 
                 dataTypeOptions: [{
                     label: 'String',

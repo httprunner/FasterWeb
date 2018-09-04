@@ -1,7 +1,7 @@
 <template>
     <el-container>
         <el-header style="background: #fff; padding: 0; height: 50px">
-            <div class="nav-api-header">
+            <div class="apiData">
                 <div style="padding-top: 10px; margin-left: 10px">
                     <el-button type="success"
                                size="small"

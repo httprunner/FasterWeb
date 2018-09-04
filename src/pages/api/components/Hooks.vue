@@ -64,12 +64,19 @@
 <script>
     export default {
         props:{
-            save: Boolean
+            save: Boolean,
+            hooks: {
+                require:false
+            }
         },
 
         watch: {
             save: function () {
                 this.$emit('hooks', this.parse_hooks());
+            },
+
+            hooks: function () {
+              this.tableData = this.hooks;
             }
         },
 
@@ -112,10 +119,7 @@
         data() {
             return {
                 currentRow: '',
-                tableData: [{
-                    setup: '',
-                    teardown: ''
-                }]
+                tableData: this.hooks
             }
         },
         name: "Hooks"
