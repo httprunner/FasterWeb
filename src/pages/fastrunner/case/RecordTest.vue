@@ -10,55 +10,89 @@
                         icon="el-icon-circle-plus"
                         @click="dialogVisible = true"
                     >
-                        添加Suite
+                        新建分组
                     </el-button>
 
-
                     <el-dialog
-                        title="添加Suite"
+                        title="添加分组"
                         :visible.sync="dialogVisible"
                         width="30%"
                         align="center"
                     >
                         <el-form
-                            :model="suiteForm"
+                            :model="nodeForm"
                             :rules="rules"
-                            ref="suiteForm"
+                            ref="nodeForm"
                             label-width="100px"
                             class="project">
-                            <el-form-item label="Suite名称" prop="name">
-                                <el-input v-model="suiteForm.name"></el-input>
-                            </el-form-item>
-                            <el-form-item label="简要描述" prop="desc">
-                                <el-input v-model="suiteForm.desc"></el-input>
+                            <el-form-item label="节点名称" prop="name">
+                                <el-input v-model="nodeForm.name"></el-input>
                             </el-form-item>
                         </el-form>
 
+                        <el-radio-group v-model="radio" size="small">
+                            <el-radio-button label="根节点"></el-radio-button>
+                            <el-radio-button label="子节点"></el-radio-button>
+                        </el-radio-group>
+
                         <span slot="footer" class="dialog-footer">
                         <el-button @click="dialogVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="handleConfirm('suiteForm')">确 定</el-button>
+                        <el-button type="primary" @click="handleConfirm('nodeForm')">确 定</el-button>
                       </span>
                     </el-dialog>
 
                     <el-button
-                        type="info"
+                        type="danger"
                         size="small"
-                        icon="el-icon-tickets"
-                    >Suite列表
+                        icon="el-icon-delete"
+                        @click="deleteNode"
+                    >删除分组
                     </el-button>
 
+                    <el-button
+                        type="warning"
+                        size="small"
+                        icon="el-icon-circle-plus-outline"
+                        @click="addTestActivate = false"
+                    >添加用例
+                    </el-button>
+
+                    <el-button type="primary" plain size="small" icon="el-icon-upload">导入用例</el-button>
+                    <el-button type="info" plain size="small" icon="el-icon-download">导出用例</el-button>
 
                     <el-checkbox style="margin-left: 40px;">全选</el-checkbox>
+
                     <el-button type="warning" icon="el-icon-star-off" circle size="mini"
                                style="margin-left: 20px"></el-button>
                     <el-button type="danger" icon="el-icon-delete" circle size="mini"></el-button>
+
+
+                    <el-tooltip class="item" effect="dark" content="环境信息" placement="top-start">
+                        <el-button plain size="small" icon="el-icon-view"></el-button>
+                    </el-tooltip>
+
+                    <el-select placeholder="请选择"
+                               size="small"
+                               tyle="margin-left: -6px"
+                               v-model="currentConfig"
+                    >
+                        <el-option
+                            v-for="item in configOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
 
                 </div>
             </div>
         </el-header>
 
         <el-container>
-            <el-aside style="width: 260px; margin-top: 10px; overflow: auto" v-if="false">
+            <el-aside
+                style="width: 260px; margin-top: 10px; overflow: auto"
+                v-if="addTestActivate"
+            >
                 <div class="nav-api-side">
                     <div class="api-tree">
                         <el-input
@@ -88,14 +122,20 @@
                                 <span><i class="iconfont" v-html="expand"></i>&nbsp;&nbsp;{{ node.label }}</span>
                             </span>
                             </el-tree>
+
                         </div>
                     </div>
+
                 </div>
 
             </el-aside>
 
-            <el-main style="padding: 0; margin-top: 10px">
-                <suite-list></suite-list>
+            <el-main style="padding: 0; ">
+                <add-test
+                    v-if="!addTestActivate"
+                    :project="this.$route.params.id"
+                ></add-test>
+
 
             </el-main>
         </el-container>
@@ -104,7 +144,7 @@
 </template>
 
 <script>
-    import SuiteList from './SuiteList'
+    import AddTest from './components/AddTest'
 
     export default {
         watch: {
@@ -113,38 +153,41 @@
             }
         },
         components: {
-            SuiteList
+            AddTest
         },
         data() {
             return {
-                response: '',
-                suiteForm: {
+                nodeForm: {
                     name: '',
-                    desc: '',
-                    project: this.$route.params.id
                 },
                 rules: {
                     name: [
-                        {required: true, message: '请输入Suite名称', trigger: 'blur'},
-                        {min: 1, max: 50, message: '最多不超过50个字符', trigger: 'blur'}
-                    ],
-                    desc: [
-                        {required: true, message: '请简要描述下该Suite', trigger: 'blur'},
+                        {required: true, message: '请输入节点名称', trigger: 'blur'},
                         {min: 1, max: 50, message: '最多不超过50个字符', trigger: 'blur'}
                     ]
                 },
+                radio: '子节点',
+                addTestActivate: true,
+                currentConfig: '',
+                treeId: '',
+                maxId: '',
                 dialogVisible: false,
                 currentNode: '',
                 data: '',
                 filterText: '',
                 expand: '&#xe667;',
                 dataTree: [],
+                configOptions: [{
+                    value: '测试环境',
+                    label: '测试环境'
+                }]
             }
         },
         methods: {
             getTree() {
-                this.$api.getTree(this.$route.params.id).then(resp => {
+                this.$api.getTree(this.$route.params.id, {params: {type: 2}}).then(resp => {
                     this.dataTree = resp['tree'];
+                    this.treeId = resp['id'];
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',
@@ -153,25 +196,54 @@
                 })
             },
 
-            //新增Suite
+            updateTree(mode) {
+                this.$api.updateTree(this.treeId, {
+                    mode: mode,
+                    body: this.dataTree
+                }).then(resp => {
+                    if (resp['success']) {
+                        this.$message.success(resp['msg']);
+                        this.dataTree = resp['tree'];
+                        this.maxId = resp['max'];
+                    } else {
+                        this.$message.error(resp['msg']);
+                    }
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
+
+            deleteNode() {
+                this.$confirm('此操作将永久删除该节点下所有接口, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    if (this.currentNode === '') {
+                        this.$message.info('请选择一个节点');
+                    } else {
+                        if (this.currentNode.children.length !== 0) {
+                            this.$message.warning('此节点有子节点，不可删除！');
+                        } else {
+                            this.remove(this.currentNode, this.data);
+                            this.updateTree(true);
+                        }
+                    }
+
+                })
+            },
+
             handleConfirm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.addSuite();
+                        this.append(this.currentNode);
+                        this.updateTree(false);
                         this.dialogVisible = false;
                     }
                 });
-            },
-
-            addSuite() {
-                this.$api.addSuite(this.suiteForm).then(resp => {
-                    this.$router.go(0);
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
-                })
             },
 
             handleNodeClick(node, data) {
@@ -183,8 +255,28 @@
                 if (!value) return true;
                 return data.label.indexOf(value) !== -1;
             },
+
+            remove(node, data) {
+                const parent = data.parent;
+                const children = parent.data.children || parent.data;
+                const index = children.findIndex(d => d.id === data.id);
+                children.splice(index, 1);
+            },
+
+            append(data) {
+                const newChild = {id: ++this.maxId, label: this.nodeForm.name, children: []};
+                if (data === '' || this.dataTree.length === 0 || this.radio === '根节点') {
+                    this.dataTree.push(newChild);
+                    return
+                }
+                if (!data.children) {
+                    this.$set(data, 'children', []);
+                }
+                data.children.push(newChild);
+            }
+
         },
-        name: "TestSuite",
+        name: "RecordTest",
         mounted() {
             this.getTree();
         }
@@ -222,7 +314,7 @@
         width: 240px;
         margin-left: 10px;
         border-radius: 4px;
-        height: 630px;
+        height: 610px;
     }
 
     .custom-tree-node {
@@ -253,6 +345,5 @@
     .el-tree-node__content {
         height: 50px;
     }
-
 
 </style>

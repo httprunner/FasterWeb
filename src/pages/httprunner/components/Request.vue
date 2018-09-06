@@ -12,7 +12,7 @@
         </div>
         <div style="margin-top: 5px">
             <el-table
-                highlight-current-row
+                :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
                 strpe
                 max-height="450"
                 :data="dataType === 'data' ? formData: paramsData"
@@ -169,9 +169,11 @@
             },
 
             request: function () {
-                this.formData = this.request.data;
-                this.jsonData = this.request.json_data;
-                this.paramsData = this.request.params;
+                if (this.request.length !== 0) {
+                    this.formData = this.request.data;
+                    this.jsonData = this.request.json_data;
+                    this.paramsData = this.request.params;
+                }
             }
         },
 
@@ -367,9 +369,19 @@
                 tempFileList: [],
                 fileList: [],
                 currentRow: '',
-                jsonData: this.request.json_data,
-                formData: this.request.data,
-                paramsData: this.request.params,
+                jsonData: '',
+                formData: [{
+                    key: '',
+                    value: '',
+                    type: 1,
+                    desc: ''
+                }],
+                paramsData: [{
+                    key: '',
+                    value: '',
+                    type: '',
+                    desc: ''
+                }],
 
                 dataTypeOptions: [{
                     label: 'String',

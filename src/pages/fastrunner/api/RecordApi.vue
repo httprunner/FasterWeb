@@ -14,7 +14,7 @@
                     </el-button>
 
                     <el-dialog
-                        title="添加分组"
+                        title="新建分组"
                         :visible.sync="dialogVisible"
                         width="30%"
                         align="center"
@@ -42,6 +42,7 @@
                     </el-dialog>
 
                     <el-button
+                        :disabled="currentNode === '' "
                         type="danger"
                         size="small"
                         icon="el-icon-delete"
@@ -50,6 +51,7 @@
                     </el-button>
 
                     <el-button
+                        :disabled="currentNode === '' "
                         type="warning"
                         size="small"
                         icon="el-icon-circle-plus-outline"
@@ -57,24 +59,59 @@
                     >添加接口
                     </el-button>
 
-                    <el-button type="primary" plain size="small" icon="el-icon-upload">导入接口</el-button>
-                    <el-button type="info" plain size="small" icon="el-icon-download">导出接口</el-button>
+                    <el-button
+                        type="primary"
+                        plain
+                        size="small"
+                        icon="el-icon-upload"
+                        :disabled="currentNode === '' "
+                    >导入接口
+                    </el-button>
+                    <el-button
+                        type="info"
+                        plain
+                        size="small"
+                        icon="el-icon-download"
+                        :disabled="currentNode === '' "
+                    >导出接口
+                    </el-button>
 
-                    <el-checkbox style="margin-left: 40px;">全选</el-checkbox>
+                    <el-checkbox
+                        v-model="checked"
+                        style="margin-left: 40px;"
+                        :disabled="currentNode === ''"
+                    >全选
+                    </el-checkbox>
 
-                    <el-button type="warning" icon="el-icon-star-off" circle size="mini"
-                               style="margin-left: 20px"></el-button>
-                    <el-button type="danger" icon="el-icon-delete" circle size="mini"></el-button>
+                    <el-button
+                        type="warning"
+                        icon="el-icon-star-off"
+                        circle
+                        size="mini"
+                        style="margin-left: 20px"
+                        :disabled="currentNode === ''"
+                    ></el-button>
+
+                    <el-button
+                        type="danger"
+                        icon="el-icon-delete"
+                        circle
+                        size="mini"
+                        :disabled="currentNode === ''"
+                        @click="del = !del"
+                    ></el-button>
 
 
                     <el-tooltip class="item" effect="dark" content="环境信息" placement="top-start">
                         <el-button plain size="small" icon="el-icon-view"></el-button>
                     </el-tooltip>
 
-                    <el-select placeholder="请选择"
-                               size="small"
-                               tyle="margin-left: -6px"
-                               v-model="currentConfig"
+                    <el-select
+                        placeholder="请选择"
+                        size="small"
+                        tyle="margin-left: -6px"
+                        :disabled="dataTree.length === 0"
+                        v-model="currentConfig"
                     >
                         <el-option
                             v-for="item in configOptions"
@@ -132,13 +169,17 @@
                     v-show="addAPIFlag"
                     :nodeId="currentNode.id"
                     :project="$route.params.id"
-                    :response = "response"
+                    :response="response"
                 >
                 </api-body>
 
                 <api-list
+                    :checked="checked"
                     v-show="!addAPIFlag"
                     v-on:api="handleAPI"
+                    :node="currentNode !== '' ? currentNode.id : '' "
+                    :project="$route.params.id"
+                    :del="del"
                 >
                 </api-list>
 
@@ -149,8 +190,8 @@
 </template>
 
 <script>
-    import ApiBody from '../api/Body'
-    import ApiList from './ApiList'
+    import ApiBody from '../../httprunner/Body'
+    import ApiList from './components/ApiList'
 
     export default {
         watch: {
@@ -164,6 +205,8 @@
         },
         data() {
             return {
+                checked:false,
+                del: false,
                 response: '',
                 nodeForm: {
                     name: '',
@@ -174,7 +217,7 @@
                         {min: 1, max: 50, message: '最多不超过50个字符', trigger: 'blur'}
                     ]
                 },
-                radio: '子节点',
+                radio: '根节点',
                 addAPIFlag: false,
                 currentConfig: '',
                 treeId: '',
@@ -185,7 +228,6 @@
                 filterText: '',
                 expand: '&#xe667;',
                 dataTree: [],
-                method: '',
                 configOptions: [{
                     value: '测试环境',
                     label: '测试环境'
@@ -193,13 +235,13 @@
             }
         },
         methods: {
-            handleAPI(response){
+            handleAPI(response) {
                 this.addAPIFlag = true;
                 this.response = response;
             },
 
             getTree() {
-                this.$api.getTree(this.$route.params.id).then(resp => {
+                this.$api.getTree(this.$route.params.id, {params: {type: 1}}).then(resp => {
                     this.dataTree = resp['tree'];
                     this.treeId = resp['id'];
                 }).catch(resp => {
@@ -210,8 +252,13 @@
                 })
             },
 
-            updateTree() {
-                this.$api.updateTree(this.treeId, this.dataTree).then(resp => {
+            updateTree(mode) {
+                this.$api.updateTree(this.treeId, {
+                    body: this.dataTree,
+                    node: this.currentNode.id,
+                    mode: mode,
+                    type: 1
+                }).then(resp => {
                     if (resp['success']) {
                         this.$message.success(resp['msg']);
                         this.dataTree = resp['tree'];
@@ -240,7 +287,7 @@
                             this.$message.warning('此节点有子节点，不可删除！');
                         } else {
                             this.remove(this.currentNode, this.data);
-                            this.updateTree();
+                            this.updateTree(true);
                         }
                     }
 
@@ -251,7 +298,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.append(this.currentNode);
-                        this.updateTree();
+                        this.updateTree(false);
                         this.dialogVisible = false;
                     }
                 });
@@ -326,7 +373,7 @@
         width: 240px;
         margin-left: 10px;
         border-radius: 4px;
-        height: 630px;
+        height: 610px;
     }
 
     .custom-tree-node {

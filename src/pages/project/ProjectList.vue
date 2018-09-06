@@ -1,8 +1,8 @@
 <template>
     <el-container>
-        <el-header style="background: #fff; padding: 0; height: 50px">
+        <el-header style="background: #F7F7F7; padding: 0; height: 50px">
             <div>
-                <div style="padding-top: 10px; margin-left: 10px">
+                <div style="padding-top: 10px; margin-left: 10px;">
                     <el-button type="success"
                                size="small"
                                icon="el-icon-circle-plus"
@@ -66,8 +66,6 @@
                     border
                     stripe
                     highlight-current-row
-                    @row-dblclick="handleCellClick"
-                    :row-style="{cursor:'pointer'}"
                     style="width: 100%;"
                 >
                     <el-table-column
@@ -78,7 +76,9 @@
                         <template slot-scope="scope">
                             <i class="iconfont">&#xe609;</i>
                             <span
-                                style="margin-left: 10px; font-size: 18px; font-weight: bold">{{ scope.row.name }}</span>
+                                style="margin-left: 10px; font-size: 18px; font-weight: bold; cursor: pointer"
+                                @click="handleCellClick(scope.row)"
+                            >{{ scope.row.name }}</span>
                         </template>
                     </el-table-column>
 
@@ -193,6 +193,7 @@
         },
         methods: {
             handleCellClick(row) {
+                console.log('1111')
                 this.$store.commit('changeBackButton');
                 this.$store.commit('changeSideMenu');
                 this.$store.commit('changeSearchButton');

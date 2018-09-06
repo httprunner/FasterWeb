@@ -1,12 +1,12 @@
 <template>
     <el-table
-        highlight-current-row
         strpe
         max-height="470"
         :data="tableData"
         style="width: 100%;"
         @cell-mouse-enter="cellMouseEnter"
         @cell-mouse-leave="cellMouseLeave"
+        :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
     >
         <el-table-column
             fixed
@@ -73,7 +73,9 @@
                 this.$emit('extract', this.parseExtract());
             },
             extract: function () {
-                this.tableData = this.extract;
+                if (this.extract.length !== 0) {
+                    this.tableData = this.extract;
+                }
             }
         },
 
@@ -120,7 +122,11 @@
         data() {
             return {
                 currentRow: '',
-                tableData: this.extract
+                tableData: [{
+                    key: '',
+                    value: '',
+                    desc: ''
+                }]
             }
         },
         name: "Extract"

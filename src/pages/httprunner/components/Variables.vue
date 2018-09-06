@@ -1,7 +1,7 @@
 <template>
 
     <el-table
-        highlight-current-row
+        :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
         strpe
         max-height="470"
         :data="tableData"
@@ -94,7 +94,9 @@
             },
 
             variables: function () {
-                this.tableData = this.variables;
+                if (this.variables.length !== 0) {
+                    this.tableData = this.variables;
+                }
             }
         },
 
@@ -196,7 +198,12 @@
         data() {
             return {
                 currentRow: '',
-                tableData: this.variables,
+                tableData: [{
+                    key: '',
+                    value: '',
+                    type: 1,
+                    desc: ''
+                }],
 
                 dataTypeOptions: [{
                     label: 'String',

@@ -4,11 +4,11 @@ import Home from '@/pages/home/Home'
 import Register from '@/pages/auth/components/Register'
 import Login from '@/pages/auth/components/Login'
 import ProjectList from '@/pages/project/ProjectList'
-import DataBase from '@/pages/common/DataBase'
+import DataBase from '@/pages/project/DataBase'
 import ProjectDetail from '@/pages/project/ProjectDetail'
-import DebugTalk from '@/pages/project/DebugTalk'
-import RecordApi from '@/pages/common/RecordApi'
-import TestSuite from '@/pages/common/TestSuite'
+import DebugTalk from '@/pages/httprunner/DebugTalk'
+import RecordApi from '@/pages/fastrunner/api/RecordApi'
+import RecordTest from '@/pages/fastrunner/case/RecordTest'
 
 Vue.use(Router)
 
@@ -82,12 +82,13 @@ export default new Router({
 
                 },
                 {
-                    name: 'TestSuite',
-                    path: 'test_suite/:id',
-                    component: TestSuite,
+                    name: 'RecordTest',
+                    path:'test_record/:id',
+                    component: RecordTest,
                     meta: {
-                        title: '测试套件'
+                        title: '用例'
                     }
+
                 }
             ]
         }

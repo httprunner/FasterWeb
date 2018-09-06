@@ -65,7 +65,7 @@
                 <el-tab-pane label="Header" name="first">
                     <api-header :save="save"
                                 v-on:header="handleHeader"
-                                :header="response ? response.body.header: [{key:'', value:'', desc:''}] ">
+                                :header="response ? response.body.header: [] ">
                     </api-header>
                 </el-tab-pane>
 
@@ -73,21 +73,7 @@
                     <api-request
                         :save="save"
                         v-on:request="handleRequest"
-                        :request="response ? response.body.request: {
-                            data: [{
-                                key: '',
-                                value: '',
-                                type: 1,
-                                desc: ''
-                            }],
-                            params: [{
-                                key: '',
-                                value: '',
-                                type: '',
-                                desc: ''
-                            }],
-                            json_data:''
-                        } "
+                        :request="response ? response.body.request: []"
                     >
                     </api-request>
                 </el-tab-pane>
@@ -96,11 +82,7 @@
                     <api-extract
                         :save="save"
                         v-on:extract="handleExtract"
-                        :extract="response ? response.body.extract : [{
-                            key: '',
-                            value: '',
-                            desc: ''
-                        }]"
+                        :extract="response ? response.body.extract : []"
                     >
                     </api-extract>
                 </el-tab-pane>
@@ -109,12 +91,7 @@
                     <api-validate
                         :save="save"
                         v-on:validate="handleValidate"
-                        :validate="response ? response.body.validate: [{
-                            expect: '',
-                            actual: '',
-                            comparator: 'equals',
-                            type: 1
-                        }]"
+                        :validate="response ? response.body.validate: []"
                     >
 
                     </api-validate>
@@ -124,12 +101,7 @@
                     <api-variables
                         :save="save"
                         v-on:variables="handleVariables"
-                        :variables="response ? response.body.variables : [{
-                            key: '',
-                            value: '',
-                            type: 1,
-                            desc: ''
-                        }]"
+                        :variables="response ? response.body.variables : []"
                     >
 
                     </api-variables>
@@ -139,10 +111,7 @@
                     <api-hooks
                         :save="save"
                         v-on:hooks="handleHooks"
-                        :hooks="response ? response.body.hooks: [{
-                            setup: '',
-                            teardown: ''
-                        }]"
+                        :hooks="response ? response.body.hooks: []"
                     >
                     </api-hooks>
                 </el-tab-pane>

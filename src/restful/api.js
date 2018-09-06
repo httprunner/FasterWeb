@@ -61,8 +61,8 @@ export const updateDebugtalk = params => {
     return axios.patch('/api/fastrunner/debugtalk/', params).then(res => res.data)
 };
 
-export const getTree = url => {
-    return axios.get('/api/fastrunner/tree/'+ url + '/').then(res => res.data)
+export const getTree = (url, params) => {
+    return axios.get('/api/fastrunner/tree/'+ url + '/', params).then(res => res.data)
 };
 
 export const updateTree = (url, params) => {
@@ -78,38 +78,23 @@ export const addAPI = params => {
 };
 
 export const apiList = params => {
-    return axios.get('/api/fastrunner/api/').then(res => res.data)
+    return axios.get('/api/fastrunner/api/', params).then(res => res.data)
 };
 
-export const getPaginationBypage = url => {
-    return axios.get('/api/fastrunner/api/?page='+url).then(res => res.data)
+export const getPaginationBypage = params => {
+    return axios.get('/api/fastrunner/api/', params).then(res => res.data)
 };
 
 export const delAPI = url => {
     return axios.delete('/api/fastrunner/api/' + url + '/').then(res => res.data)
 };
 
+export const delAllAPI = params => {
+    return axios.delete('/api/fastrunner/api/', params).then(res => res.data)
+};
+
 export const getAPISingle = url => {
     return axios.get('/api/fastrunner/api/' + url + '/').then(res => res.data)
 };
 
-export const addSuite = params => {
-    return axios.post('/api/fastrunner/suite/', params).then(res => res.data)
-};
-
-export const getSuiteList = params => {
-    return axios.get('/api/fastrunner/suite/').then(res => res.data)
-};
-
-export const getSuiteStep = url => {
-    return axios.get('/api/fastrunner/suite_step/' + url + '/').then(res => res.data)
-};
-
-export const getSuitePaginationBypage = url => {
-    return axios.get('/api/fastrunner/suite/?page='+url).then(res => res.data)
-};
-
-export const delSuite = url => {
-    return axios.delete('/api/fastrunner/suite/' + url + '/').then(res => res.data)
-};
 

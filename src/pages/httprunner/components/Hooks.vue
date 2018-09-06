@@ -1,6 +1,6 @@
 <template>
     <el-table
-        highlight-current-row
+        :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
         strpe
         max-height="470"
         :data="tableData"
@@ -63,10 +63,10 @@
 
 <script>
     export default {
-        props:{
+        props: {
             save: Boolean,
             hooks: {
-                require:false
+                require: false
             }
         },
 
@@ -76,7 +76,9 @@
             },
 
             hooks: function () {
-              this.tableData = this.hooks;
+                if (this.hooks.length !== 0 ) {
+                    this.tableData = this.hooks;
+                }
             }
         },
 
@@ -119,7 +121,10 @@
         data() {
             return {
                 currentRow: '',
-                tableData: this.hooks
+                tableData: [{
+                    setup: '',
+                    teardown: ''
+                }]
             }
         },
         name: "Hooks"

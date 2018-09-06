@@ -1,6 +1,6 @@
-# api-web
+# FasterWer
 
-> A Vue.js project
+> base on vue.js and element ui
 
 ## Build Setup
 

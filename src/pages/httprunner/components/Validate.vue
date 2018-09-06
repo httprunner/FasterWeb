@@ -1,6 +1,6 @@
 <template>
     <el-table
-        highlight-current-row
+        :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
         strpe
         max-height="470"
         :data="tableData"
@@ -95,7 +95,7 @@
 
 <script>
     export default {
-        props:{
+        props: {
             save: Boolean,
             validate: {
                 require: false
@@ -108,7 +108,9 @@
             },
 
             validate: function () {
-                this.tableData = this.validate;
+                if (this.validate.length !== 0) {
+                    this.tableData = this.validate;
+                }
             }
         },
 
@@ -167,7 +169,7 @@
                                 'False': false
                             };
                             tempValue = bool[value];
-                        } else{
+                        } else {
                             this.$notify.error({
                                 title: '类型转换错误',
                                 message: msg,
@@ -177,12 +179,20 @@
                         }
                         break;
                     case 5:
-                        try {tempValue = JSON.parse(value);}
-                        catch (err) {tempValue =false}
+                        try {
+                            tempValue = JSON.parse(value);
+                        }
+                        catch (err) {
+                            tempValue = false
+                        }
                         break;
                     case 6:
-                        try {tempValue = JSON.parse(value);}
-                        catch (err) {tempValue =false}
+                        try {
+                            tempValue = JSON.parse(value);
+                        }
+                        catch (err) {
+                            tempValue = false
+                        }
                         break;
                 }
 
@@ -217,9 +227,14 @@
         },
         data() {
             return {
-                currentValidate:'',
+                currentValidate: '',
                 currentRow: '',
-                tableData: this.validate,
+                tableData: [{
+                    expect: '',
+                    actual: '',
+                    comparator: 'equals',
+                    type: 1
+                }],
 
                 dataTypeOptions: [{
                     label: 'String',
@@ -233,49 +248,49 @@
                 }, {
                     label: 'Boolean',
                     value: 4
-                },{
+                }, {
                     label: 'List',
                     value: 5
-                },{
+                }, {
                     label: 'Dict',
                     value: 6
                 }],
 
-                validateOptions:[{
+                validateOptions: [{
                     value: 'equals'
-                },{
+                }, {
                     value: 'less_than'
-                },{
+                }, {
                     value: 'less_than_or_equals'
-                },{
+                }, {
                     value: 'greater_than'
-                },{
+                }, {
                     value: 'greater_than_or_equals'
-                },{
+                }, {
                     value: 'not_equals'
-                },{
+                }, {
                     value: 'string_equals'
-                },{
+                }, {
                     value: 'length_equals'
-                },{
+                }, {
                     value: 'length_greater_than'
-                },{
+                }, {
                     value: 'length_greater_than_or_equals'
-                },{
+                }, {
                     value: 'length_less_than'
-                },{
+                }, {
                     value: 'length_less_than_or_equals'
-                },{
+                }, {
                     value: 'contains'
-                },{
+                }, {
                     value: 'contained_by'
-                },{
+                }, {
                     value: 'type_match'
-                },{
+                }, {
                     value: 'regex_match'
-                },{
+                }, {
                     value: 'startswith'
-                },{
+                }, {
                     value: 'endswith'
                 }]
             }

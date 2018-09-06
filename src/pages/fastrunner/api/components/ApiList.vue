@@ -1,35 +1,37 @@
 <template>
     <el-container>
         <el-header style="background: #fff; padding: 0; height: 50px; border-top: 1px solid #ddd;">
-                <div style="padding-top: 8px; padding-left: 10px;">
-                        <el-pagination
-                            background
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage"
-                            :page-size="8"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="apiData.count"
-                        >
-                        </el-pagination>
-                </div>
+            <div style="padding-top: 8px; padding-left: 10px;">
+                <el-pagination
+                    v-show="apiData.count !== 0 "
+                    background
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
+                    layout="total, prev, pager, next, jumper"
+                    :total="apiData.count"
+                >
+                </el-pagination>
+            </div>
 
         </el-header>
 
         <el-container>
             <el-main style="padding: 0; margin-left: 10px; margin-top: 10px">
                 <el-table
+                    height="540"
                     ref="multipleTable"
                     :data="apiData.results"
                     :show-header="false"
-                    highlight-current-row
-                    :cell-style="{padding: 0, height: 50}"
+                    :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
                     @cell-mouse-enter="cellMouseEnter"
                     @cell-mouse-leave="cellMouseLeave"
                     style="width: 100%;"
+                    @selection-change="handleSelectionChange"
                 >
                     <el-table-column
                         type="selection"
-                        width="40">
+                        width="40"
+                    >
                     </el-table-column>
 
                     <el-table-column
@@ -119,39 +121,107 @@
 <script>
     export default {
         name: "ApiList",
-
-
+        props: {
+            node: {
+                require: true
+            },
+            project: {
+                require: true
+            },
+            checked:Boolean,
+            del: Boolean
+        },
         data() {
             return {
+                selectAPI: [],
                 currentRow: '',
-                currentPage:1,
-                apiData:[
-                    {results:[]}
+                currentPage: 1,
+                apiData: [
+                    {results: []}
                 ]
+            }
+        },
+        watch: {
+            node: function () {
+                this.getAPIList();
+            },
+            checked: function () {
+                if (this.checked) {
+                    this.toggleAll();
+                }else {
+                    this.toggleClear();
+                }
+            },
+            
+            del: function () {
+                if (this.selectAPI.length !== 0) {
+                    this.$confirm('此操作将永久删除API，是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                    }).then(() => {
+                        this.$api.delAllAPI({data:this.selectAPI}).then(resp => {
+                            this.getAPIList();
+                        }).catch(resp => {
+                            this.$message.error({
+                                message: '服务器连接超时，请重试',
+                                duration: 1000
+                            })
+                        })
+                    })
+                }else {
+                    this.$notify.warning({
+                        title:'提示',
+                        message: '请至少选择一个接口',
+                        duration:1000
+                    })
+                }
             }
         },
 
         methods: {
+            handleSelectionChange(val) {
+                this.selectAPI = val;
+            },
+
+            toggleAll() {
+                this.$refs.multipleTable.toggleAllSelection();
+            },
+
+            toggleClear() {
+                this.$refs.multipleTable.clearSelection();
+            },
             // 查询api列表
             getAPIList() {
-                this.$api.apiList().then(res => {
+                this.$api.apiList({
+                    params: {
+                        node: this.node,
+                        project: this.project
+                    }
+                }).then(res => {
                     this.apiData = res;
                 }).catch(resp => {
                     this.$message.error({
-                        message:'服务器连接超时，请重试',
-                        duration:1000
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
                     })
                 })
             },
 
 
             handleCurrentChange(val) {
-                this.$api.getSuitePaginationBypage(val).then(res => {
+                this.$api.getPaginationBypage({
+                    params: {
+                        page: this.currentPage,
+                        node: this.node,
+                        project: this.project
+                    }
+                }).then(res => {
                     this.apiData = res;
                 }).catch(resp => {
                     this.$message.error({
-                        message:'服务器连接超时，请重试',
-                        duration:1000
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
                     })
                 })
             },
@@ -163,18 +233,18 @@
                     cancelButtonText: '取消',
                     type: 'warning',
                 }).then(() => {
-                   this.$api.delAPI(index).then(resp => {
-                       if(resp.success) {
-                           this.getAPIList();
-                       }else{
-                           this.$message.error(resp.msg);
-                       }
-                   }).catch(resp => {
-                       this.$message.error({
-                           message:'服务器连接超时，请重试',
-                           duration:1000
-                       })
-                   })
+                    this.$api.delAPI(index).then(resp => {
+                        if (resp.success) {
+                            this.getAPIList();
+                        } else {
+                            this.$message.error(resp.msg);
+                        }
+                    }).catch(resp => {
+                        this.$message.error({
+                            message: '服务器连接超时，请重试',
+                            duration: 1000
+                        })
+                    })
                 })
             },
 
@@ -182,14 +252,14 @@
             handleRowClick(row) {
                 this.$api.getAPISingle(row.id).then(resp => {
                     if (resp.success) {
-                       this.$emit('api', resp);
-                    }else {
+                        this.$emit('api', resp);
+                    } else {
                         this.$message.error(resp.msg)
                     }
                 }).catch(resp => {
                     this.$message.error({
-                        message:'服务器连接超时，请重试',
-                        duration:1000
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
                     })
                 })
             },
@@ -249,7 +319,7 @@
 
     .block_patch {
         border: 1px solid #50e3c2;
-        background-color:rgba(80,227,194,.1)
+        background-color: rgba(80, 227, 194, .1)
     }
 
     .block_method_patch {
@@ -258,7 +328,7 @@
 
     .block_head {
         border: 1px solid #e6a23c;
-        background-color:rgba(230,162,60,.1)
+        background-color: rgba(230, 162, 60, .1)
     }
 
     .block_method_head {
@@ -267,7 +337,7 @@
 
     .block_options {
         border: 1px solid #409eff;
-        background-color:rgba(64,158,255,.1)
+        background-color: rgba(64, 158, 255, .1)
     }
 
     .block_method_options {
@@ -277,7 +347,6 @@
     .block {
         border-radius: 4px;
         height: 43.6px;
-        margin:10px;
         padding: 5px;
         display: flex;
         align-items: center;

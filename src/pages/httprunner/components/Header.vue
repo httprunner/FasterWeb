@@ -1,12 +1,12 @@
 <template>
     <el-table
-        highlight-current-row
         strpe
         max-height="470"
         :data="tableData"
         style="width: 100%;"
         @cell-mouse-enter="cellMouseEnter"
         @cell-mouse-leave="cellMouseLeave"
+        :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
     >
         <el-table-column
             fixed
@@ -129,7 +129,9 @@
             },
 
             header: function () {
-                this.tableData = this.header;
+                if (this.header.length !== 0 ) {
+                    this.tableData = this.header;
+                }
             }
         },
         data() {
@@ -199,7 +201,7 @@
                 }],
 
                 currentRow: '',
-                tableData: this.header
+                tableData: [{key:'', value:'', desc:''}]
             }
         },
         name: "Header"
