@@ -10,7 +10,6 @@
         @cell-mouse-leave="cellMouseLeave"
     >
         <el-table-column
-            fixed
             label="标签"
             width="250">
             <template slot-scope="scope">

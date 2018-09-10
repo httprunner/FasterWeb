@@ -9,12 +9,13 @@
                         size="small"
                         icon="el-icon-circle-plus"
                         @click="dialogVisible = true"
+                        :disabled="!addTestActivate"
                     >
                         新建分组
                     </el-button>
 
                     <el-dialog
-                        title="添加分组"
+                        title="新建分组"
                         :visible.sync="dialogVisible"
                         width="30%"
                         align="center"
@@ -46,6 +47,7 @@
                         size="small"
                         icon="el-icon-delete"
                         @click="deleteNode"
+                        :disabled="buttonActivate"
                     >删除分组
                     </el-button>
 
@@ -53,28 +55,54 @@
                         type="warning"
                         size="small"
                         icon="el-icon-circle-plus-outline"
-                        @click="addTestActivate = false"
+                        @click="buttonActivate=false"
+                        :disabled="buttonActivate"
                     >添加用例
                     </el-button>
 
-                    <el-button type="primary" plain size="small" icon="el-icon-upload">导入用例</el-button>
-                    <el-button type="info" plain size="small" icon="el-icon-download">导出用例</el-button>
+                    <el-button
+                        type="primary"
+                        plain
+                        size="small"
+                        icon="el-icon-upload"
+                        :disabled="buttonActivate"
+                    >导入用例
+                    </el-button>
 
-                    <el-checkbox style="margin-left: 40px;">全选</el-checkbox>
+                    <el-button
+                        type="info"
+                        plain
+                        size="small"
+                        icon="el-icon-download"
+                        :disabled="buttonActivate"
+                    >导出用例
+                    </el-button>
 
-                    <el-button type="warning" icon="el-icon-star-off" circle size="mini"
-                               style="margin-left: 20px"></el-button>
-                    <el-button type="danger" icon="el-icon-delete" circle size="mini"></el-button>
+                    <el-button
+                        type="danger"
+                        icon="el-icon-delete"
+                        circle
+                        size="mini"
+                        :disabled="buttonActivate"
+                        @click="del = !del"
+                    ></el-button>
 
 
-                    <el-tooltip class="item" effect="dark" content="环境信息" placement="top-start">
+                    <el-tooltip
+                        class="item"
+                        effect="dark"
+                        content="环境信息"
+                        placement="top-start"
+                    >
                         <el-button plain size="small" icon="el-icon-view"></el-button>
                     </el-tooltip>
 
-                    <el-select placeholder="请选择"
-                               size="small"
-                               tyle="margin-left: -6px"
-                               v-model="currentConfig"
+                    <el-select
+                        placeholder="请选择"
+                        size="small"
+                        tyle="margin-left: -6px"
+                        v-model="currentConfig"
+                        :disabled="buttonActivate"
                     >
                         <el-option
                             v-for="item in configOptions"
@@ -91,7 +119,7 @@
         <el-container>
             <el-aside
                 style="width: 260px; margin-top: 10px; overflow: auto"
-                v-if="addTestActivate"
+                v-show="addTestActivate"
             >
                 <div class="nav-api-side">
                     <div class="api-tree">
@@ -131,9 +159,19 @@
             </el-aside>
 
             <el-main style="padding: 0; ">
+                <test-list
+                    v-show="addTestActivate"
+                    :project="$route.params.id"
+                    :node="currentNode.id"
+                    :del="del"
+                >
+
+                </test-list>
+
                 <add-test
-                    v-if="!addTestActivate"
-                    :project="this.$route.params.id"
+                    v-show="!addTestActivate"
+                    :project="$route.params.id"
+                    :node="currentNode.id"
                 ></add-test>
 
 
@@ -145,15 +183,27 @@
 
 <script>
     import AddTest from './components/AddTest'
+    import TestList from './components/TestList'
 
     export default {
+        computed: {
+          buttonActivate: {
+              get: function () {
+                  return !this.addTestActivate || this.currentNode === '';
+              },
+              set: function (value) {
+                  this.addTestActivate =  value;
+              }
+          }
+        },
         watch: {
             filterText(val) {
                 this.$refs.tree2.filter(val);
             }
         },
         components: {
-            AddTest
+            AddTest,
+            TestList
         },
         data() {
             return {
@@ -166,7 +216,8 @@
                         {min: 1, max: 50, message: '最多不超过50个字符', trigger: 'blur'}
                     ]
                 },
-                radio: '子节点',
+                del: false,
+                radio: '根节点',
                 addTestActivate: true,
                 currentConfig: '',
                 treeId: '',
@@ -188,6 +239,7 @@
                 this.$api.getTree(this.$route.params.id, {params: {type: 2}}).then(resp => {
                     this.dataTree = resp['tree'];
                     this.treeId = resp['id'];
+                    this.maxId = resp['max'];
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',
@@ -199,7 +251,9 @@
             updateTree(mode) {
                 this.$api.updateTree(this.treeId, {
                     mode: mode,
-                    body: this.dataTree
+                    body: this.dataTree,
+                    node: this.currentNode.id,
+                    type: 2
                 }).then(resp => {
                     if (resp['success']) {
                         this.$message.success(resp['msg']);
@@ -217,7 +271,7 @@
             },
 
             deleteNode() {
-                this.$confirm('此操作将永久删除该节点下所有接口, 是否继续?', '提示', {
+                this.$confirm('此操作将永久删除该节点下所有用例, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -285,65 +339,6 @@
 
 <style>
 
-    ul li {
-        list-style: none;
-    }
 
-    .operation-li {
-        line-height: 60px;
-        color: #555;
-        font-size: 12px;
-        width: 240px;
-        margin-top: 1px;
-    }
-
-    .api-tree {
-        padding: 0;
-        margin: 0;
-    }
-
-    .nav-api-header {
-        height: 50px;
-        border-bottom: 1px solid #ddd;
-        background-color: #F7F7F7;
-
-    }
-
-    .nav-api-side {
-        border: 1px solid #ddd;
-        width: 240px;
-        margin-left: 10px;
-        border-radius: 4px;
-        height: 610px;
-    }
-
-    .custom-tree-node {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 14px;
-        padding-right: 8px;
-    }
-
-    .tree {
-        overflow-y: auto;
-        overflow-x: auto;
-        width: 240px;
-        height: 500px;
-    }
-
-    .el-tree {
-        min-width: 100%;
-        display: inline-block !important;
-    }
-
-    .el-tree-node__expand-icon {
-        padding: 4px !important;
-    }
-
-    .el-tree-node__content {
-        height: 50px;
-    }
 
 </style>

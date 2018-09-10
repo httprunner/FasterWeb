@@ -9,7 +9,6 @@
         @cell-mouse-leave="cellMouseLeave"
     >
         <el-table-column
-            fixed
             label="setup_hooks"
             width="400">
             <template slot-scope="scope">

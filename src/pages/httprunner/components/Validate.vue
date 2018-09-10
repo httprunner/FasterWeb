@@ -9,7 +9,6 @@
         @cell-mouse-leave="cellMouseLeave"
     >
         <el-table-column
-            fixed
             label="断言类型"
             width="160">
             <template slot-scope="scope">

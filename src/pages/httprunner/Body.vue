@@ -170,23 +170,69 @@
             handleHooks(hooks) {
                 this.hooks = hooks;
                 // 调用后台
-                this.addAPI();
+                if (this.id === '') {
+                    this.addAPI();
+                }else{
+                    this.updateAPI();
+                }
             },
 
-            addAPI() {
+            validateData() {
                 if (this.url === '') {
                     this.$notify.error({
                         title: 'url错误',
                         message: '接口请求地址不能为空',
                         duration: 1500
-                    })
-                } else if (this.name === '') {
+                    });
+                    return false;
+                }
+
+                if (this.name === '') {
                     this.$notify.error({
                         title: 'name错误',
                         message: '接口名称不能为空',
                         duration: 1500
+                    });
+                    return false;
+                }
+                return true
+            },
+            updateAPI() {
+                if (this.validateData()) {
+                    this.$api.updateAPI(this.id, {
+                        header: this.header,
+                        request: this.request,
+                        extract: this.extract,
+                        validate: this.validate,
+                        variables: this.variables,
+                        hooks: this.hooks,
+                        url: this.url,
+                        method: this.method,
+                        name: this.name,
+                        times: this.times,
+                    }).then(resp => {
+                        if (resp.success) {
+                            this.$message.success({
+                                message: '接口更新成功',
+                                duration: 1000
+                            })
+                        } else {
+                            this.$message.error({
+                                message: resp.msg,
+                                duration: 1000
+                            })
+                        }
+                    }).catch(resp => {
+                        this.$message.error({
+                            message: '服务器连接超时，请重试',
+                            duration: 1000
+                        })
                     })
-                } else {
+                }
+            },
+
+            addAPI() {
+                if (this.validateData()) {
                     this.$api.addAPI({
                         header: this.header,
                         request: this.request,
@@ -199,7 +245,7 @@
                         name: this.name,
                         times: this.times,
                         nodeId: this.nodeId,
-                        project: this.project
+                        project: this.project,
 
                     }).then(resp => {
                         if (resp.success) {
@@ -229,6 +275,7 @@
                 this.method = this.response.body.method;
                 this.url = this.response.body.url;
                 this.times = this.response.body.times;
+                this.id = this.response.id;
             }
         },
         data() {
@@ -236,6 +283,7 @@
                 times: 1,
                 name: '',
                 url: '',
+                id: '',
                 header: [],
                 request: [],
                 extract: [],

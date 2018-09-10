@@ -77,6 +77,10 @@ export const addAPI = params => {
     return axios.post('/api/fastrunner/api/', params).then(res => res.data)
 };
 
+export const updateAPI = (url, params) => {
+    return axios.patch('/api/fastrunner/api/' + url + '/', params).then(res => res.data)
+};
+
 export const apiList = params => {
     return axios.get('/api/fastrunner/api/', params).then(res => res.data)
 };
@@ -96,5 +100,26 @@ export const delAllAPI = params => {
 export const getAPISingle = url => {
     return axios.get('/api/fastrunner/api/' + url + '/').then(res => res.data)
 };
+
+export const addTestCase = params => {
+    return axios.post('/api/fastrunner/test/', params).then(res => res.data)
+};
+
+export const testList = params => {
+    return axios.get('/api/fastrunner/test/', params).then(res => res.data)
+};
+
+export const deleteTest = url => {
+    return axios.delete('/api/fastrunner/test/' + url + '/').then(res => res.data)
+};
+
+export const delAllTest = params => {
+    return axios.delete('/api/fastrunner/test/', params).then(res => res.data)
+};
+
+export const coptTest = (url,params) => {
+    return axios.post('/api/fastrunner/test/' + url + '/', params).then(res => res.data)
+};
+
 
 

@@ -9,7 +9,6 @@
         :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
     >
         <el-table-column
-            fixed
             label="标签"
             width="300">
             <template slot-scope="scope">

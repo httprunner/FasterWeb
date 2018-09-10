@@ -193,7 +193,6 @@
         },
         methods: {
             handleCellClick(row) {
-                console.log('1111')
                 this.$store.commit('changeBackButton');
                 this.$store.commit('changeSideMenu');
                 this.$store.commit('changeSearchButton');

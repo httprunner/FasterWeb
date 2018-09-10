@@ -8,7 +8,7 @@ import DataBase from '@/pages/project/DataBase'
 import ProjectDetail from '@/pages/project/ProjectDetail'
 import DebugTalk from '@/pages/httprunner/DebugTalk'
 import RecordApi from '@/pages/fastrunner/api/RecordApi'
-import RecordTest from '@/pages/fastrunner/case/RecordTest'
+import AutoTest from '@/pages/fastrunner/case/AutoTest'
 
 Vue.use(Router)
 
@@ -82,9 +82,9 @@ export default new Router({
 
                 },
                 {
-                    name: 'RecordTest',
-                    path:'test_record/:id',
-                    component: RecordTest,
+                    name: 'AutoTest',
+                    path:'auto_test/:id',
+                    component: AutoTest,
                     meta: {
                         title: '用例'
                     }

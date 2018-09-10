@@ -6,6 +6,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import router from './router'
 import 'styles/iconfont.css'
+import 'styles/swagger.css'
+import 'styles/tree.css'
 import * as api from './restful/api'
 import store from './store'
 
