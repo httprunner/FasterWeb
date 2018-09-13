@@ -190,7 +190,7 @@
 </template>
 
 <script>
-    import ApiBody from '../../httprunner/Body'
+    import ApiBody from './components/ApiBody'
     import ApiList from './components/ApiList'
 
     export default {

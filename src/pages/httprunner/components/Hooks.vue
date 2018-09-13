@@ -71,11 +71,11 @@
 
         watch: {
             save: function () {
-                this.$emit('hooks', this.parse_hooks());
+                this.$emit('hooks', this.parse_hooks(), this.tableData);
             },
 
             hooks: function () {
-                if (this.hooks.length !== 0 ) {
+                if (this.hooks.length !== 0) {
                     this.tableData = this.hooks;
                 }
             }

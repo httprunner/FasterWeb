@@ -80,7 +80,7 @@
     export default {
         name: "Variables",
 
-        props:{
+        props: {
             save: Boolean,
             variables: {
                 require: false
@@ -89,7 +89,7 @@
 
         watch: {
             save: function () {
-                this.$emit('variables', this.parseVariables());
+                this.$emit('variables', this.parseVariables(), this.tableData);
             },
 
             variables: function () {
@@ -142,7 +142,7 @@
                                 'False': false
                             };
                             tempValue = bool[value];
-                        } else{
+                        } else {
                             this.$notify.error({
                                 title: '类型转换错误',
                                 message: msg,
@@ -152,12 +152,20 @@
                         }
                         break;
                     case 5:
-                        try {tempValue = JSON.parse(value);}
-                        catch (err) {tempValue =false}
+                        try {
+                            tempValue = JSON.parse(value);
+                        }
+                        catch (err) {
+                            tempValue = false
+                        }
                         break;
                     case 6:
-                        try {tempValue = JSON.parse(value);}
-                        catch (err) {tempValue =false}
+                        try {
+                            tempValue = JSON.parse(value);
+                        }
+                        catch (err) {
+                            tempValue = false
+                        }
                         break;
                 }
 
@@ -175,8 +183,8 @@
 
             //变量格式化variables
             parseVariables() {
-                let  variables = {
-                    variables:[],
+                let variables = {
+                    variables: [],
                     desc: {}
                 };
                 for (let content of this.tableData) {
@@ -216,10 +224,10 @@
                 }, {
                     label: 'Boolean',
                     value: 4
-                },{
+                }, {
                     label: 'List',
                     value: 5
-                },{
+                }, {
                     label: 'Dict',
                     value: 6
                 }],

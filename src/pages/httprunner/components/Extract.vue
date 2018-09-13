@@ -69,7 +69,7 @@
 
         watch: {
             save: function () {
-                this.$emit('extract', this.parseExtract());
+                this.$emit('extract', this.parseExtract(), this.tableData);
             },
             extract: function () {
                 if (this.extract.length !== 0) {

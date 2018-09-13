@@ -147,9 +147,9 @@
     export default {
         props: {
             save: Boolean,
-            request:{
-                require:false
-            },
+            request: {
+                require: false
+            }
         },
 
         name: "Request",
@@ -165,6 +165,10 @@
                     json: this.parseJson(),
                     params: this.parseParams(),
                     files: this.parseFile()
+                }, {
+                    data: this.formData,
+                    params: this.paramsData,
+                    json_data: this.jsonData
                 });
             },
 

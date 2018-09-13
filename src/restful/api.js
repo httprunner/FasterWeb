@@ -121,5 +121,9 @@ export const coptTest = (url,params) => {
     return axios.post('/api/fastrunner/test/' + url + '/', params).then(res => res.data)
 };
 
+export const editTest = url => {
+    return axios.get('/api/fastrunner/teststep/' + url + '/').then(res => res.data)
+}
+
 
 

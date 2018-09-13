@@ -1,0 +1,293 @@
+<template>
+    <div>
+        <div style="margin-top: 10px">
+            <el-input
+                style="width: 600px"
+                placeholder="请输入用例名称"
+                v-model="name"
+                clearable
+            >
+                <template slot="prepend">用例信息录入</template>
+
+                <el-button
+                    slot="append"
+                    type="success"
+                    plain
+                    @click="save = !save"
+                >Save
+                </el-button>
+            </el-input>
+
+            <el-button
+                type="primary"
+                plain
+                @click="esc = !esc"
+            >Esc
+            </el-button>
+
+            <el-input
+                class="input-with-select"
+                placeholder="请输入接口请求地址"
+                v-model="url"
+                clearable=""
+            >
+                <el-select
+                    slot="prepend"
+                    v-model="method"
+                    size="small"
+                >
+                    <el-option
+                        v-for="item of httpOptions"
+                        :label="item.label"
+                        :value="item.label"
+                        :key="item.value"
+                    >
+                    </el-option>
+                </el-select>
+            </el-input>
+
+            <el-tooltip
+                effect="dark"
+                content="循环次数"
+                placement="bottom"
+            >
+                <el-input-number
+                    v-model="times"
+                    controls-position="right"
+                    :min="1"
+                    :max="100"
+                    style="width: 120px"
+                >
+                </el-input-number>
+            </el-tooltip>
+
+
+        </div>
+
+        <div class="request">
+            <el-tabs
+                style="margin-left: 20px"
+                v-model="activeTag"
+            >
+                <el-tab-pane label="Header" name="first">
+                    <api-header
+                        :save="save"
+                        v-on:header="handleHeader"
+                        :header="header"
+                    >
+                    </api-header>
+                </el-tab-pane>
+
+                <el-tab-pane label="Request" name="second">
+                    <api-request
+                        :save="save"
+                        v-on:request="handleRequest"
+                        :request="request"
+                    >
+                    </api-request>
+                </el-tab-pane>
+
+                <el-tab-pane label="Extract" name="third">
+                    <api-extract
+                        :save="save"
+                        v-on:extract="handleExtract"
+                        :extract="extract"
+                    >
+                    </api-extract>
+                </el-tab-pane>
+
+                <el-tab-pane label="Validate" name="fourth">
+                    <api-validate
+                        :save="save"
+                        v-on:validate="handleValidate"
+                        :validate="validate"
+                    >
+
+                    </api-validate>
+                </el-tab-pane>
+
+                <el-tab-pane label="Variables" name="five">
+                    <api-variables
+                        :save="save"
+                        v-on:variables="handleVariables"
+                        :variables="variables"
+                    >
+
+                    </api-variables>
+                </el-tab-pane>
+
+                <el-tab-pane label="Hooks" name="six">
+                    <api-hooks
+                        :save="save"
+                        v-on:hooks="handleHooks"
+                        :hooks="hooks"
+                    >
+                    </api-hooks>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+
+</template>
+
+<script>
+    import ApiHeader from '../../../httprunner/components/Header'
+    import ApiRequest from '../../../httprunner/components/Request'
+    import ApiExtract from '../../../httprunner/components/Extract'
+    import ApiValidate from '../../../httprunner/components/Validate'
+    import ApiVariables from '../../../httprunner/components/Variables'
+    import ApiHooks from '../../../httprunner/components/Hooks'
+
+    export default {
+        components: {
+            ApiHeader,
+            ApiRequest,
+            ApiExtract,
+            ApiValidate,
+            ApiVariables,
+            ApiHooks
+
+        },
+
+        props: {
+            response: {
+                require: true
+            }
+        },
+        methods: {
+            handleHeader(header, value) {
+                this.header = value;
+                this.tempBody.header = header;
+            },
+            handleRequest(request, value) {
+                this.request = value;
+                this.tempBody.request = request;
+            },
+            handleValidate(validate, value) {
+                this.validate = value;
+                this.tempBody.validate = validate;
+            },
+            handleExtract(extract, value) {
+                this.extract = value;
+                this.tempBody.extract = extract;
+            },
+            handleVariables(variables, value) {
+                this.variables = value;
+                this.tempBody.variables = variables;
+            },
+            handleHooks(hooks, value) {
+                this.hooks = value;
+
+                this.tempBody.hooks = hooks;
+                this.tempBody.url = this.url;
+                this.tempBody.method = this.method;
+                this.tempBody.name = this.name;
+                this.tempBody.times = this.times;
+
+                if (this.validateData()) {
+                    const body = {
+                        header: this.header,
+                        request: this.request,
+                        extract: this.extract,
+                        validate: this.validate,
+                        variables: this.variables,
+                        hooks: this.hooks,
+                        url: this.url,
+                        method: this.method,
+                        name: this.name,
+                        times: this.times
+                    };
+                    this.$emit('getNewBody', body, this.tempBody);
+                }
+
+            },
+
+            validateData() {
+                if (this.url === '') {
+                    this.$notify.error({
+                        title: 'url错误',
+                        message: '接口请求地址不能为空',
+                        duration: 1500
+                    });
+                    return false;
+                }
+
+                if (this.name === '') {
+                    this.$notify.error({
+                        title: 'name错误',
+                        message: '用例名称不能为空',
+                        duration: 1500
+                    });
+                    return false;
+                }
+                return true
+            }
+        },
+
+        watch: {
+            esc() {
+                this.$emit('escEdit');
+            },
+        },
+        data() {
+            return {
+                esc: false,
+                times: this.response.body.times,
+                name: this.response.body.name,
+                url: this.response.body.url,
+                header: [],
+                request: [],
+                extract: [],
+                validate: [],
+                variables: [],
+                hooks: [],
+                tempBody: {},
+                method: this.response.body.method,
+                save: false,
+
+                activeTag: 'first',
+                httpOptions: [{
+                    label: 'GET',
+                }, {
+                    label: 'POST',
+                }, {
+                    label: 'PUT',
+                }, {
+                    label: 'DELETE',
+                }, {
+                    label: 'HEAD',
+                }, {
+                    label: 'OPTIONS',
+                }, {
+                    label: 'PATCH',
+                }],
+            }
+        },
+        name: "TestBody",
+        mounted() {
+            this.header = this.response.body.header;
+            this.request = this.response.body.request;
+            this.extract = this.response.body.extract;
+            this.validate = this.response.body.validate;
+            this.variables = this.response.body.variables;
+            this.hooks = this.response.body.hooks;
+        }
+    }
+</script>
+
+<style scoped>
+    .el-select {
+        width: 130px;
+    }
+
+    .input-with-select {
+        width: 600px;
+        margin-top: 10px;
+    }
+
+    .request {
+        margin-top: 15px;
+        border: 1px solid #ddd;
+    }
+
+</style>

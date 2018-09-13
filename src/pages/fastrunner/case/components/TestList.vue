@@ -42,7 +42,7 @@
                         type="info"
                         icon="el-icon-edit"
                         circle size="mini"
-                        @click="handleRowClick(scope.row)"
+                        @click="handleEditTest(scope.row.id)"
                     ></el-button>
 
                     <el-button
@@ -129,6 +129,18 @@
         },
 
         methods: {
+
+            handleEditTest(id) {
+                this.$api.editTest(id).then(resp => {
+                    this.$emit('testStep', resp);
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
+
             handleCopyTest(id) {
                 this.$prompt('请输入用例集名称', '提示', {
                     confirmButtonText: '确定',

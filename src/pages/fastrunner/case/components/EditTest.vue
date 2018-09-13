@@ -39,7 +39,7 @@
         </el-aside>
 
         <el-main style="padding: 0; ">
-            <div style="margin-top: 10px; ">
+            <div v-show="!editTestStepActivate" style="margin-top: 10px; ">
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-pagination
@@ -73,7 +73,7 @@
                 </el-row>
             </div>
 
-            <div style="margin-top: 10px;">
+            <div v-show="!editTestStepActivate" style="margin-top: 10px;">
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <div style="overflow: auto; max-height: 600px">
@@ -149,11 +149,32 @@
                                         @mousemove="currentTest = index"
                                     >
                                         <span
-                                            class="block-method block_method_test block_method_color">{{test.method}}</span>
+                                            class="block-method block_method_test block_method_color">{{test.body.method}}</span>
                                         <input class="block-test-name"
-                                               v-model="test.name"
+                                               v-model="test.body.name"
                                         />
+
                                         <el-button
+                                            style="position: absolute; right: 84px; top: 12px"
+                                            v-show="currentTest === index"
+                                            type="info"
+                                            icon="el-icon-edit"
+                                            circle size="mini"
+                                            @click="editTestStepActivate = true"
+                                        >
+                                        </el-button>
+
+                                        <el-button
+                                            style="position: absolute; right: 48px; top: 12px"
+                                            v-show="currentTest === index"
+                                            type="success"
+                                            icon="el-icon-caret-right"
+                                            circle size="mini"
+                                        >
+                                        </el-button>
+
+                                        <el-button
+                                            style="position: absolute; right: 12px; top: 12px"
                                             v-show="currentTest === index"
                                             type="danger"
                                             icon="el-icon-delete"
@@ -168,7 +189,16 @@
                     </el-col>
                 </el-row>
             </div>
+
+            <http-runner
+                v-if="editTestStepActivate"
+                :response="testData[currentTest]"
+                v-on:escEdit="editTestStepActivate = false"
+                v-on:getNewBody="handleNewBody"
+            >
+            </http-runner>
         </el-main>
+
     </el-container>
 
 
@@ -176,6 +206,7 @@
 
 <script>
     import draggable from 'vuedraggable'
+    import HttpRunner from './TestBody'
 
     export default {
         computed: {
@@ -185,15 +216,15 @@
                 },
                 set: function (value) {
                     this.currentAPI = {
-                        id: value.id,
-                        name: value.name,
-                        method: value.method,
+                        body: value.body,
+                        id: value.id
                     };
                 }
             }
         },
         components: {
-            draggable
+            draggable,
+            HttpRunner
         },
         props: {
             project: {
@@ -201,18 +232,28 @@
             },
             node: {
                 require: true
+            },
+            testStepResp: {
+                require: false
             }
         },
 
-        name: "AddTest",
+        name: "EditTest",
         watch: {
             filterText(val) {
                 this.$refs.tree2.filter(val);
+            },
+            testStepResp() {
+                if (this.testStepResp.length !==0 ) {
+                    this.testName = this.testStepResp[0].case.name;
+                    this.testData = this.testStepResp;
+                }
             }
         },
 
         data() {
             return {
+                editTestStepActivate: false,
                 currentPage: 1,
                 length: 0,
                 testName: '',
@@ -232,6 +273,13 @@
             }
         },
         methods: {
+            handleNewBody(body, newBody) {
+                this.editTestStepActivate = false;
+                this.testData[this.currentTest] = {
+                    body: body,
+                    newBody: newBody
+                };
+            },
 
             handleClickSave() {
                 if (this.testName === '' || this.testName.length > 50) {

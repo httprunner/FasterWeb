@@ -68,10 +68,10 @@
 <script>
 
     export default {
-        props:{
-            save:Boolean,
-            header:{
-                require:false
+        props: {
+            save: Boolean,
+            header: {
+                require: false
             }
         },
         methods: {
@@ -124,11 +124,11 @@
         },
         watch: {
             save: function () {
-                this.$emit('header', this.parseHeader());
+                this.$emit('header', this.parseHeader(), this.tableData);
             },
 
             header: function () {
-                if (this.header.length !== 0 ) {
+                if (this.header.length !== 0) {
                     this.tableData = this.header;
                 }
             }
@@ -200,7 +200,7 @@
                 }],
 
                 currentRow: '',
-                tableData: [{key:'', value:'', desc:''}]
+                tableData: [{key: '', value: '', desc: ''}]
             }
         },
         name: "Header"

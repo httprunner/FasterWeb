@@ -103,7 +103,8 @@
 
         watch: {
             save: function () {
-                this.$emit('validate', this.parseValidate());
+                this.$emit('validate', this.parseValidate(), this.tableData);
+
             },
 
             validate: function () {

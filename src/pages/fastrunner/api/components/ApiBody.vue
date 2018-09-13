@@ -122,12 +122,12 @@
 </template>
 
 <script>
-    import ApiHeader from './components/Header'
-    import ApiRequest from './components/Request'
-    import ApiExtract from './components/Extract'
-    import ApiValidate from './components/Validate'
-    import ApiVariables from './components/Variables'
-    import ApiHooks from './components/Hooks'
+    import ApiHeader from '../../../httprunner/components/Header'
+    import ApiRequest from '../../../httprunner/components/Request'
+    import ApiExtract from '../../../httprunner/components/Extract'
+    import ApiValidate from '../../../httprunner/components/Validate'
+    import ApiVariables from '../../../httprunner/components/Variables'
+    import ApiHooks from '../../../httprunner/components/Hooks'
 
     export default {
         components: {
@@ -312,7 +312,7 @@
                 }],
             }
         },
-        name: "Body"
+        name: "ApiBody"
     }
 </script>
 

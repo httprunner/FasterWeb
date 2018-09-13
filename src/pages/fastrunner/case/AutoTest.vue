@@ -112,6 +112,13 @@
                         </el-option>
                     </el-select>
 
+                    <el-button
+                        :disabled="addTestActivate"
+                        type="text"
+                        style="position: absolute; right: 30px;"
+                        @click="addTestActivate=true"
+                    >返回列表</el-button>
+
                 </div>
             </div>
         </el-header>
@@ -164,16 +171,17 @@
                     :project="$route.params.id"
                     :node="currentNode.id"
                     :del="del"
+                    v-on:testStep="handleTestStep"
                 >
-
                 </test-list>
 
-                <add-test
+                <edit-test
                     v-show="!addTestActivate"
                     :project="$route.params.id"
                     :node="currentNode.id"
-                ></add-test>
-
+                    :testStepResp="testStepResp"
+                >
+                </edit-test>
 
             </el-main>
         </el-container>
@@ -182,7 +190,7 @@
 </template>
 
 <script>
-    import AddTest from './components/AddTest'
+    import EditTest from './components/EditTest'
     import TestList from './components/TestList'
 
     export default {
@@ -202,11 +210,12 @@
             }
         },
         components: {
-            AddTest,
-            TestList
+            EditTest,
+            TestList,
         },
         data() {
             return {
+                testStepResp: [],
                 nodeForm: {
                     name: '',
                 },
@@ -235,6 +244,10 @@
             }
         },
         methods: {
+            handleTestStep(resp) {
+                this.testStepResp = resp;
+                this.addTestActivate = false;
+            },
             getTree() {
                 this.$api.getTree(this.$route.params.id, {params: {type: 2}}).then(resp => {
                     this.dataTree = resp['tree'];
@@ -330,7 +343,7 @@
             }
 
         },
-        name: "RecordTest",
+        name: "AutoTest",
         mounted() {
             this.getTree();
         }
