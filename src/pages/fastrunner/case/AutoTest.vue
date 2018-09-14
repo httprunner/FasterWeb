@@ -165,7 +165,7 @@
 
             </el-aside>
 
-            <el-main style="padding: 0; ">
+            <el-main style="padding: 0; border-top: 1px solid #ddd;">
                 <test-list
                     v-show="addTestActivate"
                     :project="$route.params.id"
@@ -201,6 +201,7 @@
               },
               set: function (value) {
                   this.addTestActivate =  value;
+                  this.testStepResp = [];
               }
           }
         },

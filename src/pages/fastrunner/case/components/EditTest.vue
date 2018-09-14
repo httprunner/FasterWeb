@@ -87,7 +87,7 @@
                                 <div class="block block_post" v-if="item.method.toUpperCase() === 'POST' ">
                                     <span class="block-method block_method_post block_method_color">POST</span>
                                     <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description" >{{item.name}}</span>
+                                    <span class="block-summary-description">{{item.name}}</span>
                                 </div>
 
                                 <div class="block block_get" v-if="item.method.toUpperCase() === 'GET' ">
@@ -211,10 +211,10 @@
     export default {
         computed: {
             dragAPI: {
-                get: function () {
+                get () {
                     return this.currentAPI;
                 },
-                set: function (value) {
+                set (value) {
                     this.currentAPI = {
                         body: value.body,
                         id: value.id
@@ -244,10 +244,15 @@
                 this.$refs.tree2.filter(val);
             },
             testStepResp() {
-                if (this.testStepResp.length !==0 ) {
+                if (this.testStepResp.length !== 0) {
                     this.testName = this.testStepResp[0].case.name;
-                    this.testData = this.testStepResp;
+                    this.testId = this.testStepResp[0].case.id;
+                } else {
+                    this.testName = '';
+                    this.testId = '';
                 }
+
+                this.testData = JSON.parse(JSON.stringify(this.testStepResp))
             }
         },
 
@@ -256,6 +261,7 @@
                 editTestStepActivate: false,
                 currentPage: 1,
                 length: 0,
+                testId: '',
                 testName: '',
                 currentTest: '',
                 currentNode: '',
@@ -275,52 +281,98 @@
         methods: {
             handleNewBody(body, newBody) {
                 this.editTestStepActivate = false;
+                const step = this.testData[this.currentTest].case;
+                const id = this.testData[this.currentTest].id;
                 this.testData[this.currentTest] = {
                     body: body,
-                    newBody: newBody
+                    newBody: newBody,
+                    case: step,
+                    id:id
                 };
             },
 
-            handleClickSave() {
+            validateData() {
                 if (this.testName === '' || this.testName.length > 50) {
                     this.$notify.warning({
                         title: '提示',
                         duration: 1000,
                         message: '用例集名称必填，不能超过50个字符'
-                    })
-                } else {
-                    if (this.testData.length === 0) {
-                        this.$notify.warning({
-                            title: '提示',
-                            duration: 1000,
-                            message: '测试用例集至少包含一个接口'
-                        })
+                    });
+                    return false
+                }
+
+                if (this.testData.length === 0) {
+                    this.$notify.warning({
+                        title: '提示',
+                        duration: 1000,
+                        message: '测试用例集至少包含一个接口'
+                    });
+                    return false
+                }
+
+                return true;
+            },
+
+            addTestSuite() {
+                this.$api.addTestCase({
+                    project: this.project,
+                    relation: this.node,
+                    name: this.testName,
+                    body: this.testData
+                }).then(resp => {
+                    if (resp.success) {
+                        this.$message({
+                            message: '用例集添加成功',
+                            type: 'success',
+                            duration: 1000
+                        });
                     } else {
-                        this.$api.addTestCase({
-                            project: this.project,
-                            relation: this.node,
-                            name: this.testName,
-                            body: this.testData
-                        }).then(resp => {
-                            if (resp.success) {
-                                this.$message({
-                                    message: '用例集添加成功',
-                                    type: 'success',
-                                    duration: 1000
-                                });
-                            } else {
-                                this.$message({
-                                    message: resp.msg,
-                                    type: 'error',
-                                    duration: 1000
-                                });
-                            }
-                        }).catch(resp => {
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
-                        })
+                        this.$message({
+                            message: resp.msg,
+                            type: 'error',
+                            duration: 1000
+                        });
+                    }
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
+
+            updateTestSuite() {
+                this.$api.updateTestCase(this.testId, {
+                    name: this.testName,
+                    body: this.testData
+                }).then(resp => {
+                    if (resp.success) {
+                        this.$message({
+                            message: '用例集更新成功',
+                            type: 'success',
+                            duration: 1000
+                        });
+                    } else {
+                        this.$message({
+                            message: resp.msg,
+                            type: 'error',
+                            duration: 1000
+                        });
+                    }
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
+
+            handleClickSave() {
+                if (this.validateData()) {
+                    if (this.testId === '') {
+                        this.addTestSuite();
+                    }else {
+                        this.updateTestSuite();
                     }
                 }
             },
@@ -412,13 +464,11 @@
         height: 590px;
     }
 
-
     .block_test {
         margin-top: 10px;
         border: 1px solid #49cc90;
         background-color: rgba(236, 248, 238, .4)
     }
-
 
     .block_method_test {
         background-color: #909399;

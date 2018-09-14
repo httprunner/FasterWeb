@@ -55,7 +55,7 @@
                         type="warning"
                         size="small"
                         icon="el-icon-circle-plus-outline"
-                        @click="addAPIFlag = true"
+                        @click="initResponse = true"
                     >添加接口
                     </el-button>
 
@@ -203,9 +203,70 @@
             ApiBody,
             ApiList
         },
+
+        computed: {
+            initResponse: {
+                get() {
+                    return this.addAPIFlag;
+                },
+                set(value) {
+                    this.addAPIFlag = value;
+                    this.response = {
+                        id: '',
+                        body: {
+                            name: '',
+                            times: 1,
+                            url: '',
+                            method: 'POST',
+                            header: [{
+                                key: "",
+                                value: "",
+                                desc: ""
+                            }],
+                            request: {
+                                data: [{
+                                    key: "",
+                                    value: "",
+                                    desc: "",
+                                    type: 1
+                                }],
+                                params: [{
+                                    key: "",
+                                    value: "",
+                                    desc: "",
+                                    type: 1
+                                }],
+                                json_data: ''
+                            },
+                            validate: [{
+                                expect: "",
+                                actual: "",
+                                comparator: "equals",
+                                type: 1
+                            }],
+                            variables: [{
+                                key: "",
+                                value: "",
+                                desc: "",
+                                type: 1
+                            }],
+                            extract: [{
+                                key: "",
+                                value: "",
+                                desc: ""
+                            }],
+                            hooks: [{
+                                setup: "",
+                                teardown: ""
+                            }]
+                        }
+                    };
+                }
+            },
+        },
         data() {
             return {
-                checked:false,
+                checked: false,
                 del: false,
                 response: '',
                 nodeForm: {
@@ -344,7 +405,6 @@
 </script>
 
 <style>
-
 
 
 </style>

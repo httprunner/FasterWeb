@@ -105,6 +105,10 @@ export const addTestCase = params => {
     return axios.post('/api/fastrunner/test/', params).then(res => res.data)
 };
 
+export const updateTestCase = (url, params) => {
+    return axios.patch('/api/fastrunner/test/' + url + '/', params).then(res => res.data)
+};
+
 export const testList = params => {
     return axios.get('/api/fastrunner/test/', params).then(res => res.data)
 };

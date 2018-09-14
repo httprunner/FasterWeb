@@ -136,9 +136,10 @@
                 selectAPI: [],
                 currentRow: '',
                 currentPage: 1,
-                apiData: [
-                    {results: []}
-                ]
+                apiData: {
+                    count: 0,
+                    results: []
+                }
             }
         },
         watch: {

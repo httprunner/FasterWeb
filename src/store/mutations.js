@@ -21,9 +21,9 @@ export default {
             state.side_menu = [
                 {name: "项目概况", url: "ProjectDetail", code: "&#xe609;"},
                 {name: "驱动代码", url: "DebugTalk", code: "&#xe664;"},
-                {name: "API 管理", url: "RecordApi", code: "&#xe888;"},
+                {name: "API 模板", url: "RecordApi", code: "&#xe888;"},
                 {name: "自动化测试", url: "AutoTest", code: "&#xe606;"},
-                {name: "环境管理", url: "0007", code: "&#xe673;"}
+                {name: "环境管理", url: "RecordConfig", code: "&#xe673;"}
             ];
         }
     },

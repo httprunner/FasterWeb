@@ -9,6 +9,7 @@ import ProjectDetail from '@/pages/project/ProjectDetail'
 import DebugTalk from '@/pages/httprunner/DebugTalk'
 import RecordApi from '@/pages/fastrunner/api/RecordApi'
 import AutoTest from '@/pages/fastrunner/case/AutoTest'
+import RecordConfig from '@/pages/fastrunner/config/RecordConfig'
 
 Vue.use(Router)
 
@@ -77,7 +78,7 @@ export default new Router({
                     path:'api_record/:id',
                     component: RecordApi,
                     meta: {
-                        title: '接口'
+                        title: '接口模板'
                     }
 
                 },
@@ -86,7 +87,16 @@ export default new Router({
                     path:'auto_test/:id',
                     component: AutoTest,
                     meta: {
-                        title: '用例'
+                        title: '自动化测试'
+                    }
+
+                },
+                {
+                    name: 'RecordConfig',
+                    path:'record_config/:id',
+                    component: RecordConfig,
+                    meta: {
+                        title: '配置管理'
                     }
 
                 }
