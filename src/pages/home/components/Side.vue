@@ -49,7 +49,7 @@
         display: inline-block;
         padding: 0;
         margin: 0;
-        min-height: 690px;
+        min-height: 680px;
     }
 
     ul li {

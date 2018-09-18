@@ -1,78 +1,92 @@
 <template>
-    <el-table
-        ref="multipleTable"
-        :data="tableData"
-        :show-header="tableData.length !== 0 "
-        stripe
-        style="width: 100%"
-        height="630"
-        @cell-mouse-enter="cellMouseEnter"
-        @cell-mouse-leave="cellMouseLeave"
-        @selection-change="handleSelectionChange"
-    >
-        <el-table-column
-            type="selection"
-            width="55">
-        </el-table-column>
-
-        <el-table-column
-            label="用例集名称"
-            width="420"
+    <div>
+        <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-size="11"
+            v-show="testData.count !== 0 "
+            background
+            layout="total, prev, pager, next, jumper"
+            :total="testData.count"
         >
-            <template slot-scope="scope">
-                <div>{{scope.row.name}}</div>
-            </template>
-        </el-table-column>
+        </el-pagination>
+        <div style="padding-top: 10px">
+            <el-table
+                ref="multipleTable"
+                :data="testData.results"
+                :show-header="testData.count !== 0 "
+                stripe
+                style="width: 100%"
+                height="620"
+                @cell-mouse-enter="cellMouseEnter"
+                @cell-mouse-leave="cellMouseLeave"
+                @selection-change="handleSelectionChange"
+            >
+                <el-table-column
+                    type="selection"
+                    width="55">
+                </el-table-column>
 
-        <el-table-column
-            width="300"
-            label="更新时间"
-        >
-            <template slot-scope="scope">
-                <div>{{scope.row.update_time|datetimeFormat}}</div>
+                <el-table-column
+                    label="用例集名称"
+                    width="420"
+                >
+                    <template slot-scope="scope">
+                        <div>{{scope.row.name}}</div>
+                    </template>
+                </el-table-column>
 
-            </template>
-        </el-table-column>
+                <el-table-column
+                    width="300"
+                    label="更新时间"
+                >
+                    <template slot-scope="scope">
+                        <div>{{scope.row.update_time|datetimeFormat}}</div>
 
-        <el-table-column
-            width="300"
-        >
-            <template slot-scope="scope">
-                <el-row v-show="currentRow === scope.row">
-                    <el-button
-                        type="info"
-                        icon="el-icon-edit"
-                        circle size="mini"
-                        @click="handleEditTest(scope.row.id)"
-                    ></el-button>
+                    </template>
+                </el-table-column>
 
-                    <el-button
-                        type="primary"
-                        icon="el-icon-caret-right"
-                        circle size="mini"
-                    ></el-button>
+                <el-table-column
+                    width="300"
+                >
+                    <template slot-scope="scope">
+                        <el-row v-show="currentRow === scope.row">
+                            <el-button
+                                type="info"
+                                icon="el-icon-edit"
+                                circle size="mini"
+                                @click="handleEditTest(scope.row.id)"
+                            ></el-button>
 
-                    <el-button
-                        type="success"
-                        icon="el-icon-document"
-                        circle size="mini"
-                        @click="handleCopyTest(scope.row.id)"
-                    >
-                    </el-button>
+                            <el-button
+                                type="primary"
+                                icon="el-icon-caret-right"
+                                circle size="mini"
+                            ></el-button>
 
-                    <el-button
-                        type="danger"
-                        icon="el-icon-delete"
-                        circle size="mini"
-                        @click="handleDelTest(scope.row.id)"
-                    >
-                    </el-button>
-                </el-row>
-            </template>
+                            <el-button
+                                type="success"
+                                icon="el-icon-document"
+                                circle size="mini"
+                                @click="handleCopyTest(scope.row.id)"
+                            >
+                            </el-button>
 
-        </el-table-column>
+                            <el-button
+                                type="danger"
+                                icon="el-icon-delete"
+                                circle size="mini"
+                                @click="handleDelTest(scope.row.id)"
+                            >
+                            </el-button>
+                        </el-row>
+                    </template>
 
-    </el-table>
+                </el-table-column>
+
+            </el-table>
+        </div>
+    </div>
 
 </template>
 
@@ -102,7 +116,7 @@
                         cancelButtonText: '取消',
                         type: 'warning',
                     }).then(() => {
-                        this.$api.delAllTest({data:this.selectTest}).then(resp => {
+                        this.$api.delAllTest({data: this.selectTest}).then(resp => {
                             this.getTestList();
                         }).catch(resp => {
                             this.$message.error({
@@ -111,11 +125,11 @@
                             })
                         })
                     })
-                }else {
+                } else {
                     this.$notify.warning({
-                        title:'提示',
+                        title: '提示',
                         message: '请至少选择一个用例集',
-                        duration:1000
+                        duration: 1000
                     })
                 }
             }
@@ -124,11 +138,31 @@
             return {
                 selectTest: [],
                 currentRow: '',
-                tableData: []
+                testData: {
+                    count: 0,
+                    results: []
+                },
+                currentPage: 1,
             }
         },
 
         methods: {
+            handleCurrentChange(val) {
+                this.$api.getTestPaginationBypage({
+                    params: {
+                        page: this.currentPage,
+                        project: this.project,
+                        node: this.node
+                    }
+                }).then(resp => {
+                    this.testData = resp;
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
 
             handleEditTest(id) {
                 this.$api.editTest(id).then(resp => {
@@ -146,7 +180,7 @@
                     confirmButtonText: '确定',
                     inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
                     inputErrorMessage: '用例集不能为空'
-                }).then(({ value }) => {
+                }).then(({value}) => {
                     this.$api.coptTest(id, {
                         'name': value,
                         'relation': this.node,
@@ -154,7 +188,7 @@
                     }).then(resp => {
                         if (resp.success) {
                             this.getTestList();
-                        }else {
+                        } else {
                             this.$message.error(resp.msg);
                         }
                     }).catch(resp => {
@@ -179,7 +213,7 @@
                     this.$api.deleteTest(id).then(resp => {
                         if (resp.success) {
                             this.getTestList();
-                        }else {
+                        } else {
                             this.$message.error(resp.msg)
                         }
                     }).catch(resp => {
@@ -197,7 +231,7 @@
                         node: this.node
                     }
                 }).then(resp => {
-                    this.tableData = resp;
+                    this.testData = resp;
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',

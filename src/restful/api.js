@@ -129,13 +129,31 @@ export const editTest = url => {
     return axios.get('/api/fastrunner/teststep/' + url + '/').then(res => res.data)
 };
 
+export const getTestPaginationBypage = params => {
+    return axios.get('/api/fastrunner/test/', params).then(res => res.data)
+};
+
 export const addConfig = params => {
     return axios.post('/api/fastrunner/config/', params).then(res => res.data)
 };
 
 export const configList = params => {
-    return axios.get('/api/fastrunner/config', params).then(res => res.data)
+    return axios.get('/api/fastrunner/config/', params).then(res => res.data)
 };
 
+export const copyConfig = (url, params) => {
+    return axios.post('/api/fastrunner/config/' + url + '/', params).then(res => res.data)
+};
+
+export const deleteConfig = url => {
+    return axios.delete('/api/fastrunner/config/' + url + '/').then(res => res.data)
+};
+export const delAllConfig = params => {
+    return axios.delete('/api/fastrunner/config/', params).then(res => res.data)
+};
+
+export const getConfigPaginationBypage = params => {
+    return axios.get('/api/fastrunner/config/', params).then(res => res.data)
+};
 
 

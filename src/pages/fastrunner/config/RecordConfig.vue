@@ -34,7 +34,15 @@
                         icon="el-icon-delete"
                         circle
                         size="mini"
+                        @click="del= !del"
                     ></el-button>
+
+                    <el-button
+                        :disabled="!addConfigActivate"
+                        type="text"
+                        style="position: absolute; right: 30px;"
+                        @click="addConfigActivate=false"
+                    >返回列表</el-button>
 
                 </div>
             </div>
@@ -51,6 +59,7 @@
                 <config-list
                     v-show="!addConfigActivate"
                     :project="$route.params.id"
+                    :del="del"
                 >
                 </config-list>
             </el-main>
@@ -73,7 +82,7 @@
         },
         data() {
             return {
-                checked: false,
+                del: false,
                 addConfigActivate: false
             }
         },

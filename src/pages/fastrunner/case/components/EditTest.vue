@@ -43,6 +43,7 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-pagination
+                            :page-size="11"
                             v-show="apiData.count !== 0"
                             background
                             @current-change="handlePageChange"

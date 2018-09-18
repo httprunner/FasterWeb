@@ -3,6 +3,7 @@
         <el-header style="padding: 0; height: 50px; border-top: 1px solid #ddd;">
             <div style="padding-top: 8px; padding-left: 10px;">
                 <el-pagination
+                    :page-size="11"
                     v-show="apiData.count !== 0 "
                     background
                     @current-change="handleCurrentChange"
