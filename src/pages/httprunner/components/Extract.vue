@@ -1,7 +1,7 @@
 <template>
     <el-table
         strpe
-        max-height="470"
+        height="460"
         :data="tableData"
         style="width: 100%;"
         @cell-mouse-enter="cellMouseEnter"
@@ -9,17 +9,17 @@
         :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
     >
         <el-table-column
-            label="标签"
+            label="变量名"
             width="300">
             <template slot-scope="scope">
-                <el-input clearable v-model="scope.row.key" placeholder="定义变量名"></el-input>
+                <el-input clearable v-model="scope.row.key" placeholder="接收抽取值后的变量名"></el-input>
             </template>
         </el-table-column>
         <el-table-column
-            label="内容"
+            label="抽取表达式"
             width="420">
             <template slot-scope="scope">
-                <el-input clearable v-model="scope.row.value" placeholder="要抽取的key"></el-input>
+                <el-input clearable v-model="scope.row.value" placeholder="抽取表达式"></el-input>
 
             </template>
         </el-table-column>

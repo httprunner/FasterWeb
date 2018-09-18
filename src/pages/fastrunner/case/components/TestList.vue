@@ -2,9 +2,10 @@
     <el-table
         ref="multipleTable"
         :data="tableData"
+        :show-header="tableData.length !== 0 "
         stripe
         style="width: 100%"
-        max-height="550"
+        height="630"
         @cell-mouse-enter="cellMouseEnter"
         @cell-mouse-leave="cellMouseLeave"
         @selection-change="handleSelectionChange"

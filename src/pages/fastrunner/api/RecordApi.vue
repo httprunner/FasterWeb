@@ -84,15 +84,7 @@
                     </el-checkbox>
 
                     <el-button
-                        type="warning"
-                        icon="el-icon-star-off"
-                        circle
-                        size="mini"
                         style="margin-left: 20px"
-                        :disabled="currentNode === ''"
-                    ></el-button>
-
-                    <el-button
                         type="danger"
                         icon="el-icon-delete"
                         circle

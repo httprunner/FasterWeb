@@ -26,7 +26,6 @@
             handleProjectList() {
                 this.$store.commit('changeItemUrl', 'ProjectList');
                 this.$store.commit('changeBackButton');
-                this.$store.commit('changeSearchButton');
                 this.$store.commit('changeSideMenu','projectList');
                 this.$router.push({name:'ProjectList'});
             },

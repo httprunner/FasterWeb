@@ -3,10 +3,6 @@ export default {
         state.backButton = !state.backButton;
     },
 
-    changeSearchButton(state) {
-        state.searchButton = !state.searchButton;
-    },
-
     changeItemUrl(state, value) {
         state.itemUrl = value;
     },

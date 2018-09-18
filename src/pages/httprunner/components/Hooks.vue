@@ -2,32 +2,31 @@
     <el-table
         :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
         strpe
-        max-height="470"
+        height="460"
         :data="tableData"
         style="width: 100%;"
         @cell-mouse-enter="cellMouseEnter"
         @cell-mouse-leave="cellMouseLeave"
     >
         <el-table-column
-            label="setup_hooks"
-            width="400">
+            label="测试之前执行的方法"
+            width="450">
             <template slot-scope="scope">
                 <el-input clearable
                           v-model="scope.row.setup"
-                          placeholder="setup_hooks function"
+                          placeholder="${ setup_hooks function($request, *args, **kwargs) }"
                 >
                 </el-input>
             </template>
         </el-table-column>
 
         <el-table-column
-            fixed
-            label="teardown_hooks"
-            width="400">
+            label="测试之后执行的方法"
+            width="450">
             <template slot-scope="scope">
                 <el-input clearable
                           v-model="scope.row.teardown"
-                          placeholder="teardown_hooks function"
+                          placeholder="${ teardown_hooks function(response, *args, **kwargs) }"
                 >
                 </el-input>
             </template>

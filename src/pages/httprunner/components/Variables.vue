@@ -3,14 +3,14 @@
     <el-table
         :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
         strpe
-        max-height="470"
+        height="460"
         :data="tableData"
         style="width: 100%;"
         @cell-mouse-enter="cellMouseEnter"
         @cell-mouse-leave="cellMouseLeave"
     >
         <el-table-column
-            label="标签"
+            label="变量名"
             width="250">
             <template slot-scope="scope">
                 <el-input clearable v-model="scope.row.key" placeholder="Key"></el-input>
@@ -35,7 +35,7 @@
         </el-table-column>
 
         <el-table-column
-            label="内容"
+            label="变量值"
             width="350">
             <template slot-scope="scope">
                 <el-input clearable v-model="scope.row.value" placeholder="Value"></el-input>

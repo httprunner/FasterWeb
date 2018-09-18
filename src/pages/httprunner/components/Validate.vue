@@ -2,7 +2,7 @@
     <el-table
         :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
         strpe
-        max-height="470"
+        height="460"
         :data="tableData"
         style="width: 100%;"
         @cell-mouse-enter="cellMouseEnter"

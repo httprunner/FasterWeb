@@ -1,59 +1,61 @@
 <template>
     <div>
         <div style="margin-top: 10px">
-            <el-input
-                style="width: 600px"
-                placeholder="请输入接口名称"
-                v-model="name"
-                clearable
-            >
-                <template slot="prepend">接口信息录入</template>
-
-                <el-button
-                    slot="append"
-                    type="success"
-                    plain
-                    @click="save = !save"
-                >Save
-                </el-button>
-            </el-input>
-
-            <el-input
-                class="input-with-select"
-                placeholder="请输入接口请求地址"
-                v-model="url"
-                clearable=""
-            >
-                <el-select
-                    slot="prepend"
-                    v-model="method"
-                    size="small"
+            <div>
+                <el-input
+                    style="width: 600px"
+                    placeholder="请输入接口名称"
+                    v-model="name"
+                    clearable
                 >
-                    <el-option
-                        v-for="item of httpOptions"
-                        :label="item.label"
-                        :value="item.label"
-                        :key="item.value"
+                    <template slot="prepend">接口信息录入</template>
+
+                    <el-button
+                        slot="append"
+                        type="success"
+                        plain
+                        @click="save = !save"
+                    >Save
+                    </el-button>
+                </el-input>
+            </div>
+            <div>
+                <el-input
+                    class="input-with-select"
+                    placeholder="请输入接口请求地址"
+                    v-model="url"
+                    clearable=""
+                >
+                    <el-select
+                        slot="prepend"
+                        v-model="method"
+                        size="small"
                     >
-                    </el-option>
-                </el-select>
-            </el-input>
+                        <el-option
+                            v-for="item of httpOptions"
+                            :label="item.label"
+                            :value="item.label"
+                            :key="item.value"
+                        >
+                        </el-option>
+                    </el-select>
+                </el-input>
 
-            <el-tooltip
-                effect="dark"
-                content="循环次数"
-                placement="top-start"
-            >
-                <el-input-number
-                    v-model="times"
-                    controls-position="right"
-                    :min="1"
-                    :max="100"
-                    style="width: 120px"
+                <el-tooltip
+                    effect="dark"
+                    content="循环次数"
+                    placement="top-start"
                 >
-                </el-input-number>
-            </el-tooltip>
-
+                    <el-input-number
+                        v-model="times"
+                        controls-position="right"
+                        :min="1"
+                        :max="100"
+                        style="width: 120px"
+                    >
+                    </el-input-number>
+                </el-tooltip>
+            </div>
 
         </div>
 
@@ -63,57 +65,57 @@
                 v-model="activeTag"
             >
                 <el-tab-pane label="Header" name="first">
-                    <api-header :save="save"
+                    <headers :save="save"
                                 v-on:header="handleHeader"
                                 :header="response ? response.body.header: [] ">
-                    </api-header>
+                    </headers>
                 </el-tab-pane>
 
                 <el-tab-pane label="Request" name="second">
-                    <api-request
+                    <request
                         :save="save"
                         v-on:request="handleRequest"
                         :request="response ? response.body.request: []"
                     >
-                    </api-request>
+                    </request>
                 </el-tab-pane>
 
                 <el-tab-pane label="Extract" name="third">
-                    <api-extract
+                    <extract
                         :save="save"
                         v-on:extract="handleExtract"
                         :extract="response ? response.body.extract : []"
                     >
-                    </api-extract>
+                    </extract>
                 </el-tab-pane>
 
                 <el-tab-pane label="Validate" name="fourth">
-                    <api-validate
+                    <validate
                         :save="save"
                         v-on:validate="handleValidate"
                         :validate="response ? response.body.validate: []"
                     >
 
-                    </api-validate>
+                    </validate>
                 </el-tab-pane>
 
                 <el-tab-pane label="Variables" name="five">
-                    <api-variables
+                    <variables
                         :save="save"
                         v-on:variables="handleVariables"
                         :variables="response ? response.body.variables : []"
                     >
 
-                    </api-variables>
+                    </variables>
                 </el-tab-pane>
 
                 <el-tab-pane label="Hooks" name="six">
-                    <api-hooks
+                    <hooks
                         :save="save"
                         v-on:hooks="handleHooks"
                         :hooks="response ? response.body.hooks: []"
                     >
-                    </api-hooks>
+                    </hooks>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -122,21 +124,21 @@
 </template>
 
 <script>
-    import ApiHeader from '../../../httprunner/components/Header'
-    import ApiRequest from '../../../httprunner/components/Request'
-    import ApiExtract from '../../../httprunner/components/Extract'
-    import ApiValidate from '../../../httprunner/components/Validate'
-    import ApiVariables from '../../../httprunner/components/Variables'
-    import ApiHooks from '../../../httprunner/components/Hooks'
+    import Headers from '../../../httprunner/components/Headers'
+    import Request from '../../../httprunner/components/Request'
+    import Extract from '../../../httprunner/components/Extract'
+    import Validate from '../../../httprunner/components/Validate'
+    import Variables from '../../../httprunner/components/Variables'
+    import Hooks from '../../../httprunner/components/Hooks'
 
     export default {
         components: {
-            ApiHeader,
-            ApiRequest,
-            ApiExtract,
-            ApiValidate,
-            ApiVariables,
-            ApiHooks
+            Headers,
+            Request,
+            Extract,
+            Validate,
+            Variables,
+            Hooks
 
         },
 
@@ -172,7 +174,7 @@
                 // 调用后台
                 if (this.id === '') {
                     this.addAPI();
-                }else{
+                } else {
                     this.updateAPI();
                 }
             },

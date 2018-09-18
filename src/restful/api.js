@@ -127,7 +127,15 @@ export const coptTest = (url,params) => {
 
 export const editTest = url => {
     return axios.get('/api/fastrunner/teststep/' + url + '/').then(res => res.data)
-}
+};
+
+export const addConfig = params => {
+    return axios.post('/api/fastrunner/config/', params).then(res => res.data)
+};
+
+export const configList = params => {
+    return axios.get('/api/fastrunner/config', params).then(res => res.data)
+};
 
 
 

@@ -1,5 +1,4 @@
 export default {
-    searchButton: true,
     backButton: false,
     itemUrl:'ProjectList',
     side_menu: [

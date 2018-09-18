@@ -14,7 +14,7 @@
             <el-table
                 :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
                 strpe
-                max-height="450"
+                height="436"
                 :data="dataType === 'data' ? formData: paramsData"
                 style="width: 100%;"
                 @cell-mouse-enter="cellMouseEnter"
@@ -22,7 +22,7 @@
                 v-show="dataType !== 'json' "
             >
                 <el-table-column
-                    label="标签"
+                    label="请求Key"
                     width="250">
                     <template slot-scope="scope">
                         <el-input clearable v-model="scope.row.key" placeholder="Key"></el-input>
@@ -49,7 +49,7 @@
                 </el-table-column>
 
                 <el-table-column
-                    label="内容"
+                    label="请求Value"
                     width="350">
                     <template slot-scope="scope">
                         <el-input

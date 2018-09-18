@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-header style="background: #fff; padding: 0; height: 50px; border-top: 1px solid #ddd;">
+        <el-header style="padding: 0; height: 50px; border-top: 1px solid #ddd;">
             <div style="padding-top: 8px; padding-left: 10px;">
                 <el-pagination
                     v-show="apiData.count !== 0 "
@@ -16,9 +16,9 @@
         </el-header>
 
         <el-container>
-            <el-main style="padding: 0; margin-left: 10px; margin-top: 10px">
+            <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
                 <el-table
-                    height="550"
+                    height="570"
                     ref="multipleTable"
                     :data="apiData.results"
                     :show-header="false"
@@ -108,7 +108,6 @@
                                 >
                                 </el-button>
                             </el-row>
-
                         </template>
                     </el-table-column>
 

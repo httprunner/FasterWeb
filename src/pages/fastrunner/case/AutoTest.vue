@@ -79,6 +79,7 @@
                     </el-button>
 
                     <el-button
+                        style="margin-left: 20px"
                         type="danger"
                         icon="el-icon-delete"
                         circle

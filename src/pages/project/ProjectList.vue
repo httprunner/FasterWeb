@@ -195,7 +195,6 @@
             handleCellClick(row) {
                 this.$store.commit('changeBackButton');
                 this.$store.commit('changeSideMenu');
-                this.$store.commit('changeSearchButton');
                 this.$store.commit('changeItemUrl', 'ProjectDetail');
                 this.$router.push({name:'ProjectDetail', params:{id:row['id']}});
             },

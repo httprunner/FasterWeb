@@ -21,14 +21,14 @@ export default new Router({
             name: 'Register',
             component: Register,
             meta: {
-                title: '注册页面'
+                title: '用户注册'
             }
         }, {
             path: '/fastrunner/login',
             name: 'Login',
             component: Login,
             meta: {
-                title: '登陆页面'
+                title: '用户登录'
             }
         },
         {
@@ -96,7 +96,7 @@ export default new Router({
                     path:'record_config/:id',
                     component: RecordConfig,
                     meta: {
-                        title: '配置管理'
+                        title: '环境管理'
                     }
 
                 }

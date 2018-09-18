@@ -5,30 +5,7 @@
                 <li class="li-first">1</li>
                 <li class="li-second">you account</li>
                 <li style="margin-left: 5px">
-                    <el-input placeholder="请输入内容"
-                              v-model="value"
-                              :disabled="$store.state.searchButton"
-                              class="input-with-select">
-
-                        <el-select slot="prepend"
-                                   v-model="key"
-                                   :disabled="$store.state.searchButton"
-                                   placeholder="请选择"
-                                   style="width: 100px">
-                            <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                            </el-option>
-                        </el-select>
-
-                        <el-button :disabled="$store.state.searchButton"
-                                   slot="append"
-                                   icon="el-icon-search">
-
-                        </el-button>
-                    </el-input>
+                    logo
                 </li>
             </ul>
 
@@ -42,23 +19,7 @@
 
     export default {
         data() {
-            return {
-                options: [{
-                    value: 'case',
-                    label: '用例'
-                }, {
-                    value: 'suite',
-                    label: 'Suite'
-                }, {
-                    value: 'api',
-                    label: '接口'
-                }, {
-                    value: 'config',
-                    label: '环境'
-                }],
-                value: '',
-                key: ''
-            }
+            return {}
         },
         name: "Header",
 
@@ -66,8 +27,6 @@
 </script>
 
 <style scoped>
-
-
     .header {
         margin: 0;
         padding: 0;

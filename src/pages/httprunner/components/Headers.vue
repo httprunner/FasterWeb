@@ -1,6 +1,6 @@
 <template>
     <el-table
-        max-height="470"
+        height="460"
         :data="tableData"
         style="width: 100%;"
         :border="false"
