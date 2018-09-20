@@ -12,9 +12,7 @@
                     :total="configData.count"
                 >
                 </el-pagination>
-
             </div>
-
         </el-header>
 
         <el-container>
@@ -36,7 +34,7 @@
 
                     <el-table-column
                         label="环境名称"
-                        width="420"
+                        width="350"
                     >
                         <template slot-scope="scope">
                             <div>{{scope.row.name}}</div>
@@ -72,7 +70,7 @@
                                     type="info"
                                     icon="el-icon-edit"
                                     circle size="mini"
-                                    @click="handleEditTest(scope.row.id)"
+                                    @click="handleEditConfig(scope.row)"
                                 ></el-button>
 
                                 <el-button
@@ -105,6 +103,7 @@
     export default {
         name: "ConfigList",
         props: {
+            back:Boolean,
             project: {
                 require: true
             },
@@ -122,7 +121,11 @@
             }
         },
         watch: {
-            del: function () {
+            back (){
+                this.getConfigList();
+            },
+
+            del () {
                 if (this.selectConfig.length !== 0) {
                     this.$confirm('此操作将永久删除环境，是否继续?', '提示', {
                         confirmButtonText: '确定',
@@ -191,20 +194,8 @@
                 })
             },
 
-            // 编辑API
-            handleRowClick(row) {
-                this.$api.getAPISingle(row.id).then(resp => {
-                    if (resp.success) {
-                        this.$emit('api', resp);
-                    } else {
-                        this.$message.error(resp.msg)
-                    }
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
-                })
+            handleEditConfig(row) {
+                this.$emit('respConfig', row);
             },
 
             handleCopyConfig(id) {

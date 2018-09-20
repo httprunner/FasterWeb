@@ -118,7 +118,7 @@
         </el-header>
 
         <el-container>
-            <el-aside style="width: 260px; margin-top: 10px; overflow: auto">
+            <el-aside style="width: 260px; margin-top: 10px; ">
                 <div class="nav-api-side">
                     <div class="api-tree">
                         <el-input
@@ -162,16 +162,18 @@
                     :nodeId="currentNode.id"
                     :project="$route.params.id"
                     :response="response"
+                    v-on:addSuccess="handleAddSuccess"
                 >
                 </api-body>
 
                 <api-list
-                    :checked="checked"
                     v-show="!addAPIFlag"
+                    :checked="checked"
                     v-on:api="handleAPI"
                     :node="currentNode !== '' ? currentNode.id : '' "
                     :project="$route.params.id"
                     :del="del"
+                    :back="back"
                 >
                 </api-list>
 
@@ -258,6 +260,7 @@
         },
         data() {
             return {
+                back: false,
                 checked: false,
                 del: false,
                 response: '',
@@ -279,7 +282,7 @@
                 currentNode: '',
                 data: '',
                 filterText: '',
-                expand: '&#xe667;',
+                expand: '&#xe65f;',
                 dataTree: [],
                 configOptions: [{
                     value: '测试环境',
@@ -288,6 +291,11 @@
             }
         },
         methods: {
+            handleAddSuccess (){
+                this.back = !this.back;
+                this.addAPIFlag = false;
+            },
+
             handleAPI(response) {
                 this.addAPIFlag = true;
                 this.response = response;

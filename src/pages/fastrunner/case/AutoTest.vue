@@ -57,7 +57,7 @@
                         icon="el-icon-circle-plus-outline"
                         @click="buttonActivate=false"
                         :disabled="buttonActivate"
-                    >添加用例
+                    >添加用例集
                     </el-button>
 
                     <el-button
@@ -117,7 +117,7 @@
                         :disabled="addTestActivate"
                         type="text"
                         style="position: absolute; right: 30px;"
-                        @click="addTestActivate=true"
+                        @click="handleBackList"
                     >返回列表</el-button>
 
                 </div>
@@ -126,7 +126,7 @@
 
         <el-container>
             <el-aside
-                style="width: 260px; margin-top: 10px; overflow: auto"
+                style="width: 260px; margin-top: 10px;"
                 v-show="addTestActivate"
             >
                 <div class="nav-api-side">
@@ -173,14 +173,17 @@
                     :node="currentNode.id"
                     :del="del"
                     v-on:testStep="handleTestStep"
+                    :back="back"
                 >
                 </test-list>
 
                 <edit-test
+                    :back="back"
                     v-show="!addTestActivate"
                     :project="$route.params.id"
                     :node="currentNode.id"
                     :testStepResp="testStepResp"
+                    v-on:addSuccess="handleBackList"
                 >
                 </edit-test>
 
@@ -227,6 +230,7 @@
                         {min: 1, max: 50, message: '最多不超过50个字符', trigger: 'blur'}
                     ]
                 },
+                back: false,
                 del: false,
                 radio: '根节点',
                 addTestActivate: true,
@@ -237,7 +241,7 @@
                 currentNode: '',
                 data: '',
                 filterText: '',
-                expand: '&#xe667;',
+                expand: '&#xe65f;',
                 dataTree: [],
                 configOptions: [{
                     value: '测试环境',
@@ -246,6 +250,11 @@
             }
         },
         methods: {
+            handleBackList () {
+                this.addTestActivate = true;
+                this.back = !this.back;
+            },
+
             handleTestStep(resp) {
                 this.testStepResp = resp;
                 this.addTestActivate = false;

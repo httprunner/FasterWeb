@@ -109,6 +109,15 @@
                 require: false
             }
         },
+
+        watch: {
+            response: function () {
+                this.name = this.response.body.name;
+                this.baseUrl = this.response.body.base_url;
+                this.id = this.response.id;
+            }
+        },
+
         methods: {
             handleHeader(header) {
                 this.header = header;
@@ -125,7 +134,11 @@
             },
             handleParameters(parameters) {
                 this.parameters = parameters;
-                this.addConfig();
+                if (this.id === '') {
+                    this.addConfig();
+                } else {
+                    this.updateConfig();
+                }
             },
 
             addConfig() {
@@ -145,7 +158,40 @@
                             this.$message.success({
                                 message: '环境添加成功',
                                 duration: 1000
+                            });
+                            this.$emit("addSuccess");
+                        } else {
+                            this.$message.error({
+                                message: resp.msg,
+                                duration: 1000
                             })
+                        }
+                    }).catch(resp => {
+                        this.$message.error({
+                            message: '服务器连接超时，请重试',
+                            duration: 1000
+                        })
+                    })
+                }
+            },
+
+            updateConfig() {
+                if (this.validateData()) {
+                    this.$api.updateConfig(this.id, {
+                        parameters: this.parameters,
+                        header: this.header,
+                        request: this.request,
+                        variables: this.variables,
+                        hooks: this.hooks,
+                        base_url: this.baseUrl,
+                        name: this.name,
+                    }).then(resp => {
+                        if (resp.success) {
+                            this.$message.success({
+                                message: '环境更新成功',
+                                duration: 1000
+                            });
+                            this.$emit("addSuccess");
                         } else {
                             this.$message.error({
                                 message: resp.msg,

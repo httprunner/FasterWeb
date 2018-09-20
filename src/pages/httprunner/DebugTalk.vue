@@ -2,29 +2,62 @@
     <el-container>
         <el-header style="background-color: #F7F7F7;; padding: 0; height: 50px">
             <div style="padding-top: 10px; margin-left: 10px">
-                <el-button type="success"
-                           size="small"
-                           icon="el-icon-circle-check-outline"
-                           @click="handleConfirm"
+                <el-button
+                    type="primary"
+                    size="small"
+                    icon="el-icon-circle-check-outline"
+                    @click="handleConfirm"
+                    round
                 >
                     点击保存
                 </el-button>
+
+                <el-button
+                    icon="el-icon-caret-right"
+                    type="info"
+                    size="small"
+                    @click="handleRunCode"
+                    round
+                >
+                    在线运行
+                </el-button>
+
+                <h1 style="position: absolute; right:150px; top: 45px;">终 端 控 制 台</h1>
             </div>
 
         </el-header>
 
         <el-container>
             <el-main style="padding: 0; margin-left: 10px">
-                <div id="code">
-                    <editor v-model="code.debugtalk"
+                <el-row>
+                    <el-col :span="16">
+                        <editor
+                            v-model="code.code"
                             @init="editorInit"
                             lang="python"
                             theme="monokai"
                             width="100%"
                             height="630"
-                    >
-                    </editor>
-                </div>
+                            :options="{
+                                enableSnippets:true,
+                                enableBasicAutocompletion: true,
+                                enableLiveAutocompletion: true
+                            }"
+                        >
+                        </editor>
+                    </el-col>
+
+                    <el-col :span="8">
+                        <editor
+                            v-model="resp.msg"
+                            lang="text"
+                            theme="monokai"
+                            width="100%"
+                            height="630"
+                        >
+                        </editor>
+                    </el-col>
+                </el-row>
 
             </el-main>
         </el-container>
@@ -37,17 +70,31 @@
         data() {
             return {
                 code: {
-                    'debugtalk': '',
-                    'id': ''
+                    code: '',
+                    id: ''
+                },
+                resp: {
+                    msg: ''
                 }
             }
         },
         name: "DebugTalk",
         methods: {
+            handleRunCode() {
+                this.$api.runDebugtalk(this.code).then(resp => {
+                    this.resp = resp;
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
+
             handleConfirm() {
                 this.$api.updateDebugtalk(this.code).then(res => {
                     this.getDebugTalk();
-                    this.$message.success("debugtalk.py保存成功");
+                    this.$message.success("代码保存成功");
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',
@@ -57,9 +104,6 @@
             },
             editorInit() {
                 require('brace/ext/language_tools')
-                require('brace/mode/python')
-                require('brace/theme/monokai')
-                require('brace/snippets/python')
             },
             getDebugTalk() {
                 this.$api.getDebugtalk(this.$route.params.id).then(res => {
@@ -73,7 +117,7 @@
             }
         },
         components: {
-            editor: require('vue2-ace-editor'),
+            editor: require('vue2-ace-editor')
         },
         mounted() {
             this.getDebugTalk();

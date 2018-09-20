@@ -4,7 +4,7 @@
             <li v-if="$store.state.backButton"
                 class="item-li item-back"
                 @click="handleProjectList">
-                <span class="iconfont" >&#xe68c;</span>返 回 列 表</li>
+                <span class="iconfont" >&#xe617;</span>返 回 列 表</li>
 
             <li v-for="item of $store.state.side_menu"
                 :key="item.url"
@@ -67,8 +67,8 @@
     }
 
     .active {
-        color: #43a047;
-        background: #ECF8EE;
+        color: #fff !important;
+        background: #4caf50 !important;
     }
 
 

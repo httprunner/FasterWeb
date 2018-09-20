@@ -91,11 +91,14 @@
                     border
                     stripe
                     highlight-current-row
-                    style="width: 100%;">
+                    style="width: 100%;"
+                    :show-header="dataBaseData.results.length > 0"
+                >
                     <el-table-column
                         label="数据库名称"
                         width="250"
-                        align="center">
+                        align="center"
+                    >
                         <template slot-scope="scope">
                             <el-tag v-if="scope.row.type===1" type="">Sql Server</el-tag>
                             <el-tag v-if="scope.row.type===2" type="success">MySQL</el-tag>
@@ -213,7 +216,9 @@
             return {
                 editVisible:false,
                 dialogVisible: false,
-                dataBaseData: '',
+                dataBaseData: {
+                    results:[]
+                },
                 dataBaseForm: {
                     name: '',
                     desc: '',

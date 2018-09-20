@@ -23,6 +23,7 @@ ul li {
 }
 
 .nav-api-side {
+    overflow: auto;
     border: 1px solid #ddd;
     width: 240px;
     margin-left: 10px;

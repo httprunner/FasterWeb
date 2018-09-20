@@ -61,6 +61,10 @@ export const updateDebugtalk = params => {
     return axios.patch('/api/fastrunner/debugtalk/', params).then(res => res.data)
 };
 
+export const runDebugtalk = params => {
+    return axios.post('/api/fastrunner/debugtalk/', params).then(res => res.data)
+};
+
 export const getTree = (url, params) => {
     return axios.get('/api/fastrunner/tree/'+ url + '/', params).then(res => res.data)
 };
@@ -136,6 +140,11 @@ export const getTestPaginationBypage = params => {
 export const addConfig = params => {
     return axios.post('/api/fastrunner/config/', params).then(res => res.data)
 };
+
+export const updateConfig = (url, params) => {
+    return axios.patch('/api/fastrunner/config/' + url + '/', params).then(res => res.data)
+};
+
 
 export const configList = params => {
     return axios.get('/api/fastrunner/config/', params).then(res => res.data)

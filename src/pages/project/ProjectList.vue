@@ -65,6 +65,7 @@
                     :data="projectData.results"
                     border
                     stripe
+                    :show-header="projectData.results.length > 0"
                     highlight-current-row
                     style="width: 100%;"
                 >
@@ -74,9 +75,9 @@
                         align="center"
                     >
                         <template slot-scope="scope">
-                            <i class="iconfont">&#xe609;</i>
+                            <i class="iconfont" style="position: absolute; left: 10px">&#xe64a;</i>
                             <span
-                                style="margin-left: 10px; font-size: 18px; font-weight: bold; cursor: pointer"
+                                style="font-size: 18px; font-weight: bold; cursor: pointer;"
                                 @click="handleCellClick(scope.row)"
                             >{{ scope.row.name }}</span>
                         </template>
@@ -172,7 +173,9 @@
             return {
                 dialogVisible: false,
                 editVisible: false,
-                projectData: [],
+                projectData: {
+                    results: []
+                },
                 projectForm: {
                     name: '',
                     desc: '',

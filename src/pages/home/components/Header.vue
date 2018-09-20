@@ -1,13 +1,22 @@
 <template>
     <div>
         <div class="nav-header">
-            <ul class="header">
-                <li class="li-first">1</li>
-                <li class="li-second">you account</li>
-                <li style="margin-left: 5px">
-                    logo
-                </li>
-            </ul>
+            <el-row>
+                <el-col :span="3">
+                    <span style="width: 50px; display: inline-block">icon</span>
+                    <span style="width: 126px; display: inline-block; border-right: 1px solid #ddd">Account</span>
+                </el-col>
+                <el-col :span="12">
+                    <div style="padding: 18px">
+                    <el-breadcrumb separator-class="el-icon-arrow-right">
+                        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+                        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+                        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+                    </el-breadcrumb>
+                    </div>
+                </el-col>
+            </el-row>
 
         </div>
     </div>
@@ -27,31 +36,6 @@
 </script>
 
 <style scoped>
-    .header {
-        margin: 0;
-        padding: 0;
-    }
-
-    .li-first {
-        width: 50px;
-        border-right: 1px solid #ddd;
-    }
-
-    .li-second {
-        width: 125px;
-        padding: 10px auto;
-        border-right: 1px solid #ddd;
-    }
-
-    ul li {
-        list-style: none;
-    }
-
-    .header li {
-        display: inline-block;
-        height: 50px;
-    }
-
     .nav-header {
         margin: 0 auto;
         font-size: 14px;

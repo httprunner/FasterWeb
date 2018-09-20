@@ -5,7 +5,7 @@
             <li class="title-li" title="Test API Project">
                 <b>{{projectInfo.name}}</b>
                 <a @click="dialogVisible = true" style="cursor: pointer">
-                    <i class="el-icon-edit">修改</i>
+                    <i class="iconfont">&#xe67d;</i>修改
                 </a>
                 <el-dialog
                     title="编辑项目"
@@ -39,45 +39,35 @@
         </ul>
 
         <ul class="project_detail">
-            <li class="pull-left first-li">
-                <p class="title-p"><i class="iconfont">&#xe888;</i> &nbsp;{{projectInfo.api_count}} 个API</p>
+            <li class="pull-left">
+                <p class="title-p"><i class="iconfont">&#xe74a;</i> &nbsp;{{projectInfo.api_count}} 个API</p>
                 <p class="desc-p">接口总数</p>
             </li>
 
-            <li class="pull-left center-li">
-                <p class="title-p"><i class="iconfont">&#xe697;</i> &nbsp;{{projectInfo.suite_count}} 个Suite</p>
-                <p class="desc-p">Suite总数</p>
+            <li class="pull-left">
+                <p class="title-p"><i class="iconfont">&#xe6da;</i> &nbsp;{{projectInfo.case_count}} 个用例集</p>
+                <p class="desc-p">用例集总数</p>
             </li>
 
-            <li class="pull-left center-li">
-                <p class="title-p"><i class="iconfont">&#xe606;</i> &nbsp;{{projectInfo.case_count}} 个用例</p>
-                <p class="desc-p">用例总数</p>
-            </li>
-
-            <li class="pull-left last-li">
-                <p class="title-p"><i class="iconfont">&#xe673;</i> &nbsp;{{projectInfo.config_count}} 套环境</p>
+            <li class="pull-left">
+                <p class="title-p"><i class="iconfont">&#xee32;</i> &nbsp;{{projectInfo.config_count}} 套环境</p>
                 <p class="desc-p">环境套数</p>
             </li>
         </ul>
 
         <ul class="project_detail">
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe60c;</i> &nbsp;{{projectInfo.team_count}} 人</p>
-                <p class="desc-p">项目组成员</p>
-            </li>
-
-            <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe60c;</i> &nbsp;1 项task</p>
+                <p class="title-p"><i class="iconfont">&#xe61e;</i> &nbsp;0 项task</p>
                 <p class="desc-p">定时任务</p>
             </li>
 
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe60c;</i> &nbsp;1 个报告</p>
+                <p class="title-p"><i class="iconfont">&#xe66e;</i> &nbsp;0 个报告</p>
                 <p class="desc-p">测试报告</p>
             </li>
 
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe60c;</i> &nbsp;{{projectInfo.update_time | datetimeFormat}}
+                <p class="title-p"><i class="iconfont">&#xe63b;</i> &nbsp;{{projectInfo.update_time | datetimeFormat}}
                 </p>
                 <p class="desc-p">最后更新时间</p>
             </li>
@@ -201,9 +191,13 @@
         margin-top: 10px;
         text-indent: 20px;
         display: inline-block;
-        height: 82px;
+        height: 90px;
         width: calc(20% - 1.5px);
         border: 1px solid #ddd;
+    }
+
+    .project_detail {
+        height: 100px;
     }
 
     .title-project {

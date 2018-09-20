@@ -1,92 +1,97 @@
 <template>
-    <div>
-        <el-pagination
-            @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
-            :page-size="11"
-            v-show="testData.count !== 0 "
-            background
-            layout="total, prev, pager, next, jumper"
-            :total="testData.count"
-        >
-        </el-pagination>
-        <div style="padding-top: 10px">
-            <el-table
-                ref="multipleTable"
-                :data="testData.results"
-                :show-header="testData.count !== 0 "
-                stripe
-                style="width: 100%"
-                height="620"
-                @cell-mouse-enter="cellMouseEnter"
-                @cell-mouse-leave="cellMouseLeave"
-                @selection-change="handleSelectionChange"
-            >
-                <el-table-column
-                    type="selection"
-                    width="55">
-                </el-table-column>
-
-                <el-table-column
-                    label="用例集名称"
-                    width="420"
+    <el-container>
+        <el-header style="padding: 0; ">
+            <div style="padding-top: 8px; padding-left: 10px;">
+                <el-pagination
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
+                    :page-size="11"
+                    v-show="testData.count !== 0 "
+                    background
+                    layout="total, prev, pager, next, jumper"
+                    :total="testData.count"
                 >
-                    <template slot-scope="scope">
-                        <div>{{scope.row.name}}</div>
-                    </template>
-                </el-table-column>
+                </el-pagination>
+            </div>
+        </el-header>
 
-                <el-table-column
-                    width="300"
-                    label="更新时间"
+        <el-container>
+            <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
+                <el-table
+                    ref="multipleTable"
+                    :data="testData.results"
+                    :show-header="testData.count !== 0 "
+                    stripe
+                    style="width: 100%"
+                    height="570"
+                    @cell-mouse-enter="cellMouseEnter"
+                    @cell-mouse-leave="cellMouseLeave"
+                    @selection-change="handleSelectionChange"
                 >
-                    <template slot-scope="scope">
-                        <div>{{scope.row.update_time|datetimeFormat}}</div>
+                    <el-table-column
+                        type="selection"
+                        width="55">
+                    </el-table-column>
 
-                    </template>
-                </el-table-column>
+                    <el-table-column
+                        label="用例集名称"
+                        width="420"
+                    >
+                        <template slot-scope="scope">
+                            <div>{{scope.row.name}}</div>
+                        </template>
+                    </el-table-column>
 
-                <el-table-column
-                    width="300"
-                >
-                    <template slot-scope="scope">
-                        <el-row v-show="currentRow === scope.row">
-                            <el-button
-                                type="info"
-                                icon="el-icon-edit"
-                                circle size="mini"
-                                @click="handleEditTest(scope.row.id)"
-                            ></el-button>
+                    <el-table-column
+                        width="300"
+                        label="更新时间"
+                    >
+                        <template slot-scope="scope">
+                            <div>{{scope.row.update_time|datetimeFormat}}</div>
 
-                            <el-button
-                                type="primary"
-                                icon="el-icon-caret-right"
-                                circle size="mini"
-                            ></el-button>
+                        </template>
+                    </el-table-column>
 
-                            <el-button
-                                type="success"
-                                icon="el-icon-document"
-                                circle size="mini"
-                                @click="handleCopyTest(scope.row.id)"
-                            >
-                            </el-button>
+                    <el-table-column
+                        width="300"
+                    >
+                        <template slot-scope="scope">
+                            <el-row v-show="currentRow === scope.row">
+                                <el-button
+                                    type="info"
+                                    icon="el-icon-edit"
+                                    circle size="mini"
+                                    @click="handleEditTest(scope.row.id)"
+                                ></el-button>
 
-                            <el-button
-                                type="danger"
-                                icon="el-icon-delete"
-                                circle size="mini"
-                                @click="handleDelTest(scope.row.id)"
-                            >
-                            </el-button>
-                        </el-row>
-                    </template>
+                                <el-button
+                                    type="primary"
+                                    icon="el-icon-caret-right"
+                                    circle size="mini"
+                                ></el-button>
 
-                </el-table-column>
+                                <el-button
+                                    type="success"
+                                    icon="el-icon-document"
+                                    circle size="mini"
+                                    @click="handleCopyTest(scope.row.id)"
+                                >
+                                </el-button>
 
-            </el-table>
-        </div>
-    </div>
+                                <el-button
+                                    type="danger"
+                                    icon="el-icon-delete"
+                                    circle size="mini"
+                                    @click="handleDelTest(scope.row.id)"
+                                >
+                                </el-button>
+                            </el-row>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-main>
+        </el-container>
+    </el-container>
 
 </template>
 
@@ -95,6 +100,7 @@
         name: "TestList",
 
         props: {
+            back: Boolean,
             project: {
                 require: true
             },
@@ -105,11 +111,15 @@
         },
 
         watch: {
-            node() {
+            node () {
                 this.getTestList();
             },
 
-            del() {
+            back () {
+                this.getTestList();
+            },
+
+            del () {
                 if (this.selectTest.length !== 0) {
                     this.$confirm('此操作将永久删除测试用例集，是否继续?', '提示', {
                         confirmButtonText: '确定',

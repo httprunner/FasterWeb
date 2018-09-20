@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-aside style="width: 260px; margin-top: 10px; overflow: auto">
+        <el-aside style="width: 260px; margin-top: 10px;">
             <div class="nav-api-side">
                 <div class="api-tree">
                     <el-input
@@ -61,7 +61,7 @@
                             v-model="testName"
                             clearable
                         >
-                            <template slot="prepend">用例信息录入</template>
+                            <template slot="prepend">用例集信息录入</template>
                             <el-button
                                 slot="append"
                                 type="success"
@@ -81,7 +81,7 @@
                             <div
                                 v-for="(item,index) in apiData.results"
                                 draggable='true'
-                                @dragstart="dragAPI = item"
+                                @dragstart="currentAPI = JSON.parse(JSON.stringify(item))"
                                 style="cursor: pointer; margin-top: 10px"
                                 :key="index"
                             >
@@ -210,19 +210,6 @@
     import HttpRunner from './TestBody'
 
     export default {
-        computed: {
-            dragAPI: {
-                get () {
-                    return this.currentAPI;
-                },
-                set (value) {
-                    this.currentAPI = {
-                        body: value.body,
-                        id: value.id
-                    };
-                }
-            }
-        },
         components: {
             draggable,
             HttpRunner
@@ -236,15 +223,20 @@
             },
             testStepResp: {
                 require: false
-            }
+            },
+            back: Boolean
         },
 
         name: "EditTest",
         watch: {
-            filterText(val) {
+            back () {
+                this.editTestStepActivate = false;
+            },
+
+            filterText (val) {
                 this.$refs.tree2.filter(val);
             },
-            testStepResp() {
+            testStepResp () {
                 if (this.testStepResp.length !== 0) {
                     this.testName = this.testStepResp[0].case.name;
                     this.testId = this.testStepResp[0].case.id;
@@ -269,7 +261,7 @@
                 currentAPI: '',
                 data: '',
                 filterText: '',
-                expand: '&#xe667;',
+                expand: '&#xe65f;',
                 dataTree: [],
                 apiData: {
                     count: 0,
@@ -327,6 +319,7 @@
                             type: 'success',
                             duration: 1000
                         });
+                        this.$emit("addSuccess");
                     } else {
                         this.$message({
                             message: resp.msg,
@@ -353,6 +346,7 @@
                             type: 'success',
                             duration: 1000
                         });
+                        this.$emit("addSuccess");
                     } else {
                         this.$message({
                             message: resp.msg,
@@ -446,7 +440,7 @@
 
             drop(event) {
                 event.preventDefault();
-                this.testData.push(this.dragAPI);
+                this.testData.push(this.currentAPI);
             },
             allowDrop(event) {
                 event.preventDefault();

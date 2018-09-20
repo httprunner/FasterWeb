@@ -217,7 +217,8 @@
                             this.$message.success({
                                 message: '接口更新成功',
                                 duration: 1000
-                            })
+                            });
+                            this.$emit('addSuccess');
                         } else {
                             this.$message.error({
                                 message: resp.msg,
@@ -254,7 +255,8 @@
                             this.$message.success({
                                 message: '接口添加成功',
                                 duration: 1000
-                            })
+                            });
+                            this.$emit('addSuccess');
                         } else {
                             this.$message.error({
                                 message: resp.msg,
