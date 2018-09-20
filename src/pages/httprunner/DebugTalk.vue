@@ -21,8 +21,6 @@
                 >
                     在线运行
                 </el-button>
-
-                <h1 style="position: absolute; right:150px; top: 45px;">终 端 控 制 台</h1>
             </div>
 
         </el-header>
@@ -58,7 +56,6 @@
                         </editor>
                     </el-col>
                 </el-row>
-
             </el-main>
         </el-container>
     </el-container>
@@ -92,7 +89,7 @@
             },
 
             handleConfirm() {
-                this.$api.updateDebugtalk(this.code).then(res => {
+                this.$api.updateDebugtalk(this.code).then(resp => {
                     this.getDebugTalk();
                     this.$message.success("代码保存成功");
                 }).catch(resp => {
@@ -104,6 +101,9 @@
             },
             editorInit() {
                 require('brace/ext/language_tools')
+                require('brace/mode/python')
+                require('brace/theme/monokai')
+                require('brace/snippets/python')
             },
             getDebugTalk() {
                 this.$api.getDebugtalk(this.$route.params.id).then(res => {
