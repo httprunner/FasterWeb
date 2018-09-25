@@ -27,10 +27,13 @@
                 this.$store.commit('changeItemUrl', 'ProjectList');
                 this.$store.commit('changeBackButton');
                 this.$store.commit('changeSideMenu','projectList');
+                this.setLocalValue("menu", JSON.stringify(this.$store.state.side_menu));
                 this.$router.push({name:'ProjectList'});
             },
             selected(url) {
                 this.$store.commit('changeItemUrl', url);
+                this.setLocalValue("menu", JSON.stringify(this.$store.state.side_menu));
+                this.setLocalValue("itemUrl", url);
                 this.$router.push({name:url})
             }
         }

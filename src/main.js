@@ -8,6 +8,7 @@ import router from './router'
 import 'styles/iconfont.css'
 import 'styles/swagger.css'
 import 'styles/tree.css'
+import 'styles/home.css'
 import * as api from './restful/api'
 import store from './store'
 
@@ -15,34 +16,64 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.prototype.$api = api
 
-Vue.filter('datetimeFormat', function (time, format='YY-MM-DD hh:mm:ss') {
+Vue.filter('datetimeFormat', function (time, format = 'YY-MM-DD hh:mm:ss') {
     let date = new Date(time);
     let year = date.getFullYear(),
-        month = date.getMonth()+1,
+        month = date.getMonth() + 1,
         day = date.getDate(),
         hour = date.getHours(),
         min = date.getMinutes(),
         sec = date.getSeconds();
-    let preArr = Array.apply(null,Array(10)).map(function(elem, index) {
-        return '0'+index;
+    let preArr = Array.apply(null, Array(10)).map(function (elem, index) {
+        return '0' + index;
     });
 
-    let newTime = format.replace(/YY/g,year)
-        .replace(/MM/g,preArr[month]||month)
-        .replace(/DD/g,preArr[day]||day)
-        .replace(/hh/g,preArr[hour]||hour)
-        .replace(/mm/g,preArr[min]||min)
-        .replace(/ss/g,preArr[sec]||sec);
+    let newTime = format.replace(/YY/g, year)
+        .replace(/MM/g, preArr[month] || month)
+        .replace(/DD/g, preArr[day] || day)
+        .replace(/hh/g, preArr[hour] || hour)
+        .replace(/mm/g, preArr[min] || min)
+        .replace(/ss/g, preArr[sec] || sec);
 
     return newTime;
 });
 
+Vue.prototype.setLocalValue = function(name, value) {
+    if (window.localStorage) {
+        localStorage.setItem(name, value);
+    } else {
+        alert('This browser does NOT support localStorage');
+    }
+};
+Vue.prototype.getLocalValue = function (name) {
+    const value = localStorage.getItem(name);
+    if (value) {
+        return value;
+    } else {
+        return '';
+    }
+};
+
 router.beforeEach((to, from, next) => {
     /* 路由发生变化修改页面title */
-    if (to.meta.title) {
-        document.title = to.meta.title
-    }
-    next()
+    setTimeout((res) => {
+        if (to.meta.title) {
+            document.title = to.meta.title
+        }
+
+        if (to.meta.requireAuth) {
+            if (store.state.token !== '') {
+                next();
+            }else {
+                next({
+                    name: 'Login',
+                })
+            }
+        } else {
+            next()
+        }
+    })
+
 })
 
 /* eslint-disable no-new */
@@ -51,5 +82,26 @@ new Vue({
     router,
     store,
     components: {App},
-    template: '<App/>'
+    template: '<App/>',
+    created() {
+        if (this.getLocalValue("token") === null) {
+            this.setLocalValue("token", "");
+        }
+
+        if (this.getLocalValue("menu") === null) {
+            this.setLocalValue("menu", JSON.stringify([
+                {name: "项目列表",  code: "&#xe7a7;", url:'ProjectList'},
+                {name: "数据库管理",  code: "&#xe782;", url:'DataBase'}
+            ]));
+        }
+
+        if (this.getLocalValue("itemUrl") === null) {
+            this.setLocalValue("itemUrl", "ProjectList");
+        }
+        this.$store.commit("isLogin", this.getLocalValue("token"));
+
+        this.$store.commit("changeItemUrl", this.getLocalValue("itemUrl"));
+
+        this.$store.commit("setSideMenu", JSON.parse(this.getLocalValue("menu")))
+    }
 })

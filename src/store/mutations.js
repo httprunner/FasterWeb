@@ -1,4 +1,9 @@
 export default {
+
+    isLogin(state, value){
+        state.token = value;
+    },
+
     changeBackButton(state) {
         state.backButton = !state.backButton;
     },
@@ -27,5 +32,9 @@ export default {
             ];
         }
     },
+
+    setSideMenu(state, value) {
+        state.side_menu = value;
+    }
 
 }

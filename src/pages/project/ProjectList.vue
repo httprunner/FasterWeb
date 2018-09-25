@@ -75,7 +75,7 @@
                         align="center"
                     >
                         <template slot-scope="scope">
-                            <i class="iconfont" style="position: absolute; left: 10px">&#xe64a;</i>
+                            <i class="iconfont">&#xe64a;</i>
                             <span
                                 style="font-size: 18px; font-weight: bold; cursor: pointer;"
                                 @click="handleCellClick(scope.row)"
@@ -199,6 +199,8 @@
                 this.$store.commit('changeBackButton');
                 this.$store.commit('changeSideMenu');
                 this.$store.commit('changeItemUrl', 'ProjectDetail');
+                this.setLocalValue("itemUrl", "ProjectDetail");
+                this.setLocalValue("menu", JSON.stringify(this.$store.state.side_menu));
                 this.$router.push({name:'ProjectDetail', params:{id:row['id']}});
             },
             handleEdit(index, row) {

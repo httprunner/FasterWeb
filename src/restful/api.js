@@ -1,35 +1,58 @@
 import axios from 'axios'
-
+import store from '../store/state'
+import router from '../router'
 let baseUrl = " http://localhost:8000";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = baseUrl;
 
+axios.interceptors.request.use(function (config) {
+    if (!config.url.startsWith("/api/user/")){
+        config.url = config.url + "?token=" + store.token;
+    }
+    return config;
+}, function (error) {
+    return Promise.reject(error);
+});
+
+axios.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    if (error.response.status === 401) {
+        router.replace({
+            name: 'Login'
+        })
+    }
+});
+
+// usermanager api
 export const register = params => {
-    return axios.post('/api/register/', params).then(res => res.data)
+    return axios.post('/api/user/register/', params).then(res => res.data)
 };
 
 export const login = params => {
-    return axios.post('/api/login/', params).then(res => res.data)
+    return axios.post('/api/user/login/', params).then(res => res.data)
 };
 
+
+// fastrunner api
 export const addProject = params => {
     return axios.post('/api/fastrunner/project/', params).then(res => res.data)
 };
 
-export const deleteProject  = config => {
+export const deleteProject = config => {
     return axios.delete('/api/fastrunner/project/', config).then(res => res.data)
 };
 
-export const getProjectList  = params => {
+export const getProjectList = params => {
     return axios.get('/api/fastrunner/project/').then(res => res.data)
 };
 
-export const getProjectDetail  = pk => {
+export const getProjectDetail = pk => {
     return axios.get('/api/fastrunner/project/' + pk + '/').then(res => res.data)
 };
 
-export const getPagination  = url => {
+export const getPagination = url => {
     return axios.get(url).then(res => res.data)
 };
 
@@ -41,20 +64,20 @@ export const addDataBase = params => {
     return axios.post('/api/fastrunner/database/', params).then(res => res.data)
 };
 
-export const getDataBaseList  = params => {
+export const getDataBaseList = params => {
     return axios.get('/api/fastrunner/database/').then(res => res.data)
 };
 
-export const deleteDataBase  = pk => {
+export const deleteDataBase = pk => {
     return axios.delete('/api/fastrunner/database/' + pk + '/').then(res => res.data)
 };
 
 export const updateDataBase = (url, params) => {
-    return axios.patch('/api/fastrunner/database/'+ url + '/', params).then(res => res.data)
+    return axios.patch('/api/fastrunner/database/' + url + '/', params).then(res => res.data)
 };
 
 export const getDebugtalk = url => {
-    return axios.get('/api/fastrunner/debugtalk/'+ url + '/').then(res => res.data)
+    return axios.get('/api/fastrunner/debugtalk/' + url + '/').then(res => res.data)
 };
 
 export const updateDebugtalk = params => {
@@ -66,14 +89,14 @@ export const runDebugtalk = params => {
 };
 
 export const getTree = (url, params) => {
-    return axios.get('/api/fastrunner/tree/'+ url + '/', params).then(res => res.data)
+    return axios.get('/api/fastrunner/tree/' + url + '/', params).then(res => res.data)
 };
 
 export const updateTree = (url, params) => {
-    return axios.patch('/api/fastrunner/tree/'+ url + '/', params).then(res => res.data)
+    return axios.patch('/api/fastrunner/tree/' + url + '/', params).then(res => res.data)
 };
 
-export const uploadFile  = url => {
+export const uploadFile = url => {
     return baseUrl + '/api/fastrunner/file/'
 };
 
@@ -125,7 +148,7 @@ export const delAllTest = params => {
     return axios.delete('/api/fastrunner/test/', params).then(res => res.data)
 };
 
-export const coptTest = (url,params) => {
+export const coptTest = (url, params) => {
     return axios.post('/api/fastrunner/test/' + url + '/', params).then(res => res.data)
 };
 

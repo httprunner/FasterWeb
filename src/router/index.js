@@ -36,7 +36,7 @@ export default new Router({
             name: 'Home',
             component: Home,
             meta: {
-                title: '首页'
+                title: '首页',
             },
             children: [
                 {
@@ -44,7 +44,8 @@ export default new Router({
                     path: 'index',
                     component: ProjectList,
                     meta: {
-                        title: '项目列表'
+                        title: '项目列表',
+                        requireAuth: true,
                     }
                 },
                 {
@@ -52,7 +53,8 @@ export default new Router({
                     path: 'database',
                     component: DataBase,
                     meta: {
-                        title: '数据库'
+                        title: '数据库',
+                        requireAuth: true,
                     }
                 },
                 {
@@ -60,7 +62,8 @@ export default new Router({
                     path:'project/:id/dashbord',
                     component: ProjectDetail,
                     meta: {
-                        title: '项目预览'
+                        title: '项目预览',
+                        requireAuth: true,
                     }
 
                 },
@@ -69,7 +72,8 @@ export default new Router({
                     path:'debugtalk/:id',
                     component: DebugTalk,
                     meta: {
-                        title: '编辑驱动'
+                        title: '编辑驱动',
+                        requireAuth: true,
                     }
 
                 },
@@ -78,7 +82,8 @@ export default new Router({
                     path:'api_record/:id',
                     component: RecordApi,
                     meta: {
-                        title: '接口模板'
+                        title: '接口模板',
+                        requireAuth: true
                     }
 
                 },
@@ -87,7 +92,8 @@ export default new Router({
                     path:'auto_test/:id',
                     component: AutoTest,
                     meta: {
-                        title: '自动化测试'
+                        title: '自动化测试',
+                        requireAuth: true
                     }
 
                 },
@@ -96,7 +102,8 @@ export default new Router({
                     path:'record_config/:id',
                     component: RecordConfig,
                     meta: {
-                        title: '环境管理'
+                        title: '环境管理',
+                        requireAuth: true
                     }
 
                 }

@@ -15,6 +15,7 @@
         height: 100%;
     }
     body {
+        visibility: visible;
         height:100%;
         width:100%;
         overflow:hidden;
@@ -22,6 +23,5 @@
         padding:0;
         background: #fff;
         color: #333;
-        font-family: "Helvetica Neue", "Helvetica", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "WenQuanYi Micro Hei", "Arial", sans-serif;
-    }
+        font-family: "PingFang SC", "Helvetica Neue", Helvetica, "Hiragino Sans GB", STHeitiSC-Light, "Microsoft YaHei", "微软雅黑", Arial, sans-serif  }
 </style>
