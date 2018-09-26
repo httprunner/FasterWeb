@@ -199,8 +199,6 @@
                 this.$store.commit('changeBackButton');
                 this.$store.commit('changeSideMenu');
                 this.$store.commit('changeItemUrl', 'ProjectDetail');
-                this.setLocalValue("itemUrl", "ProjectDetail");
-                this.setLocalValue("menu", JSON.stringify(this.$store.state.side_menu));
                 this.$router.push({name:'ProjectDetail', params:{id:row['id']}});
             },
             handleEdit(index, row) {

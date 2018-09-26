@@ -87,21 +87,7 @@ new Vue({
         if (this.getLocalValue("token") === null) {
             this.setLocalValue("token", "");
         }
-
-        if (this.getLocalValue("menu") === null) {
-            this.setLocalValue("menu", JSON.stringify([
-                {name: "项目列表",  code: "&#xe7a7;", url:'ProjectList'},
-                {name: "数据库管理",  code: "&#xe782;", url:'DataBase'}
-            ]));
-        }
-
-        if (this.getLocalValue("itemUrl") === null) {
-            this.setLocalValue("itemUrl", "ProjectList");
-        }
         this.$store.commit("isLogin", this.getLocalValue("token"));
 
-        this.$store.commit("changeItemUrl", this.getLocalValue("itemUrl"));
-
-        this.$store.commit("setSideMenu", JSON.parse(this.getLocalValue("menu")))
     }
 })

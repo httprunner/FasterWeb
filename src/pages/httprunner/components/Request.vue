@@ -63,7 +63,7 @@
                             <el-col :span="7">
                                 <el-upload
                                     :show-file-list="false"
-                                    :action="uploadFile()"
+                                    :action="uploadFile(scope.row)"
                                     :limit="1"
                                     type="small"
                                     :file-list="fileList"
@@ -219,12 +219,18 @@
                 return this.tempFileList.length > index;
             },
 
-            uploadFile() {
+            uploadFile(row) {
                 return this.$api.uploadFile();
             },
 
-            uploadError() {
-                this.$message.error('Sorry，文件上传失败啦, 请重试！')
+            uploadError(error) {
+                if (error.status === 401) {
+                    this.$router.replace({
+                        name: 'Login'
+                    })
+                } else {
+                    this.$message.error('Sorry，文件上传失败啦, 请重试！')
+                }
             },
 
             cellMouseEnter(row) {

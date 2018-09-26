@@ -97,7 +97,7 @@ export const updateTree = (url, params) => {
 };
 
 export const uploadFile = url => {
-    return baseUrl + '/api/fastrunner/file/'
+    return baseUrl + '/api/fastrunner/file/?token='+store.token
 };
 
 export const addAPI = params => {
@@ -186,6 +186,11 @@ export const delAllConfig = params => {
 
 export const getConfigPaginationBypage = params => {
     return axios.get('/api/fastrunner/config/', params).then(res => res.data)
+};
+
+
+export const runSingleAPI = params => {
+    return axios.post('/api/fastrunner/run_api/', params).then(res => res.data)
 };
 
 

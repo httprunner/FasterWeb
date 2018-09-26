@@ -31,10 +31,6 @@ export default {
                 {name: "MockServer", url: "MockServer", code: "&#xe63c;"}
             ];
         }
-    },
-
-    setSideMenu(state, value) {
-        state.side_menu = value;
     }
 
 }

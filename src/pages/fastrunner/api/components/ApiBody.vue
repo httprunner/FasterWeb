@@ -18,6 +18,131 @@
                     >Save
                     </el-button>
                 </el-input>
+
+                <el-button
+                    type="primary"
+                    @click="reverseStatus"
+                >Send
+                </el-button>
+
+                <el-dialog
+                    v-if="dialogTableVisible"
+                    :visible.sync="dialogTableVisible"
+                    width="60%"
+                    style="padding: 0"
+                    center
+                    title="API Request and Response"
+                >
+                    <div
+                        class="popup"
+                        v-for="test_suite in summary.details"
+                    >
+
+                        <div
+                            class="content"
+                            v-for="item in test_suite.records"
+                        >
+
+                            <div style="text-align: center; font-size: 20px; color: deepskyblue;">
+                                {{item.name}} &nbsp;<span :class="item.status">{{item.status}}</span>
+                            </div>
+
+                            <h3>Request:</h3>
+                            <div style="overflow: auto">
+                                <table class="details">
+                                    <tr v-for="(value, key) in item.meta_data.request">
+                                        <th>{{ key }}</th>
+                                        <td>
+                                            <span v-if="key === 'headers' ">
+                                                <div
+                                                    v-for="(header_value, header_key) in item.meta_data.request.headers">
+                                                    <strong>{{ header_key }}</strong>: {{ header_value }}
+                                                </div>
+                                            </span>
+
+                                            <span v-else>
+                                                {{ value }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <h3>Response:</h3>
+                            <div style="overflow: auto">
+                                <table class="details">
+                                    <tr
+                                        v-if='["text", "json", "elapsed_ms", "response_time_ms", "content_size", "content_type"].indexOf(key) === -1'
+                                        v-for="(value, key) in item.meta_data.response"
+                                    >
+                                        <th>{{ key }}</th>
+                                        <td>
+                                            <span v-if="key === 'headers' ">
+                                                <div
+                                                    v-for="(header_value, header_key) in item.meta_data.response.headers">
+                                                <strong>{{ header_key }}</strong>: {{ header_value }}
+                                                </div>
+                                            </span>
+                                            <span v-else-if="key === 'content' ">
+                                                <img
+                                                    v-if="item.meta_data.response.content_type.indexOf('image') !== -1 "
+                                                    :src="item.meta_data.response.content"
+                                                />
+                                                <pre v-else>{{item.meta_data.response.text}}</pre>
+                                            </span>
+                                            <span v-else>{{value}}</span>
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <h3>Validators:</h3>
+                            <div style="overflow: auto">
+                                <table class="details">
+                                    <tr>
+                                        <th>check</th>
+                                        <th>comparator</th>
+                                        <th>expect value</th>
+                                        <th>actual value</th>
+                                    </tr>
+                                    <tr v-for="validator in item.meta_data.validators">
+                                        <td class="passed" v-if="validator.check_result === 'pass' ">
+                                        <td class="failed" v-if="validator.check_result === 'fail' ">
+                                        <td class="unchecked" v-if="validator.check_result === 'unchecked' ">
+                                            {{ validator.check}}
+                                        </td>
+                                        <td>{{ validator.comparator }}</td>
+                                        <td>{{ validator.expect }}</td>
+                                        <td>{{ validator.check_value }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <h3>Statistics:</h3>
+                            <div style="overflow: auto">
+                                <table class="details">
+                                    <tr>
+                                        <th>content_size(bytes)</th>
+                                        <td>{{ item.meta_data.response.content_size }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>response_time(ms)</th>
+                                        <td>{{ item.meta_data.response.response_time_ms }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>elapsed(ms)</th>
+                                        <td>{{ item.meta_data.response.elapsed_ms }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </el-dialog>
+
+
             </div>
             <div>
                 <el-input
@@ -44,7 +169,7 @@
                 <el-tooltip
                     effect="dark"
                     content="循环次数"
-                    placement="top-start"
+                    placement="bottom"
                 >
                     <el-input-number
                         v-model="times"
@@ -66,8 +191,8 @@
             >
                 <el-tab-pane label="Header" name="first">
                     <headers :save="save"
-                                v-on:header="handleHeader"
-                                :header="response ? response.body.header: [] ">
+                             v-on:header="handleHeader"
+                             :header="response ? response.body.header: [] ">
                     </headers>
                 </el-tab-pane>
 
@@ -154,6 +279,11 @@
             }
         },
         methods: {
+            reverseStatus() {
+                this.save = !this.save;
+                this.run = true;
+            },
+
             handleHeader(header) {
                 this.header = header;
             },
@@ -172,10 +302,16 @@
             handleHooks(hooks) {
                 this.hooks = hooks;
                 // 调用后台
-                if (this.id === '') {
-                    this.addAPI();
+                if (!this.run) {
+                    if (this.id === '') {
+                        this.addAPI();
+                    } else {
+                        this.updateAPI();
+                    }
                 } else {
-                    this.updateAPI();
+                    this.runAPI();
+                    this.dialogTableVisible = true;
+                    this.run = false;
                 }
             },
 
@@ -225,6 +361,30 @@
                                 duration: 1000
                             })
                         }
+                    }).catch(resp => {
+                        this.$message.error({
+                            message: '服务器连接超时，请重试',
+                            duration: 1000
+                        })
+                    })
+                }
+            },
+
+            runAPI() {
+                if (this.validateData()) {
+                    this.$api.runSingleAPI({
+                        header: this.header,
+                        request: this.request,
+                        extract: this.extract,
+                        validate: this.validate,
+                        variables: this.variables,
+                        hooks: this.hooks,
+                        url: this.url,
+                        method: this.method,
+                        name: this.name,
+                        times: this.times,
+                    }).then(resp => {
+                        this.summary = resp;
                     }).catch(resp => {
                         this.$message.error({
                             message: '服务器连接超时，请重试',
@@ -295,9 +455,10 @@
                 variables: [],
                 hooks: [],
                 method: 'POST',
-
+                dialogTableVisible: false,
                 save: false,
-
+                run: false,
+                summary: {},
                 activeTag: 'first',
                 httpOptions: [{
                     label: 'GET',
@@ -334,5 +495,81 @@
         margin-top: 15px;
         border: 1px solid #ddd;
     }
+
+    .details {
+        width: 500px;
+        margin-bottom: 20px;
+    }
+
+    .details th {
+        background-color: skyblue;
+        padding: 5px 12px;
+    }
+
+    .details tr .passed {
+        background-color: lightgreen;
+    }
+
+    .details tr .failed {
+        background-color: red;
+    }
+
+    .details tr .unchecked {
+        background-color: gray;
+    }
+
+    .details td {
+        background-color: lightblue;
+        padding: 5px 12px;
+    }
+
+
+    .success {
+        color: #67c23a;
+    }
+
+    .error {
+        color: #e6a23c;
+    }
+
+    .failure {
+        color: #f56c6c;
+    }
+
+    .skipped {
+        color: #909399;
+    }
+
+    .popup h2 {
+        margin-top: 0;
+        color: #333;
+        font-family: Tahoma, Arial, sans-serif;
+    }
+
+    .popup .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        transition: all 200ms;
+        font-size: 30px;
+        font-weight: bold;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .popup .close:hover {
+        color: #06d85f;
+    }
+
+    .popup .content {
+        max-height: 80%;
+        overflow: auto;
+        text-align: left;
+    }
+
+    .details tr {
+        color: black;
+    }
+
 
 </style>

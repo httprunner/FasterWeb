@@ -104,8 +104,6 @@
                     this.$router.push({name: 'ProjectList'});
                     this.$store.commit("isLogin", resp.token);
                     this.setLocalValue("token", resp.token);
-                    this.setLocalValue("itemUrl", "ProjectList");
-                    this.setLocalValue("menu", JSON.stringify(this.$store.state.side_menu))
                 } else {
                     this.$message.error({
                         message: resp.msg,
