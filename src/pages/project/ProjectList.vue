@@ -16,7 +16,7 @@
                                size="small"
                                icon="el-icon-d-arrow-left"
                                :disabled="projectData.previous === null "
-                               @click = "getPagination(projectData.previous)"
+                               @click="getPagination(projectData.previous)"
                     >
                         上一页
                     </el-button>
@@ -25,7 +25,7 @@
                                round
                                size="small"
                                :disabled="projectData.next === null"
-                               @click = "getPagination(projectData.next)"
+                               @click="getPagination(projectData.next)"
                     >
                         下一页
                         <i class="el-icon-d-arrow-right"></i>
@@ -114,7 +114,9 @@
                     >
                         <template slot-scope="scope">
                             <div slot="reference" class="name-wrapper">
-                                <el-tag type="info" style="font-size: 16px;">{{ scope.row.update_time | datetimeFormat }}</el-tag>
+                                <el-tag type="info" style="font-size: 16px;">{{ scope.row.update_time | datetimeFormat
+                                    }}
+                                </el-tag>
                             </div>
                         </template>
                     </el-table-column>
@@ -199,7 +201,7 @@
                 this.$store.commit('changeBackButton');
                 this.$store.commit('changeSideMenu');
                 this.$store.commit('changeItemUrl', 'ProjectDetail');
-                this.$router.push({name:'ProjectDetail', params:{id:row['id']}});
+                this.$router.push({name: 'ProjectDetail', params: {id: row['id']}});
             },
             handleEdit(index, row) {
                 this.editVisible = true;
@@ -222,8 +224,8 @@
                         }
                     }).catch(resp => {
                         this.$message.error({
-                            message:'服务器连接超时，请重试',
-                            duration:1000
+                            message: '服务器连接超时，请重试',
+                            duration: 1000
                         })
                     });
                 })
@@ -237,7 +239,7 @@
 
                         if (this.projectForm.id === '') {
                             obj = this.$api.addProject(this.projectForm);
-                        } else{
+                        } else {
                             obj = this.$api.updateProject(this.projectForm);
                         }
                         obj.then(resp => {
@@ -254,14 +256,14 @@
                             this.projectForm.responsible = 'yinquanwang';
                         }).catch(resp => {
                             this.$message.error({
-                                message:'服务器连接超时，请重试',
-                                duration:1000
+                                message: '服务器连接超时，请重试',
+                                duration: 1000
                             })
                         });
                     } else {
                         if (this.projectForm.id !== '') {
                             this.editVisible = true;
-                        }else {
+                        } else {
                             this.dialogVisible = true;
                         }
                         return false;
@@ -287,8 +289,8 @@
                     this.projectData = resp;
                 }).catch(resp => {
                     this.$message.error({
-                        message:'服务器连接超时，请重试',
-                        duration:1000
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
                     })
                 });
             },
@@ -297,8 +299,8 @@
                     this.projectData = resp;
                 }).catch(resp => {
                     this.$message.error({
-                        message:'服务器连接超时，请重试',
-                        duration:1000
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
                     })
                 })
             },

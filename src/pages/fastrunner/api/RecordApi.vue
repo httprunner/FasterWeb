@@ -85,6 +85,16 @@
 
                     <el-button
                         style="margin-left: 20px"
+                        type="primary"
+                        icon="el-icon-caret-right"
+                        circle
+                        size="mini"
+                        :disabled="currentNode === ''"
+                        @click="run = !run"
+                    ></el-button>
+
+
+                    <el-button
                         type="danger"
                         icon="el-icon-delete"
                         circle
@@ -95,21 +105,21 @@
 
 
                     <el-tooltip class="item" effect="dark" content="环境信息" placement="top-start">
-                        <el-button plain size="small" icon="el-icon-view"></el-button>
+                        <el-button plain size="medium" icon="el-icon-view"></el-button>
                     </el-tooltip>
 
                     <el-select
                         placeholder="请选择"
-                        size="small"
+                        size="medium"
                         tyle="margin-left: -6px"
-                        :disabled="dataTree.length === 0"
+                        :disabled="currentNode === ''"
                         v-model="currentConfig"
                     >
                         <el-option
                             v-for="item in configOptions"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
                         </el-option>
                     </el-select>
 
@@ -162,6 +172,7 @@
                     :nodeId="currentNode.id"
                     :project="$route.params.id"
                     :response="response"
+                    :config="currentConfig"
                     v-on:addSuccess="handleAddSuccess"
                 >
                 </api-body>
@@ -174,6 +185,8 @@
                     :project="$route.params.id"
                     :del="del"
                     :back="back"
+                    :run="run"
+                    :config="currentConfig"
                 >
                 </api-list>
 
@@ -263,6 +276,7 @@
                 back: false,
                 checked: false,
                 del: false,
+                run:false,
                 response: '',
                 nodeForm: {
                     name: '',
@@ -275,7 +289,7 @@
                 },
                 radio: '根节点',
                 addAPIFlag: false,
-                currentConfig: '',
+                currentConfig: null,
                 treeId: '',
                 maxId: '',
                 dialogVisible: false,
@@ -284,10 +298,7 @@
                 filterText: '',
                 expand: '&#xe65f;',
                 dataTree: [],
-                configOptions: [{
-                    value: '测试环境',
-                    label: '测试环境'
-                }]
+                configOptions: []
             }
         },
         methods: {
@@ -306,6 +317,18 @@
                     this.dataTree = resp['tree'];
                     this.treeId = resp['id'];
                     this.maxId = resp['max'];
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
+
+            getConfig() {
+                this.$api.getAllConfig(this.$route.params.id).then(resp => {
+                    this.configOptions = resp;
+                    this.configOptions.push({"name":"请选择", id:null})
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',
@@ -400,11 +423,12 @@
         name: "RecordApi",
         mounted() {
             this.getTree();
+            this.getConfig();
         }
     }
 </script>
 
-<style>
+<style scoped>
 
 
 </style>

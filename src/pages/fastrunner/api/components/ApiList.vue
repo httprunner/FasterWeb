@@ -100,6 +100,7 @@
                                     type="primary"
                                     icon="el-icon-caret-right"
                                     circle size="mini"
+                                    @click="handleRunAPI(scope.row.id)"
                                 ></el-button>
                                 <el-button
                                     type="danger"
@@ -113,15 +114,30 @@
                     </el-table-column>
 
                 </el-table>
+                <el-dialog
+                    v-if="dialogTableVisible"
+                    :visible.sync="dialogTableVisible"
+                    width="50%"
+                >
+                    <report :summary="summary"></report>
+                </el-dialog>
             </el-main>
         </el-container>
     </el-container>
 </template>
 
 <script>
+    import Report from '../../../reports/DebugReport'
     export default {
+        components: {
+            Report
+        },
         name: "ApiList",
         props: {
+            config:{
+                require:true
+            },
+            run: Boolean,
             back:Boolean,
             node: {
                 require: true
@@ -134,6 +150,8 @@
         },
         data() {
             return {
+                dialogTableVisible: false,
+                summary: {},
                 selectAPI: [],
                 currentRow: '',
                 currentPage: 1,
@@ -144,6 +162,21 @@
             }
         },
         watch: {
+            run () {
+                this.$api.runAPITree({
+                    "project":this.project,
+                    "relation": this.node,
+                    "config": this.config
+                }).then(resp => {
+                    this.summary = resp;
+                    this.dialogTableVisible = true;
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
             back () {
                 this.getAPIList();
             },
@@ -261,6 +294,19 @@
                     } else {
                         this.$message.error(resp.msg)
                     }
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
+            // 运行API
+            handleRunAPI(id) {
+                this.$api.runAPIByPk(id, {params:{config:this.config}}).then(resp => {
+                    this.summary = resp;
+                    this.dialogTableVisible = true;
+
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',

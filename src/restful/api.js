@@ -188,9 +188,21 @@ export const getConfigPaginationBypage = params => {
     return axios.get('/api/fastrunner/config/', params).then(res => res.data)
 };
 
+export const getAllConfig = url => {
+    return axios.get('/api/fastrunner/config/' + url + '/').then(res => res.data)
+};
+
 
 export const runSingleAPI = params => {
     return axios.post('/api/fastrunner/run_api/', params).then(res => res.data)
+};
+
+export const runAPIByPk = (url, params) => {
+    return axios.get('/api/fastrunner/run_api_pk/'+url+'/', params).then(res => res.data)
+};
+
+export const runAPITree = params => {
+    return axios.post('/api/fastrunner/run_api_tree/', params).then(res => res.data)
 };
 
 

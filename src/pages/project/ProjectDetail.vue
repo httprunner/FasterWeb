@@ -21,6 +21,7 @@
                         <el-form-item label="项目名称" prop="name">
                             <el-input v-model="projectForm.name"></el-input>
                         </el-form-item>
+
                         <el-form-item label="项目描述" prop="desc">
                             <el-input v-model="projectForm.desc"></el-input>
                         </el-form-item>

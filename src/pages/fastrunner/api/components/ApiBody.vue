@@ -25,136 +25,18 @@
                 >Send
                 </el-button>
 
-                <el-dialog
-                    v-if="dialogTableVisible"
-                    :visible.sync="dialogTableVisible"
-                    width="60%"
-                    style="padding: 0"
-                    center
-                    title="API Request and Response"
-                >
-                    <div
-                        class="popup"
-                        v-for="test_suite in summary.details"
-                    >
-
-                        <div
-                            class="content"
-                            v-for="item in test_suite.records"
-                        >
-
-                            <div style="text-align: center; font-size: 20px; color: deepskyblue;">
-                                {{item.name}} &nbsp;<span :class="item.status">{{item.status}}</span>
-                            </div>
-
-                            <h3>Request:</h3>
-                            <div style="overflow: auto">
-                                <table class="details">
-                                    <tr v-for="(value, key) in item.meta_data.request">
-                                        <th>{{ key }}</th>
-                                        <td>
-                                            <span v-if="key === 'headers' ">
-                                                <div
-                                                    v-for="(header_value, header_key) in item.meta_data.request.headers">
-                                                    <strong>{{ header_key }}</strong>: {{ header_value }}
-                                                </div>
-                                            </span>
-
-                                            <span v-else>
-                                                {{ value }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <h3>Response:</h3>
-                            <div style="overflow: auto">
-                                <table class="details">
-                                    <tr
-                                        v-if='["text", "json", "elapsed_ms", "response_time_ms", "content_size", "content_type"].indexOf(key) === -1'
-                                        v-for="(value, key) in item.meta_data.response"
-                                    >
-                                        <th>{{ key }}</th>
-                                        <td>
-                                            <span v-if="key === 'headers' ">
-                                                <div
-                                                    v-for="(header_value, header_key) in item.meta_data.response.headers">
-                                                <strong>{{ header_key }}</strong>: {{ header_value }}
-                                                </div>
-                                            </span>
-                                            <span v-else-if="key === 'content' ">
-                                                <img
-                                                    v-if="item.meta_data.response.content_type.indexOf('image') !== -1 "
-                                                    :src="item.meta_data.response.content"
-                                                />
-                                                <pre v-else>{{item.meta_data.response.text}}</pre>
-                                            </span>
-                                            <span v-else>{{value}}</span>
-
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <h3>Validators:</h3>
-                            <div style="overflow: auto">
-                                <table class="details">
-                                    <tr>
-                                        <th>check</th>
-                                        <th>comparator</th>
-                                        <th>expect value</th>
-                                        <th>actual value</th>
-                                    </tr>
-                                    <tr v-for="validator in item.meta_data.validators">
-                                        <td class="passed" v-if="validator.check_result === 'pass' ">
-                                        <td class="failed" v-if="validator.check_result === 'fail' ">
-                                        <td class="unchecked" v-if="validator.check_result === 'unchecked' ">
-                                            {{ validator.check}}
-                                        </td>
-                                        <td>{{ validator.comparator }}</td>
-                                        <td>{{ validator.expect }}</td>
-                                        <td>{{ validator.check_value }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <h3>Statistics:</h3>
-                            <div style="overflow: auto">
-                                <table class="details">
-                                    <tr>
-                                        <th>content_size(bytes)</th>
-                                        <td>{{ item.meta_data.response.content_size }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>response_time(ms)</th>
-                                        <td>{{ item.meta_data.response.response_time_ms }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>elapsed(ms)</th>
-                                        <td>{{ item.meta_data.response.elapsed_ms }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </el-dialog>
-
-
             </div>
             <div>
                 <el-input
-                    class="input-with-select"
+                    style="width: 600px; margin-top: 10px"
                     placeholder="请输入接口请求地址"
                     v-model="url"
-                    clearable=""
+                    clearable
                 >
                     <el-select
+                        style="width: 125px"
                         slot="prepend"
                         v-model="method"
-                        size="small"
                     >
                         <el-option
                             v-for="item of httpOptions"
@@ -164,6 +46,7 @@
                         >
                         </el-option>
                     </el-select>
+
                 </el-input>
 
                 <el-tooltip
@@ -185,6 +68,15 @@
         </div>
 
         <div class="request">
+
+            <el-dialog
+                v-if="dialogTableVisible"
+                :visible.sync="dialogTableVisible"
+                width="50%"
+            >
+                <report :summary="summary"></report>
+            </el-dialog>
+
             <el-tabs
                 style="margin-left: 20px"
                 v-model="activeTag"
@@ -255,6 +147,7 @@
     import Validate from '../../../httprunner/components/Validate'
     import Variables from '../../../httprunner/components/Variables'
     import Hooks from '../../../httprunner/components/Hooks'
+    import Report from '../../../reports/DebugReport'
 
     export default {
         components: {
@@ -263,11 +156,15 @@
             Extract,
             Validate,
             Variables,
-            Hooks
+            Hooks,
+            Report
 
         },
 
         props: {
+            config: {
+                require: true
+            },
             nodeId: {
                 require: false
             },
@@ -310,7 +207,6 @@
                     }
                 } else {
                     this.runAPI();
-                    this.dialogTableVisible = true;
                     this.run = false;
                 }
             },
@@ -383,8 +279,10 @@
                         method: this.method,
                         name: this.name,
                         times: this.times,
+                        config: this.config
                     }).then(resp => {
                         this.summary = resp;
+                        this.dialogTableVisible = true;
                     }).catch(resp => {
                         this.$message.error({
                             message: '服务器连接超时，请重试',
@@ -482,93 +380,9 @@
 </script>
 
 <style scoped>
-    .el-select {
-        width: 130px;
-    }
-
-    .input-with-select {
-        width: 600px;
-        margin-top: 10px;
-    }
-
     .request {
         margin-top: 15px;
         border: 1px solid #ddd;
-    }
-
-    .details {
-        width: 500px;
-        margin-bottom: 20px;
-    }
-
-    .details th {
-        background-color: skyblue;
-        padding: 5px 12px;
-    }
-
-    .details tr .passed {
-        background-color: lightgreen;
-    }
-
-    .details tr .failed {
-        background-color: red;
-    }
-
-    .details tr .unchecked {
-        background-color: gray;
-    }
-
-    .details td {
-        background-color: lightblue;
-        padding: 5px 12px;
-    }
-
-
-    .success {
-        color: #67c23a;
-    }
-
-    .error {
-        color: #e6a23c;
-    }
-
-    .failure {
-        color: #f56c6c;
-    }
-
-    .skipped {
-        color: #909399;
-    }
-
-    .popup h2 {
-        margin-top: 0;
-        color: #333;
-        font-family: Tahoma, Arial, sans-serif;
-    }
-
-    .popup .close {
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        transition: all 200ms;
-        font-size: 30px;
-        font-weight: bold;
-        text-decoration: none;
-        color: #333;
-    }
-
-    .popup .close:hover {
-        color: #06d85f;
-    }
-
-    .popup .content {
-        max-height: 80%;
-        overflow: auto;
-        text-align: left;
-    }
-
-    .details tr {
-        color: black;
     }
 
 

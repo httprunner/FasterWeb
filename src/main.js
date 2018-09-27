@@ -9,6 +9,7 @@ import 'styles/iconfont.css'
 import 'styles/swagger.css'
 import 'styles/tree.css'
 import 'styles/home.css'
+import 'styles/reports.css'
 import * as api from './restful/api'
 import store from './store'
 
