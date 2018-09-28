@@ -7,7 +7,7 @@
                     :offset="1"
                 >
                     <div>
-                        <img src="~@/assets/images/logo-top.png"/>
+
                     </div>
                 </el-col>
             </el-row>
