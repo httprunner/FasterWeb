@@ -1,13 +1,14 @@
 import axios from 'axios'
 import store from '../store/state'
 import router from '../router'
+
 let baseUrl = " http://localhost:8000";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = baseUrl;
 
 axios.interceptors.request.use(function (config) {
-    if (!config.url.startsWith("/api/user/")){
+    if (!config.url.startsWith("/api/user/")) {
         config.url = config.url + "?token=" + store.token;
     }
     return config;
@@ -97,7 +98,7 @@ export const updateTree = (url, params) => {
 };
 
 export const uploadFile = url => {
-    return baseUrl + '/api/fastrunner/file/?token='+store.token
+    return baseUrl + '/api/fastrunner/file/?token=' + store.token
 };
 
 export const addAPI = params => {
@@ -198,11 +199,22 @@ export const runSingleAPI = params => {
 };
 
 export const runAPIByPk = (url, params) => {
-    return axios.get('/api/fastrunner/run_api_pk/'+url+'/', params).then(res => res.data)
+    return axios.get('/api/fastrunner/run_api_pk/' + url + '/', params).then(res => res.data)
 };
 
 export const runAPITree = params => {
     return axios.post('/api/fastrunner/run_api_tree/', params).then(res => res.data)
 };
 
+export const runSingleTestSuite = params => {
+    return axios.post('/api/fastrunner/run_testsuite/', params).then(res => res.data)
+};
+
+export const runSingleTest = params => {
+    return axios.post('/api/fastrunner/run_test/', params).then(res => res.data)
+};
+
+export const runTestByPk = (url, params)  => {
+    return axios.get('/api/fastrunner/run_testsuite_pk/' + url + '/', params).then(res => res.data)
+};
 

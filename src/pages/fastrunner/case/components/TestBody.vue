@@ -17,14 +17,21 @@
                         @click="save = !save"
                     >Save
                     </el-button>
+                    <el-button
+                        slot="append"
+                        type="warning"
+                        plain
+                        @click="esc = !esc"
+                    >Back
+                    </el-button>
                 </el-input>
 
                 <el-button
                     type="primary"
-                    plain
-                    @click="esc = !esc"
-                >Esc
+                    @click="handleRun"
+                >Run
                 </el-button>
+
             </div>
             <div>
 
@@ -64,6 +71,13 @@
                     </el-input-number>
                 </el-tooltip>
             </div>
+            <el-dialog
+                v-if="dialogTableVisible"
+                :visible.sync="dialogTableVisible"
+                width="50%"
+            >
+                <report :summary="summary"></report>
+            </el-dialog>
         </div>
 
         <div class="request">
@@ -139,6 +153,7 @@
     import Validate from '../../../httprunner/components/Validate'
     import Variables from '../../../httprunner/components/Variables'
     import Hooks from '../../../httprunner/components/Hooks'
+    import Report from '../../../reports/DebugReport'
 
     export default {
         components: {
@@ -147,16 +162,25 @@
             Extract,
             Validate,
             Variables,
-            Hooks
+            Hooks,
+            Report
 
         },
 
         props: {
+            config: {
+                require: true
+            },
             response: {
                 require: true
             }
         },
         methods: {
+            handleRun() {
+                this.run = true;
+                this.save = !this.save;
+            },
+
             handleHeader(header, value) {
                 this.header = value;
                 this.tempBody.header = header;
@@ -199,7 +223,23 @@
                         name: this.name,
                         times: this.times
                     };
-                    this.$emit('getNewBody', body, this.tempBody);
+                    if (this.run === true) {
+                        this.$api.runSingleTest({
+                            body: {newBody: this.tempBody},
+                            config: this.config
+                        }).then(resp => {
+                            this.summary = resp;
+                            this.dialogTableVisible = true;
+                        }).catch(resp => {
+                            this.$message.error({
+                                message: '服务器连接超时，请重试',
+                                duration: 1000
+                            })
+                        })
+                    } else {
+                        this.$emit('getNewBody', body, this.tempBody);
+                    }
+                    this.run = false;
                 }
 
             },
@@ -229,10 +269,11 @@
         watch: {
             esc() {
                 this.$emit('escEdit');
-            },
+            }
         },
         data() {
             return {
+                run: false,
                 esc: false,
                 times: this.response.body.times,
                 name: this.response.body.name,
@@ -246,7 +287,8 @@
                 tempBody: {},
                 method: this.response.body.method,
                 save: false,
-
+                summary: {},
+                dialogTableVisible: false,
                 activeTag: 'first',
                 httpOptions: [{
                     label: 'GET',
@@ -279,7 +321,7 @@
 
 <style scoped>
     .el-select {
-        width: 130px;
+        width: 125px;
     }
 
     .input-with-select {

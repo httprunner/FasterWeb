@@ -56,18 +56,26 @@
                     </el-col>
                     <el-col :span="12">
                         <el-input
-                            style="width: 500px; text-align: center"
+                            style="width: 540px; text-align: center"
                             placeholder="请输入测试用例集名称"
                             v-model="testName"
                             clearable
                         >
-                            <template slot="prepend">用例集信息录入</template>
+                            <template slot="prepend">信息录入</template>
                             <el-button
                                 slot="append"
                                 type="success"
                                 plain
                                 @click="handleClickSave"
                             >Save
+                            </el-button>
+
+                            <el-button
+                                slot="append"
+                                type="primary"
+                                plain
+                                @click="handleClickRun"
+                            >Run
                             </el-button>
                         </el-input>
                     </el-col>
@@ -132,6 +140,14 @@
                         </div>
                     </el-col>
                     <el-col :span="12">
+                        <el-dialog
+                            v-if="dialogTableVisible"
+                            :visible.sync="dialogTableVisible"
+                            width="50%"
+                        >
+                            <report :summary="summary"></report>
+                        </el-dialog>
+
                         <div style="max-height: 600px; overflow: auto"
                              @drop='drop($event)'
                              @dragover='allowDrop($event)'
@@ -156,7 +172,7 @@
                                         />
 
                                         <el-button
-                                            style="position: absolute; right: 84px; top: 12px"
+                                            style="position: absolute; right: 84px; top: 8px"
                                             v-show="currentTest === index"
                                             type="info"
                                             icon="el-icon-edit"
@@ -166,16 +182,17 @@
                                         </el-button>
 
                                         <el-button
-                                            style="position: absolute; right: 48px; top: 12px"
+                                            style="position: absolute; right: 48px; top: 8px"
                                             v-show="currentTest === index"
                                             type="success"
                                             icon="el-icon-caret-right"
                                             circle size="mini"
+                                            @click="handleSingleRun"
                                         >
                                         </el-button>
 
                                         <el-button
-                                            style="position: absolute; right: 12px; top: 12px"
+                                            style="position: absolute; right: 12px; top: 8px"
                                             v-show="currentTest === index"
                                             type="danger"
                                             icon="el-icon-delete"
@@ -194,6 +211,7 @@
             <http-runner
                 v-if="editTestStepActivate"
                 :response="testData[currentTest]"
+                :config="config"
                 v-on:escEdit="editTestStepActivate = false"
                 v-on:getNewBody="handleNewBody"
             >
@@ -208,13 +226,18 @@
 <script>
     import draggable from 'vuedraggable'
     import HttpRunner from './TestBody'
+    import Report from '../../../reports/DebugReport'
 
     export default {
         components: {
             draggable,
-            HttpRunner
+            HttpRunner,
+            Report
         },
         props: {
+            config: {
+                require: true
+            },
             project: {
                 require: true
             },
@@ -229,14 +252,14 @@
 
         name: "EditTest",
         watch: {
-            back () {
+            back() {
                 this.editTestStepActivate = false;
             },
 
-            filterText (val) {
+            filterText(val) {
                 this.$refs.tree2.filter(val);
             },
-            testStepResp () {
+            testStepResp() {
                 if (this.testStepResp.length !== 0) {
                     this.testName = this.testStepResp[0].case.name;
                     this.testId = this.testStepResp[0].case.id;
@@ -251,6 +274,7 @@
 
         data() {
             return {
+                dialogTableVisible: false,
                 editTestStepActivate: false,
                 currentPage: 1,
                 length: 0,
@@ -263,6 +287,7 @@
                 filterText: '',
                 expand: '&#xe65f;',
                 dataTree: [],
+                summary: {},
                 apiData: {
                     count: 0,
                     results: []
@@ -280,7 +305,7 @@
                     body: body,
                     newBody: newBody,
                     case: step,
-                    id:id
+                    id: id
                 };
             },
 
@@ -366,10 +391,43 @@
                 if (this.validateData()) {
                     if (this.testId === '') {
                         this.addTestSuite();
-                    }else {
+                    } else {
                         this.updateTestSuite();
                     }
                 }
+            },
+
+            handleClickRun() {
+                if (this.validateData()) {
+                    this.$api.runSingleTestSuite({
+                        name: this.testName,
+                        body: this.testData,
+                        config: this.config
+                    }).then(resp => {
+                        this.summary = resp;
+                        this.dialogTableVisible = true;
+                    }).catch(resp => {
+                        this.$message.error({
+                            message: '服务器连接超时，请重试',
+                            duration: 1000
+                        })
+                    })
+                }
+            },
+
+            handleSingleRun() {
+                this.$api.runSingleTest({
+                    body: this.testData[this.currentTest],
+                    config: this.config
+                }).then(resp => {
+                    this.summary = resp;
+                    this.dialogTableVisible = true;
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
             },
 
             handlePageChange(val) {

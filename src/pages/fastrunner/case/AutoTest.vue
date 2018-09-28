@@ -80,6 +80,15 @@
 
                     <el-button
                         style="margin-left: 20px"
+                        type="primary"
+                        icon="el-icon-caret-right"
+                        circle
+                        size="mini"
+                        :disabled="currentNode === ''"
+                    ></el-button>
+
+                    <el-button
+                        style="margin-left: 20px"
                         type="danger"
                         icon="el-icon-delete"
                         circle
@@ -98,18 +107,18 @@
                         <el-button plain size="small" icon="el-icon-view"></el-button>
                     </el-tooltip>
 
+
                     <el-select
                         placeholder="请选择"
                         size="small"
                         tyle="margin-left: -6px"
                         v-model="currentConfig"
-                        :disabled="buttonActivate"
                     >
                         <el-option
                             v-for="item in configOptions"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
                         </el-option>
                     </el-select>
 
@@ -172,6 +181,7 @@
                     :project="$route.params.id"
                     :node="currentNode.id"
                     :del="del"
+                    :config="currentConfig"
                     v-on:testStep="handleTestStep"
                     :back="back"
                 >
@@ -183,6 +193,7 @@
                     :project="$route.params.id"
                     :node="currentNode.id"
                     :testStepResp="testStepResp"
+                    :config="currentConfig"
                     v-on:addSuccess="handleBackList"
                 >
                 </edit-test>
@@ -250,6 +261,18 @@
             }
         },
         methods: {
+            getConfig() {
+                this.$api.getAllConfig(this.$route.params.id).then(resp => {
+                    this.configOptions = resp;
+                    this.configOptions.push({"name":"请选择", id:''})
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
+
             handleBackList () {
                 this.addTestActivate = true;
                 this.back = !this.back;
@@ -357,11 +380,12 @@
         name: "AutoTest",
         mounted() {
             this.getTree();
+            this.getConfig();
         }
     }
 </script>
 
-<style>
+<style scoped>
 
 
 

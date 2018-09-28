@@ -17,6 +17,13 @@
 
         <el-container>
             <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
+                <el-dialog
+                    v-if="dialogTableVisible"
+                    :visible.sync="dialogTableVisible"
+                    width="50%"
+                >
+                    <report :summary="summary"></report>
+                </el-dialog>
                 <el-table
                     ref="multipleTable"
                     :data="testData.results"
@@ -68,6 +75,7 @@
                                     type="primary"
                                     icon="el-icon-caret-right"
                                     circle size="mini"
+                                    @click="handleRunTest(scope.row.id)"
                                 ></el-button>
 
                                 <el-button
@@ -96,10 +104,19 @@
 </template>
 
 <script>
+    import Report from '../../../reports/DebugReport'
+
     export default {
+
         name: "TestList",
+        components: {
+            Report
+        },
 
         props: {
+            config:{
+                require:true
+            },
             back: Boolean,
             project: {
                 require: true
@@ -111,15 +128,15 @@
         },
 
         watch: {
-            node () {
+            node() {
                 this.getTestList();
             },
 
-            back () {
+            back() {
                 this.getTestList();
             },
 
-            del () {
+            del() {
                 if (this.selectTest.length !== 0) {
                     this.$confirm('此操作将永久删除测试用例集，是否继续?', '提示', {
                         confirmButtonText: '确定',
@@ -146,7 +163,9 @@
         },
         data() {
             return {
+                dialogTableVisible: false,
                 selectTest: [],
+                summary: {},
                 currentRow: '',
                 testData: {
                     count: 0,
@@ -157,6 +176,17 @@
         },
 
         methods: {
+            handleRunTest(id) {
+                this.$api.runTestByPk(id, {params:{config:this.config}}).then(resp => {
+                    this.summary = resp;
+                    this.dialogTableVisible = true;
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
             handleCurrentChange(val) {
                 this.$api.getTestPaginationBypage({
                     params: {

@@ -105,12 +105,12 @@
 
 
                     <el-tooltip class="item" effect="dark" content="环境信息" placement="top-start">
-                        <el-button plain size="medium" icon="el-icon-view"></el-button>
+                        <el-button plain size="small" icon="el-icon-view"></el-button>
                     </el-tooltip>
 
                     <el-select
                         placeholder="请选择"
-                        size="medium"
+                        size="small"
                         tyle="margin-left: -6px"
                         :disabled="currentNode === ''"
                         v-model="currentConfig"
@@ -289,7 +289,7 @@
                 },
                 radio: '根节点',
                 addAPIFlag: false,
-                currentConfig: null,
+                currentConfig: '',
                 treeId: '',
                 maxId: '',
                 dialogVisible: false,
@@ -328,7 +328,7 @@
             getConfig() {
                 this.$api.getAllConfig(this.$route.params.id).then(resp => {
                     this.configOptions = resp;
-                    this.configOptions.push({"name":"请选择", id:null})
+                    this.configOptions.push({"name":"请选择", id:''})
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',

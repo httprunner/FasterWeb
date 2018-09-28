@@ -1,22 +1,10 @@
 <template>
     <div>
         <div class="nav-header">
-            <el-row>
-                <el-col :span="3">
-                    <span style="width: 50px; display: inline-block">icon</span>
-                    <span style="width: 126px; display: inline-block; border-right: 1px solid #ddd">Account</span>
-                </el-col>
-                <el-col :span="12">
-                    <div style="padding: 18px">
-                    <el-breadcrumb separator-class="el-icon-arrow-right">
-                        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-                        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-                        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-                    </el-breadcrumb>
-                    </div>
-                </el-col>
-            </el-row>
+           <span class="left" >
+               <img src="~@/assets/images/logo-top.png" class="logo">
+           </span>
+            <span class="right">ssss</span>
 
         </div>
     </div>
@@ -36,6 +24,27 @@
 </script>
 
 <style scoped>
+    .left {
+        width: 180px;
+        display: inline-block;
+        position: fixed;
+        z-index: 900;
+        top: 0;
+    }
+
+    .right {
+        position: fixed;
+        left: 181px;
+        right: 0;
+        top:0;
+
+    }
+
+    .logo {
+        background: white;
+        height: 40px;
+    }
+
     .nav-header {
         margin: 0 auto;
         font-size: 14px;
