@@ -13,6 +13,7 @@ npm run dev
 
 ```
 
-## After Build
+After Build
+-----------
 
-1. Open browser(recommend chrome) and input: http:localhost:8080/fastrunner/login
+1. Open url(recommend chrome): http://127.0.0.1:8000/api/register/
