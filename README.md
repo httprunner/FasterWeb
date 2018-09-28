@@ -1,5 +1,6 @@
 # FasterWeb
 
+[![LICENSE](https://img.shields.io/github/license/yinquanwang/FasterRunner.svg)]
 > FasterWeb that depends FasterRunner
 
 ## Build Development
