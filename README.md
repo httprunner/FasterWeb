@@ -16,4 +16,4 @@ npm run dev
 After Build
 -----------
 
-1. Open url(recommend chrome): http://127.0.0.1:8000/api/register/
+1. open url(recommend chrome): http://localhost:8080/fastrunner/register
