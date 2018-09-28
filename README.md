@@ -1,6 +1,6 @@
 # FasterWeb
 
-> base on vue.js and element ui
+> FasterWeb that depends FasterRunner
 
 ## Build Development
 
