@@ -175,7 +175,7 @@
 
             </el-aside>
 
-            <el-main style="padding: 0; border-top: 1px solid #ddd;">
+            <el-main style="padding: 0;">
                 <test-list
                     v-show="addTestActivate"
                     :project="$route.params.id"

@@ -1,7 +1,7 @@
 <template>
     <el-container>
-        <el-header style="background-color: #F7F7F7;; padding: 0; height: 50px">
-            <div style="padding-top: 10px; margin-left: 10px">
+        <el-header style="background-color: #F7F7F7;; padding: 0; height: 50px;">
+            <div style="padding-top: 10px; margin-left: 10px; ">
                 <el-button
                     type="primary"
                     size="small"
@@ -35,7 +35,7 @@
                             lang="python"
                             theme="monokai"
                             width="100%"
-                            height="630"
+                            height="1024"
                             :options="{
                                 enableSnippets:true,
                                 enableBasicAutocompletion: true,
@@ -51,7 +51,7 @@
                             lang="text"
                             theme="monokai"
                             width="100%"
-                            height="630"
+                            height="1024"
                         >
                         </editor>
                     </el-col>
@@ -127,7 +127,7 @@
 
 <style>
     .ace_editor {
-        font-size: 20px;
+        font-size: 18px;
     }
 
 </style>

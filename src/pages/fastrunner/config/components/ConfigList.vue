@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-header style="padding: 0; height: 50px; border-top: 1px solid #ddd;">
+        <el-header style="padding: 0; height: 50px;">
             <div style="padding-top: 8px; padding-left: 10px;">
                 <el-pagination
                     :page-size="11"
@@ -17,12 +17,12 @@
 
         <el-container>
             <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
+                <div style="position: fixed; bottom: 0; right:0; left: 200px; top: 150px">
                 <el-table
                     :data="configData.results"
                     :show-header="configData.results.length !== 0 "
                     stripe
-                    style="width: 100%"
-                    height="570"
+                    height="calc(100%)"
                     @cell-mouse-enter="cellMouseEnter"
                     @cell-mouse-leave="cellMouseLeave"
                     @selection-change="handleSelectionChange"
@@ -94,6 +94,7 @@
                     </el-table-column>
 
                 </el-table>
+                </div>
             </el-main>
         </el-container>
     </el-container>

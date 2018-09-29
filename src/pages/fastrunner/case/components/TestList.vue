@@ -16,7 +16,7 @@
         </el-header>
 
         <el-container>
-            <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
+            <el-main style="padding: 0; margin-left: 10px;">
                 <el-dialog
                     v-if="dialogTableVisible"
                     :visible.sync="dialogTableVisible"

@@ -1,7 +1,7 @@
 <template>
     <el-container>
-        <el-header style="padding: 0; height: 50px; border-top: 1px solid #ddd;">
-            <div style="padding-top: 8px; padding-left: 10px;">
+        <el-header style="padding: 0; height: 50px;">
+            <div style=" padding-left: 10px;">
                 <el-pagination
                     :page-size="11"
                     v-show="apiData.count !== 0 "
@@ -17,9 +17,10 @@
         </el-header>
 
         <el-container>
-            <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
+            <el-main style="padding: 0; margin-left: 10px;">
+                <div style="position: fixed; bottom: 0; right:0; left: 450px; top: 160px">
                 <el-table
-                    height="570"
+                    height="calc(100%)"
                     ref="multipleTable"
                     :data="apiData.results"
                     :show-header="false"
@@ -114,13 +115,15 @@
                     </el-table-column>
 
                 </el-table>
-                <el-dialog
-                    v-if="dialogTableVisible"
-                    :visible.sync="dialogTableVisible"
-                    width="50%"
-                >
-                    <report :summary="summary"></report>
-                </el-dialog>
+                    <el-dialog
+                        v-if="dialogTableVisible"
+                        :visible.sync="dialogTableVisible"
+                        width="50%"
+                    >
+                        <report :summary="summary"></report>
+                    </el-dialog>
+                </div>
+
             </el-main>
         </el-container>
     </el-container>
