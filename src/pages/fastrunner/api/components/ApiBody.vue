@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div style="margin-top: 10px">
+        <div>
             <div>
                 <el-input
                     style="width: 600px"
@@ -78,11 +78,12 @@
             </el-dialog>
 
             <el-tabs
-                style="margin-left: 20px"
+                style="margin-left: 20px;"
                 v-model="activeTag"
             >
                 <el-tab-pane label="Header" name="first">
-                    <headers :save="save"
+                    <headers
+                            :save="save"
                              v-on:header="handleHeader"
                              :header="response ? response.body.header: [] ">
                     </headers>

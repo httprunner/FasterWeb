@@ -103,7 +103,9 @@
                 if (resp.success) {
                     this.$router.push({name: 'ProjectList'});
                     this.$store.commit("isLogin", resp.token);
+                    this.$store.commit("setUser", resp.user);
                     this.setLocalValue("token", resp.token);
+                    this.setLocalValue("user", resp.user);
                 } else {
                     this.$message.error({
                         message: resp.msg,

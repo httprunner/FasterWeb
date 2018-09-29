@@ -42,6 +42,7 @@
 
 <style scoped>
     .common-side-bar {
+        position: fixed;
         border-right: 1px solid #ddd;
         height: 100%;
         background-color: #fff;
@@ -52,7 +53,6 @@
         display: inline-block;
         padding: 0;
         margin: 0;
-        min-height: 680px;
     }
 
     ul li {

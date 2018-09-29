@@ -1,7 +1,7 @@
 <template>
 
     <el-container>
-        <el-header style="background: #fff; padding: 0; height: 50px">
+        <el-header style="background: #fff; padding: 0; ">
             <div class="nav-api-header">
                 <div style="padding-top: 10px; margin-left: 10px">
                     <el-button

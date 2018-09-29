@@ -28,7 +28,10 @@ ul li {
     width: 240px;
     margin-left: 10px;
     border-radius: 4px;
-    height: 620px;
+    position: fixed;
+    top: 110px;
+    bottom: 0;
+
 }
 
 .custom-tree-node {
