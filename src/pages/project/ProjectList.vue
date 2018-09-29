@@ -181,7 +181,7 @@
                 projectForm: {
                     name: '',
                     desc: '',
-                    responsible: 'yinquanwang',
+                    responsible: this.$store.state.user,
                     id: ''
                 },
                 rules: {
@@ -243,7 +243,7 @@
                             obj = this.$api.updateProject(this.projectForm);
                         }
                         obj.then(resp => {
-                            if (resp["success"]) {
+                            if (resp.success) {
                                 this.success(resp);
                                 this.getProjectList();
                             } else {
@@ -253,7 +253,6 @@
                             this.projectForm.name = '';
                             this.projectForm.desc = '';
                             this.projectForm.id = '';
-                            this.projectForm.responsible = 'yinquanwang';
                         }).catch(resp => {
                             this.$message.error({
                                 message: '服务器连接超时，请重试',

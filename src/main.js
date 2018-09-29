@@ -88,7 +88,11 @@ new Vue({
         if (this.getLocalValue("token") === null) {
             this.setLocalValue("token", "");
         }
+        if (this.getLocalValue("user") === null) {
+            this.setLocalValue("user", "");
+        }
         this.$store.commit("isLogin", this.getLocalValue("token"));
+        this.$store.commit("setUser", this.getLocalValue("user"));
 
     }
 })

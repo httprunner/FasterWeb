@@ -4,6 +4,10 @@ export default {
         state.token = value;
     },
 
+    setUser(state, value){
+        state.user = value;
+    },
+
     changeBackButton(state) {
         state.backButton = !state.backButton;
     },
