@@ -1,10 +1,16 @@
 <template>
     <div>
         <div class="nav-header">
-           <span class="left" >
+           <span class="left">
                <img src="~@/assets/images/logo-top.png" class="logo">
            </span>
-            <span class="right">ssss</span>
+            <span class="right">
+                <div style="float: right; color: #d9d9d9; margin-right: 100px">
+                    <i class="iconfont">&#xe61c;</i>
+                    <span v-text="this.$store.state.user" style="padding-left: 5px; font-size: large"></span>
+                    <a style="padding-left: 10px;" @click="handleLogOut">注 销</a>
+                </div>
+            </span>
 
         </div>
     </div>
@@ -15,8 +21,12 @@
 <script>
 
     export default {
-        data() {
-            return {}
+        methods: {
+            handleLogOut () {
+                this.$store.commit("isLogin", null);
+                this.setLocalValue("token", null);
+                this.$router.push({name:"Login"});
+            }
         },
         name: "Header",
 
@@ -34,10 +44,14 @@
 
     .right {
         position: fixed;
-        left: 181px;
+        left: 300px;
         right: 0;
-        top:0;
+        top: 0;
 
+    }
+
+    .right div a:hover {
+        color: darkcyan;
     }
 
     .logo {
@@ -46,6 +60,7 @@
     }
 
     .nav-header {
+        background: #333333;
         margin: 0 auto;
         font-size: 14px;
         width: 100%;

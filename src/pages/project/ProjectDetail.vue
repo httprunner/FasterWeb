@@ -1,36 +1,37 @@
 <template>
 
     <div>
+        <el-dialog
+            title="编辑项目"
+            :visible.sync="dialogVisible"
+            width="30%"
+            align="center"
+        >
+            <el-form
+                :model="projectForm"
+                :rules="rules"
+                ref="projectForm"
+                label-width="100px"
+            >
+                <el-form-item label="项目名称" prop="name">
+                    <el-input v-model="projectForm.name"></el-input>
+                </el-form-item>
+
+                <el-form-item label="项目描述" prop="desc">
+                    <el-input v-model="projectForm.desc"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="handleConfirm('projectForm')">确 定</el-button>
+                      </span>
+        </el-dialog>
         <ul class="title-project">
             <li class="title-li" title="Test API Project">
                 <b>{{projectInfo.name}}</b>
                 <a @click="dialogVisible = true" style="cursor: pointer">
                     <i class="iconfont">&#xe67d;</i>修改
                 </a>
-                <el-dialog
-                    title="编辑项目"
-                    :visible.sync="dialogVisible"
-                    width="30%"
-                    align="center"
-                >
-                    <el-form :model="projectForm"
-                             :rules="rules"
-                             ref="projectForm"
-                             label-width="100px"
-                    >
-                        <el-form-item label="项目名称" prop="name">
-                            <el-input v-model="projectForm.name"></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="项目描述" prop="desc">
-                            <el-input v-model="projectForm.desc"></el-input>
-                        </el-form-item>
-                    </el-form>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button @click="dialogVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="handleConfirm('projectForm')">确 定</el-button>
-                      </span>
-                </el-dialog>
 
             </li>
             <li class="desc-li">
@@ -68,11 +69,11 @@
             </li>
 
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe63b;</i> &nbsp;{{projectInfo.update_time | datetimeFormat}}
-                </p>
+                <p class="title-p"><i class="iconfont">&#xe63b;</i> &nbsp;{{projectInfo.update_time | datetimeFormat}}</p>
                 <p class="desc-p">最后更新时间</p>
             </li>
         </ul>
+
 
     </div>
 </template>
@@ -82,8 +83,8 @@
         name: "ProjectDetail",
         data() {
             return {
-                dialogVisible:false,
-                projectInfo:{},
+                dialogVisible: false,
+                projectInfo: {},
                 projectForm: {
                     name: '',
                     desc: '',
@@ -125,8 +126,8 @@
                     this.projectForm.id = pk;
                 }).catch(resp => {
                     this.$message.error({
-                        message:'服务器连接超时，请重试',
-                        duration:1000
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
                     })
                 })
             },
@@ -147,8 +148,8 @@
                             this.projectForm.desc = this.projectInfo['desc'];
                         }).catch(resp => {
                             this.$message.error({
-                                message:'服务器连接超时，请重试',
-                                duration:1000
+                                message: '服务器连接超时，请重试',
+                                duration: 1000
                             })
                         });
                     } else {
@@ -165,7 +166,10 @@
 </script>
 
 <style scoped>
+
+
     .desc-p {
+        padding-top: 10px;
         font-size: 12px;
         color: #b6b6b6;
     }
@@ -216,6 +220,7 @@
     }
 
     .desc-li {
+        margin-top: 10px;
         color: #b6b6b6;
         font-size: 14px;
     }
