@@ -402,7 +402,8 @@
                     this.$api.runSingleTestSuite({
                         name: this.testName,
                         body: this.testData,
-                        config: this.config
+                        config: this.config,
+                        project: this.project
                     }).then(resp => {
                         this.summary = resp;
                         this.dialogTableVisible = true;
@@ -418,7 +419,8 @@
             handleSingleRun() {
                 this.$api.runSingleTest({
                     body: this.testData[this.currentTest],
-                    config: this.config
+                    config: this.config,
+                    project: this.project
                 }).then(resp => {
                     this.summary = resp;
                     this.dialogTableVisible = true;
