@@ -226,7 +226,8 @@
                     if (this.run === true) {
                         this.$api.runSingleTest({
                             body: {newBody: this.tempBody},
-                            config: this.config
+                            config: this.config,
+                            project:this.$route.params.id
                         }).then(resp => {
                             this.summary = resp;
                             this.dialogTableVisible = true;

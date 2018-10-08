@@ -280,7 +280,8 @@
                         method: this.method,
                         name: this.name,
                         times: this.times,
-                        config: this.config
+                        config: this.config,
+                        project: this.project
                     }).then(resp => {
                         this.summary = resp;
                         this.dialogTableVisible = true;

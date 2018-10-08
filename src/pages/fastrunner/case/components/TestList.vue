@@ -177,7 +177,7 @@
 
         methods: {
             handleRunTest(id) {
-                this.$api.runTestByPk(id, {params:{config:this.config}}).then(resp => {
+                this.$api.runTestByPk(id, {params:{config:this.config, project: this.project}}).then(resp => {
                     this.summary = resp;
                     this.dialogTableVisible = true;
                 }).catch(resp => {

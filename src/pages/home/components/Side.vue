@@ -43,6 +43,7 @@
 <style scoped>
     .common-side-bar {
         position: fixed;
+        top:48px;
         border-right: 1px solid #ddd;
         height: 100%;
         background-color: #fff;
