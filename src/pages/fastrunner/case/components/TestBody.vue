@@ -74,7 +74,7 @@
             <el-dialog
                 v-if="dialogTableVisible"
                 :visible.sync="dialogTableVisible"
-                width="50%"
+                width="70%"
             >
                 <report :summary="summary"></report>
             </el-dialog>
