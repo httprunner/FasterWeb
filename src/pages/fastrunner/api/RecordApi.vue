@@ -231,6 +231,7 @@
                                 desc: ""
                             }],
                             request: {
+                                files: [],
                                 data: [{
                                     key: "",
                                     value: "",

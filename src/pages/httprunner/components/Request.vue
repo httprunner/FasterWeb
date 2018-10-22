@@ -84,7 +84,7 @@
                                     :value="tempFileList[scope.$index].size"
                                     style="margin-top: 8px"
                                 >
-                                    <i class="el-icon-document">{{tempFileList[scope.$index].name}}</i>
+                                    <i class="el-icon-document" v-text="tempFileList[scope.$index].name"></i>
                                 </el-badge>
 
                             </el-col>
@@ -177,6 +177,9 @@
                     this.formData = this.request.data;
                     this.jsonData = this.request.json_data;
                     this.paramsData = this.request.params;
+                    if(this.request.files) {
+                        this.tempFileList = this.request.files
+                    }
                 }
             }
         },
@@ -213,6 +216,10 @@
                 this.formData[this.currentIndex]['value'] = info.name;
                 this.currentIndex = 0;
                 this.fileList = [];
+                if (!response.success) {
+                    this.$message.error(file.name + response.msg);
+                }
+
             },
 
             showFile(index) {
