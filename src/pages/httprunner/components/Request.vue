@@ -73,18 +73,18 @@
                                     <el-button
                                         size="small"
                                         type="primary"
-                                        @click="currentIndex = scope.$index"
+                                        @click="currentIndex=scope.$index"
                                     >选择文件
                                     </el-button>
                                 </el-upload>
                             </el-col>
 
-                            <el-col :span="12" v-if="showFile(scope.$index)">
+                            <el-col :span="12">
                                 <el-badge
-                                    :value="tempFileList[scope.$index].size"
+                                    :value="scope.row.size"
                                     style="margin-top: 8px"
                                 >
-                                    <i class="el-icon-document" v-text="tempFileList[scope.$index].name"></i>
+                                    <i class="el-icon-document" v-text="scope.row.value"></i>
                                 </el-badge>
 
                             </el-col>
@@ -177,9 +177,6 @@
                     this.formData = this.request.data;
                     this.jsonData = this.request.json_data;
                     this.paramsData = this.request.params;
-                    if(this.request.files) {
-                        this.tempFileList = this.request.files
-                    }
                 }
             }
         },
@@ -201,29 +198,13 @@
                 } else {
                     size = size.toString() + 'Byte'
                 }
-
-                let info = {
-                    name: file.name,
-                    size: size
-                };
-
-                if (this.tempFileList.length <= this.currentIndex) {
-                    this.tempFileList.push(info);
-                } else {
-                    this.tempFileList[this.currentIndex] = info;
-                }
-
-                this.formData[this.currentIndex]['value'] = info.name;
-                this.currentIndex = 0;
+                this.formData[this.currentIndex]['value'] = file.name;
+                this.formData[this.currentIndex]['size'] = size;
                 this.fileList = [];
                 if (!response.success) {
                     this.$message.error(file.name + response.msg);
                 }
 
-            },
-
-            showFile(index) {
-                return this.tempFileList.length > index;
             },
 
             uploadFile(row) {
@@ -261,9 +242,6 @@
             handleDelete(index, row) {
                 const data = this.dataType === 'data' ? this.formData : this.paramsData;
                 data.splice(index, 1);
-                if (this.tempFileList.length > index) {
-                    this.tempFileList.splice(index, 1)
-                }
             },
 
             // 文件格式化
@@ -384,9 +362,8 @@
 
         data() {
             return {
-                currentIndex: 0,
-                tempFileList: [],
                 fileList: [],
+                currentIndex: 0,
                 currentRow: '',
                 jsonData: '',
                 formData: [{
