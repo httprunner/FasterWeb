@@ -28,30 +28,35 @@
         <el-container>
             <el-main style="padding: 0; margin-left: 10px">
                 <el-row>
-                    <el-col :span="16">
+                    <el-col>
                         <editor
                             v-model="code.code"
                             @init="editorInit"
                             lang="python"
                             theme="monokai"
                             width="100%"
-                            height="1024"
+                            :height="codeHeight"
                             :options="{
-                                enableSnippets:true,
-                                enableBasicAutocompletion: true,
-                                enableLiveAutocompletion: true
-                            }"
+                                 enableSnippets:true,
+                                 enableBasicAutocompletion: true,
+                                 enableLiveAutocompletion: true
+                             }"
                         >
                         </editor>
                     </el-col>
 
-                    <el-col :span="8">
+
+                </el-row>
+                <div style="border: 1px solid #ddd"></div>
+
+                <el-row>
+                    <el-col>
                         <editor
                             v-model="resp.msg"
                             lang="text"
                             theme="monokai"
                             width="100%"
-                            height="1024"
+                            :height="consoleHeight"
                         >
                         </editor>
                     </el-col>
@@ -66,6 +71,8 @@
     export default {
         data() {
             return {
+                codeHeight: 500,
+                consoleHeight: 100,
                 code: {
                     code: '',
                     id: ''
@@ -121,11 +128,14 @@
         },
         mounted() {
             this.getDebugTalk();
+            this.codeHeight = window.screen.height / 2;
+            this.consoleHeight = window.screen.height /2 - 250;
         }
     }
 </script>
 
 <style>
+
     .ace_editor {
         font-size: 18px;
     }
