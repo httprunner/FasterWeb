@@ -357,8 +357,8 @@
                 return data.label.indexOf(value) !== -1;
             },
 
-            remove(node, data) {
-                const parent = data.parent;
+            remove(data, node) {
+                const parent = node.parent;
                 const children = parent.data.children || parent.data;
                 const index = children.findIndex(d => d.id === data.id);
                 children.splice(index, 1);
