@@ -2,13 +2,14 @@ import axios from 'axios'
 import store from '../store/state'
 import router from '../router'
 
-let baseUrl = " http://localhost:8000";
+let baseUrl = "http://localhost:8000";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = baseUrl;
 
 axios.interceptors.request.use(function (config) {
-    if (!config.url.startsWith("/api/user/")) {
+    if (config.url.indexOf("/api/fastrunner/project/?cursor=") !== -1 || config.url.indexOf("/api/fastrunner/database/?cursor=") !== -1) {}
+    else if (!config.url.startsWith("/api/user/")) {
         config.url = config.url + "?token=" + store.token;
     }
     return config;
@@ -214,7 +215,7 @@ export const runSingleTest = params => {
     return axios.post('/api/fastrunner/run_test/', params).then(res => res.data)
 };
 
-export const runTestByPk = (url, params)  => {
+export const runTestByPk = (url, params) => {
     return axios.get('/api/fastrunner/run_testsuite_pk/' + url + '/', params).then(res => res.data)
 };
 

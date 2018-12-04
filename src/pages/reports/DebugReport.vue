@@ -167,7 +167,7 @@
                                 <pre class="code-block" v-html="handleRequest(props.row.meta_data.request)"></pre>
                             </el-tab-pane>
                             <el-tab-pane label="Response">
-                                <pre class="code-block" v-html="handleResponse(props.row.meta_data.response)"></pre>
+                                <pre class="code-block" v-text="handleResponse(props.row.meta_data.response)"></pre>
                             </el-tab-pane>
                             <el-tab-pane label="Validators" v-if="props.row.meta_data.validators.length !== 0">
                                 <pre class="code-block" v-html="props.row.meta_data.validators"></pre>
