@@ -1,0 +1,75 @@
+ul li {
+    list-style: none;
+}
+
+.operation-li {
+    line-height: 60px;
+    color: #555;
+    font-size: 12px;
+    width: 240px;
+    margin-top: 1px;
+}
+
+.api-tree {
+    padding: 0;
+    margin: 0;
+}
+
+.nav-api-header {
+    padding-top: 5px;
+    padding-bottom: 10px;
+    resize: inherit;
+    padding-left: 5px;
+    height: 48px;
+    border-bottom: 1px solid #ddd;
+    background-color: #F7F7F7;
+
+}
+
+.nav-api-side {
+    overflow: auto;
+    /* border: 1px solid #ddd; */
+    border-right: 1px solid #ddd;
+    width: 250px;
+    margin: 0px;
+    padding: 0px;
+    resize: inherit;
+    height: 1024px;
+}
+
+.custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    padding-right: 0%;
+    /* padding-right: 8px;  */
+}
+
+
+.tree {
+    overflow-y: auto;
+    overflow-x: auto;
+    width: 250px;
+    height: 500px;
+}
+
+.el-tree {
+    min-width: 100%;
+    display: inline-block !important;
+}
+
+.el-tree-node__expand-icon {
+    padding: 4px !important;
+}
+
+.el-tree-node__content {
+    height: 50px;
+}
+
+.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+    background-color: rgba(64, 158, 255, .1);
+    color: #409EFF;
+}
