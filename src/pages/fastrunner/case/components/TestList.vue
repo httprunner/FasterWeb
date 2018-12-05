@@ -30,7 +30,7 @@
                     :show-header="testData.count !== 0 "
                     stripe
                     style="width: 100%"
-                    height="570"
+                    height="750"
                     @cell-mouse-enter="cellMouseEnter"
                     @cell-mouse-leave="cellMouseLeave"
                     @selection-change="handleSelectionChange"

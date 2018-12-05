@@ -25,7 +25,10 @@
                 >Send
                 </el-button>
 
+               <!-- <img src="~@/assets/images/loader.gif" v-show="loader">-->
+
             </div>
+
             <div>
                 <el-input
                     style="width: 600px; margin-top: 10px"
@@ -136,7 +139,9 @@
                     </hooks>
                 </el-tab-pane>
             </el-tabs>
+
         </div>
+        
 
     </div>
 
@@ -345,6 +350,7 @@
         },
         data() {
             return {
+                loader: false,
                 times: 1,
                 name: '',
                 url: '',

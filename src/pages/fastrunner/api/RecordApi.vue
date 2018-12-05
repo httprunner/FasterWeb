@@ -89,7 +89,6 @@
                         icon="el-icon-caret-right"
                         circle
                         size="mini"
-                        :disabled="currentNode === ''"
                         @click="run = !run"
                     ></el-button>
 
@@ -128,7 +127,7 @@
         </el-header>
 
         <el-container>
-            <el-aside style="width: 260px; margin-top: 10px; ">
+            <el-aside style="margin-top: 10px;" >
                 <div class="nav-api-side">
                     <div class="api-tree">
                         <el-input
@@ -139,34 +138,30 @@
                             prefix-icon="el-icon-search"
                         >
                         </el-input>
-
-                        <div class="operation-li">
-                            <el-tree
-                                @node-click="handleNodeClick"
-                                :data="dataTree"
-                                node-key="id"
-                                :default-expand-all="false"
-                                :expand-on-click-node="false"
-                                draggable
-                                highlight-current
-                                :filter-node-method="filterNode"
-                                ref="tree2"
-                            >
+                        <el-tree
+                            @node-click="handleNodeClick"
+                            :data="dataTree"
+                            node-key="id"
+                            :default-expand-all="false"
+                            :expand-on-click-node="false"
+                            draggable
+                            highlight-current
+                            :filter-node-method="filterNode"
+                            ref="tree2"
+                        >
                             <span class="custom-tree-node"
                                   slot-scope="{ node, data }"
                             >
                                 <span><i class="iconfont" v-html="expand"></i>&nbsp;&nbsp;{{ node.label }}</span>
                             </span>
-                            </el-tree>
-
-                        </div>
+                        </el-tree>
                     </div>
 
                 </div>
 
             </el-aside>
 
-            <el-main style="padding: 0; ">
+            <el-main style="padding: 0;">
                 <api-body
                     v-show="addAPIFlag"
                     :nodeId="currentNode.id"
@@ -276,7 +271,7 @@
                 back: false,
                 checked: false,
                 del: false,
-                run:false,
+                run: false,
                 response: '',
                 nodeForm: {
                     name: '',
@@ -302,7 +297,7 @@
             }
         },
         methods: {
-            handleAddSuccess (){
+            handleAddSuccess() {
                 this.back = !this.back;
                 this.addAPIFlag = false;
             },
@@ -328,7 +323,7 @@
             getConfig() {
                 this.$api.getAllConfig(this.$route.params.id).then(resp => {
                     this.configOptions = resp;
-                    this.configOptions.push({"name":"请选择", id:''})
+                    this.configOptions.push({"name": "请选择", id: ''})
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',

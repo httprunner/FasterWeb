@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-aside style="width: 260px; margin-top: 10px;">
+        <el-aside style="margin-top: 10px;">
             <div class="nav-api-side">
                 <div class="api-tree">
                     <el-input
@@ -12,33 +12,30 @@
                     >
                     </el-input>
 
-                    <div class="operation-li">
-                        <el-tree
-                            @node-click="handleNodeClick"
-                            :data="dataTree"
-                            node-key="id"
-                            :default-expand-all="false"
-                            :expand-on-click-node="false"
-                            draggable
-                            highlight-current
-                            :filter-node-method="filterNode"
-                            ref="tree2"
-                        >
+                    <el-tree
+                        @node-click="handleNodeClick"
+                        :data="dataTree"
+                        node-key="id"
+                        :default-expand-all="false"
+                        :expand-on-click-node="false"
+                        draggable
+                        highlight-current
+                        :filter-node-method="filterNode"
+                        ref="tree2"
+                    >
                             <span class="custom-tree-node"
                                   slot-scope="{ node, data }"
                             >
                                 <span><i class="iconfont" v-html="expand"></i>&nbsp;&nbsp;{{ node.label }}</span>
                             </span>
-                        </el-tree>
-
-                    </div>
+                    </el-tree>
                 </div>
 
             </div>
 
         </el-aside>
 
-        <el-main style="padding: 0; ">
+        <el-main>
             <div v-show="!editTestStepActivate" style="margin-top: 10px; ">
                 <el-row :gutter="20">
                     <el-col :span="12">
@@ -85,59 +82,58 @@
             <div v-show="!editTestStepActivate" style="margin-top: 10px;">
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <div style="overflow: auto; max-height: 600px">
-                            <div
-                                v-for="(item,index) in apiData.results"
-                                draggable='true'
-                                @dragstart="currentAPI = JSON.parse(JSON.stringify(item))"
-                                style="cursor: pointer; margin-top: 10px"
-                                :key="index"
-                            >
-                                <div class="block block_post" v-if="item.method.toUpperCase() === 'POST' ">
-                                    <span class="block-method block_method_post block_method_color">POST</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_get" v-if="item.method.toUpperCase() === 'GET' ">
-                                    <span class="block-method block_method_get block_method_color">GET</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_put" v-if="item.method.toUpperCase() === 'PUT' ">
-                                    <span class="block-method block_method_put block_method_color">PUT</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_delete" v-if="item.method.toUpperCase() === 'DELETE' ">
-                                    <span class="block-method block_method_delete block_method_color">DELETE</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_patch" v-if="item.method.toUpperCase() === 'PATCH' ">
-                                    <span class="block-method block_method_patch block_method_color">PATCH</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_head" v-if="item.method.toUpperCase() === 'HEAD' ">
-                                    <span class="block-method block_method_head block_method_color">HEAD</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_options"
-                                     v-if="item.method.toUpperCase()=== 'OPTIONS' ">
-                                    <span class="block-method block_method_options block_method_color">OPTIONS</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
+                        <div
+                            v-for="(item,index) in apiData.results"
+                            draggable='true'
+                            @dragstart="currentAPI = JSON.parse(JSON.stringify(item))"
+                            style="cursor: pointer; margin-top: 10px"
+                            :key="index"
+                        >
+                            <div class="block block_post" v-if="item.method.toUpperCase() === 'POST' ">
+                                <span class="block-method block_method_post block_method_color">POST</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
                             </div>
+
+                            <div class="block block_get" v-if="item.method.toUpperCase() === 'GET' ">
+                                <span class="block-method block_method_get block_method_color">GET</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                            <div class="block block_put" v-if="item.method.toUpperCase() === 'PUT' ">
+                                <span class="block-method block_method_put block_method_color">PUT</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                            <div class="block block_delete" v-if="item.method.toUpperCase() === 'DELETE' ">
+                                <span class="block-method block_method_delete block_method_color">DELETE</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                            <div class="block block_patch" v-if="item.method.toUpperCase() === 'PATCH' ">
+                                <span class="block-method block_method_patch block_method_color">PATCH</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                            <div class="block block_head" v-if="item.method.toUpperCase() === 'HEAD' ">
+                                <span class="block-method block_method_head block_method_color">HEAD</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                            <div class="block block_options"
+                                 v-if="item.method.toUpperCase()=== 'OPTIONS' ">
+                                <span class="block-method block_method_options block_method_color">OPTIONS</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
                         </div>
+
                     </el-col>
                     <el-col :span="12">
                         <el-dialog

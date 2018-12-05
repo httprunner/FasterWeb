@@ -127,7 +127,8 @@
                         type="text"
                         style="position: absolute; right: 30px;"
                         @click="handleBackList"
-                    >返回列表</el-button>
+                    >返回列表
+                    </el-button>
 
                 </div>
             </div>
@@ -135,7 +136,7 @@
 
         <el-container>
             <el-aside
-                style="width: 260px; margin-top: 10px;"
+                style="margin-top: 10px;"
                 v-show="addTestActivate"
             >
                 <div class="nav-api-side">
@@ -149,29 +150,27 @@
                         >
                         </el-input>
 
-                        <div class="operation-li">
-                            <el-tree
-                                @node-click="handleNodeClick"
-                                :data="dataTree"
-                                node-key="id"
-                                :default-expand-all="false"
-                                :expand-on-click-node="false"
-                                draggable
-                                highlight-current
-                                :filter-node-method="filterNode"
-                                ref="tree2"
-                            >
+                        <el-tree
+                            @node-click="handleNodeClick"
+                            :data="dataTree"
+                            node-key="id"
+                            :default-expand-all="false"
+                            :expand-on-click-node="false"
+                            draggable
+                            highlight-current
+                            :filter-node-method="filterNode"
+                            ref="tree2"
+                        >
                             <span class="custom-tree-node"
                                   slot-scope="{ node, data }"
                             >
                                 <span><i class="iconfont" v-html="expand"></i>&nbsp;&nbsp;{{ node.label }}</span>
                             </span>
-                            </el-tree>
+                        </el-tree>
 
-                        </div>
                     </div>
-
                 </div>
+
 
             </el-aside>
 
@@ -210,15 +209,15 @@
 
     export default {
         computed: {
-          buttonActivate: {
-              get: function () {
-                  return !this.addTestActivate || this.currentNode === '';
-              },
-              set: function (value) {
-                  this.addTestActivate =  value;
-                  this.testStepResp = [];
-              }
-          }
+            buttonActivate: {
+                get: function () {
+                    return !this.addTestActivate || this.currentNode === '';
+                },
+                set: function (value) {
+                    this.addTestActivate = value;
+                    this.testStepResp = [];
+                }
+            }
         },
         watch: {
             filterText(val) {
@@ -264,7 +263,7 @@
             getConfig() {
                 this.$api.getAllConfig(this.$route.params.id).then(resp => {
                     this.configOptions = resp;
-                    this.configOptions.push({"name":"请选择", id:''})
+                    this.configOptions.push({"name": "请选择", id: ''})
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',
@@ -273,7 +272,7 @@
                 })
             },
 
-            handleBackList () {
+            handleBackList() {
                 this.addTestActivate = true;
                 this.back = !this.back;
             },
@@ -386,7 +385,6 @@
 </script>
 
 <style scoped>
-
 
 
 </style>

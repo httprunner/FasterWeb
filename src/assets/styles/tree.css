@@ -25,7 +25,7 @@ ul li {
 .nav-api-side {
     overflow: auto;
     border: 1px solid #ddd;
-    width: 240px;
+    width: 280px;
     margin-left: 10px;
     border-radius: 4px;
     position: fixed;
@@ -47,7 +47,7 @@ ul li {
 .tree {
     overflow-y: auto;
     overflow-x: auto;
-    width: 240px;
+    width: 280px;
     height: 500px;
 }
 
