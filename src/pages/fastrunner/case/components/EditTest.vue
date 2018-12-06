@@ -71,6 +71,7 @@
                                 slot="append"
                                 type="primary"
                                 plain
+                                v-loading="suite_loading"
                                 @click="handleClickRun"
                             >Run
                             </el-button>
@@ -148,7 +149,7 @@
                              @drop='drop($event)'
                              @dragover='allowDrop($event)'
                         >
-                            <div class='test-list'>
+                            <div class='test-list' v-loading="loading">
                                 <draggable
                                     v-model="testData"
                                     @end="dragEnd"
@@ -270,6 +271,8 @@
 
         data() {
             return {
+                suite_loading: false,
+                loading:false,
                 dialogTableVisible: false,
                 editTestStepActivate: false,
                 currentPage: 1,
@@ -329,6 +332,7 @@
 
             addTestSuite() {
                 this.$api.addTestCase({
+                    length: this.testData.length,
                     project: this.project,
                     relation: this.node,
                     name: this.testName,
@@ -358,6 +362,7 @@
 
             updateTestSuite() {
                 this.$api.updateTestCase(this.testId, {
+                    length:this.testData.length,
                     name: this.testName,
                     body: this.testData
                 }).then(resp => {
@@ -395,15 +400,18 @@
 
             handleClickRun() {
                 if (this.validateData()) {
+                    this.suite_loading = true;
                     this.$api.runSingleTestSuite({
                         name: this.testName,
                         body: this.testData,
                         config: this.config,
                         project: this.project
                     }).then(resp => {
+                        this.suite_loading = false;
                         this.summary = resp;
                         this.dialogTableVisible = true;
                     }).catch(resp => {
+                        this.suite_loading = false;
                         this.$message.error({
                             message: '服务器连接超时，请重试',
                             duration: 1000
@@ -413,14 +421,17 @@
             },
 
             handleSingleRun() {
+                this.loading = true;
                 this.$api.runSingleTest({
                     body: this.testData[this.currentTest],
                     config: this.config,
                     project: this.project
                 }).then(resp => {
+                    this.loading = false;
                     this.summary = resp;
                     this.dialogTableVisible = true;
                 }).catch(resp => {
+                    this.loading = false;
                     this.$message.error({
                         message: '服务器连接超时，请重试',
                         duration: 1000

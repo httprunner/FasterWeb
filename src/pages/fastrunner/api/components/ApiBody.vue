@@ -22,11 +22,10 @@
                 <el-button
                     type="primary"
                     @click="reverseStatus"
+                    v-loading="loading"
+                    :disabled="loading"
                 >Send
                 </el-button>
-
-               <!-- <img src="~@/assets/images/loader.gif" v-show="loader">-->
-
             </div>
 
             <div>
@@ -205,7 +204,7 @@
             },
             handleHooks(hooks) {
                 this.hooks = hooks;
-                // 调用后台
+
                 if (!this.run) {
                     if (this.id === '') {
                         this.addAPI();
@@ -275,6 +274,7 @@
 
             runAPI() {
                 if (this.validateData()) {
+                    this.loading = true;
                     this.$api.runSingleAPI({
                         header: this.header,
                         request: this.request,
@@ -291,6 +291,7 @@
                     }).then(resp => {
                         this.summary = resp;
                         this.dialogTableVisible = true;
+                        this.loading = false;
                     }).catch(resp => {
                         this.$message.error({
                             message: '服务器连接超时，请重试',
@@ -350,7 +351,7 @@
         },
         data() {
             return {
-                loader: false,
+                loading: false,
                 times: 1,
                 name: '',
                 url: '',

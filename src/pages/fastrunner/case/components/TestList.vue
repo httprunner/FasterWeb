@@ -25,6 +25,7 @@
                     <report :summary="summary"></report>
                 </el-dialog>
                 <el-table
+                    v-loading="loading"
                     ref="multipleTable"
                     :data="testData.results"
                     :show-header="testData.count !== 0 "
@@ -48,6 +49,16 @@
                             <div>{{scope.row.name}}</div>
                         </template>
                     </el-table-column>
+
+                    <el-table-column
+                        label="API个数"
+                        width="300"
+                    >
+                        <template slot-scope="scope">
+                            <div>{{scope.row.length}} 个</div>
+                        </template>
+                    </el-table-column>
+
 
                     <el-table-column
                         width="300"
@@ -163,6 +174,7 @@
         },
         data() {
             return {
+                loading:false,
                 dialogTableVisible: false,
                 selectTest: [],
                 summary: {},
@@ -177,10 +189,13 @@
 
         methods: {
             handleRunTest(id) {
+                this.loading = true;
                 this.$api.runTestByPk(id, {params:{config:this.config, project: this.project}}).then(resp => {
                     this.summary = resp;
                     this.dialogTableVisible = true;
+                    this.loading = false;
                 }).catch(resp => {
+                    this.loading = false;
                     this.$message.error({
                         message: '服务器连接超时，请重试',
                         duration: 1000

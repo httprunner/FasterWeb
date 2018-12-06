@@ -27,20 +27,30 @@
                 </el-dialog>
 
                 <el-dialog
-                    title="Run API"
+
                     :visible.sync="dialogTreeVisible"
                     width="45%"
                 >
                     <div>
+                        <el-input
+                            placeholder="输入关键字进行过滤"
+                            v-model="filterText"
+                            size="medium"
+                            clearable
+                            prefix-icon="el-icon-search"
+                        >
+                        </el-input>
+
                         <el-tree
+                            :filter-node-method="filterNode"
                             :data="dataTree"
                             show-checkbox
                             node-key="id"
-                            default-expand-all
                             :expand-on-click-node="false"
                             check-on-click-node
                             :check-strictly="true"
                             :highlight-current="true"
+                            ref="tree"
                         >
                             <span class="custom-tree-node"
                                   slot-scope="{ node, data }"
@@ -52,7 +62,7 @@
                     </div>
                     <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogTreeVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogTreeVisible = false">确 定</el-button>
+                    <el-button type="primary" @click="runTree">确 定</el-button>
                   </span>
                 </el-dialog>
 
@@ -68,6 +78,7 @@
                         @cell-mouse-leave="cellMouseLeave"
                         style="width: 100%;"
                         @selection-change="handleSelectionChange"
+                        v-loading="loading"
                     >
                         <el-table-column
                             type="selection"
@@ -186,6 +197,8 @@
         },
         data() {
             return {
+                filterText:'',
+                loading: false,
                 expand: '&#xe65f;',
                 dataTree: {},
                 dialogTreeVisible: false,
@@ -201,23 +214,13 @@
             }
         },
         watch: {
-            run() {
+            filterText(val) {
+                this.$refs.tree.filter(val);
+            },
 
+            run() {
                 this.dialogTreeVisible = true;
                 this.getTree();
-                /*this.$api.runAPITree({
-                    "project": this.project,
-                    "relation": this.node,
-                    "config": this.config
-                }).then(resp => {
-                    this.summary = resp;
-                    this.dialogTableVisible = true;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
-                })*/
             },
             back() {
                 this.getAPIList();
@@ -260,6 +263,35 @@
         },
 
         methods: {
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.label.indexOf(value) !== -1;
+            },
+            runTree() {
+                this.dialogTreeVisible = false;
+                const relation = this.$refs.tree.getCheckedKeys();
+                if (relation.length === 0) {
+                    this.$notify.error({
+                        title: '提示',
+                        message: '请至少选择一个节点',
+                        duration: 1500
+                    });
+                } else {
+                    this.$api.runAPITree({
+                        "project": this.project,
+                        "relation": relation,
+                        "config": this.config
+                    }).then(resp => {
+                        this.summary = resp;
+                        this.dialogTableVisible = true;
+                    }).catch(resp => {
+                        this.$message.error({
+                            message: '服务器连接超时，请重试',
+                            duration: 1000
+                        })
+                    })
+                }
+            },
             getTree() {
                 this.$api.getTree(this.$route.params.id, {params: {type: 1}}).then(resp => {
                     this.dataTree = resp.tree;
@@ -356,11 +388,13 @@
             },
             // 运行API
             handleRunAPI(id) {
+                this.loading = true;
                 this.$api.runAPIByPk(id, {params: {config: this.config}}).then(resp => {
                     this.summary = resp;
                     this.dialogTableVisible = true;
-
+                    this.loading = false;
                 }).catch(resp => {
+                    this.loading = false;
                     this.$message.error({
                         message: '服务器连接超时，请重试',
                         duration: 1000

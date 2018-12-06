@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div style="margin-top: 10px">
+        <div>
             <div>
                 <el-input
                     style="width: 600px"
@@ -29,6 +29,7 @@
                 <el-button
                     type="primary"
                     @click="handleRun"
+                    v-loading="loading"
                 >Run
                 </el-button>
 
@@ -224,6 +225,7 @@
                         times: this.times
                     };
                     if (this.run === true) {
+                        this.loading = true;
                         this.$api.runSingleTest({
                             body: {newBody: this.tempBody},
                             config: this.config,
@@ -231,7 +233,9 @@
                         }).then(resp => {
                             this.summary = resp;
                             this.dialogTableVisible = true;
+                            this.loading = false;
                         }).catch(resp => {
+                            this.loading = false;
                             this.$message.error({
                                 message: '服务器连接超时，请重试',
                                 duration: 1000
@@ -274,6 +278,7 @@
         },
         data() {
             return {
+                loading:false,
                 run: false,
                 esc: false,
                 times: this.response.body.times,

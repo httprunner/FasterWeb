@@ -84,7 +84,6 @@
                         icon="el-icon-caret-right"
                         circle
                         size="mini"
-                        :disabled="currentNode === ''"
                     ></el-button>
 
                     <el-button
