@@ -219,3 +219,8 @@ export const runTestByPk = (url, params) => {
     return axios.get('/api/fastrunner/run_testsuite_pk/' + url + '/', params).then(res => res.data)
 };
 
+export const runSuiteTree = params => {
+    return axios.post('/api/fastrunner/run_suite_tree/', params).then(res => res.data)
+};
+
+

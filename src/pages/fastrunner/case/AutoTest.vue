@@ -84,6 +84,7 @@
                         icon="el-icon-caret-right"
                         circle
                         size="mini"
+                        @click="run = !run"
                     ></el-button>
 
                     <el-button
@@ -182,6 +183,7 @@
                     :config="currentConfig"
                     v-on:testStep="handleTestStep"
                     :back="back"
+                    :run="run"
                 >
                 </test-list>
 
@@ -241,6 +243,7 @@
                 },
                 back: false,
                 del: false,
+                run:false,
                 radio: '根节点',
                 addTestActivate: true,
                 currentConfig: '',

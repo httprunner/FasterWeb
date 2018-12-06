@@ -24,6 +24,48 @@
                 >
                     <report :summary="summary"></report>
                 </el-dialog>
+
+                <el-dialog
+                    title="Run TestSuite"
+                    :visible.sync="dialogTreeVisible"
+                    width="45%"
+                >
+                    <div>
+                        <el-input
+                            placeholder="输入关键字进行过滤"
+                            v-model="filterText"
+                            size="medium"
+                            clearable
+                            prefix-icon="el-icon-search"
+                        >
+                        </el-input>
+
+                        <el-tree
+                            :filter-node-method="filterNode"
+                            :data="dataTree"
+                            show-checkbox
+                            node-key="id"
+                            :expand-on-click-node="false"
+                            check-on-click-node
+                            :check-strictly="true"
+                            :highlight-current="true"
+                            ref="tree"
+                        >
+                            <span class="custom-tree-node"
+                                  slot-scope="{ node, data }"
+                            >
+                                <span><i class="iconfont" v-html="expand"></i>&nbsp;&nbsp;{{ node.label }}</span>
+                            </span>
+                        </el-tree>
+
+                    </div>
+                    <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogTreeVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="runTree">确 定</el-button>
+                  </span>
+                </el-dialog>
+
+
                 <el-table
                     v-loading="loading"
                     ref="multipleTable"
@@ -125,6 +167,7 @@
         },
 
         props: {
+            run:Boolean,
             config:{
                 require:true
             },
@@ -139,6 +182,13 @@
         },
 
         watch: {
+            filterText(val) {
+                this.$refs.tree.filter(val);
+            },
+
+            run() {
+                this.getTree();
+            },
             node() {
                 this.getTestList();
             },
@@ -174,6 +224,10 @@
         },
         data() {
             return {
+                filterText: '',
+                expand: '&#xe65f;',
+                dialogTreeVisible:false,
+                dataTree: {},
                 loading:false,
                 dialogTableVisible: false,
                 selectTest: [],
@@ -188,6 +242,56 @@
         },
 
         methods: {
+            getTree() {
+                this.$api.getTree(this.$route.params.id, {params: {type: 2}}).then(resp => {
+                    this.dataTree = resp.tree;
+                    this.dialogTreeVisible = true;
+                }).catch(resp => {
+                    this.$message.error({
+                        message: '服务器连接超时，请重试',
+                        duration: 1000
+                    })
+                })
+            },
+
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.label.indexOf(value) !== -1;
+            },
+
+            runTree() {
+                this.dialogTreeVisible = false;
+                const relation = this.$refs.tree.getCheckedKeys();
+                if (relation.length === 0) {
+                    this.$notify.error({
+                        title: '提示',
+                        message: '请至少选择一个节点',
+                        duration: 1500
+                    });
+                } else {
+                    this.$api.runSuiteTree({
+                        "project": this.project,
+                        "relation": relation,
+                        "config": this.config
+                    }).then(resp => {
+                        if (resp.hasOwnProperty("status")) {
+                            this.$message.error({
+                                message:"指定节点下没有找到用例集",
+                                duration:1500
+                            });
+                        } else {
+                            this.summary = resp;
+                            this.dialogTableVisible = true;
+                        }
+                    }).catch(resp => {
+                        this.$message.error({
+                            message: '服务器连接超时，请重试',
+                            duration: 1000
+                        })
+                    })
+                }
+            },
+
             handleRunTest(id) {
                 this.loading = true;
                 this.$api.runTestByPk(id, {params:{config:this.config, project: this.project}}).then(resp => {

@@ -27,7 +27,7 @@
                 </el-dialog>
 
                 <el-dialog
-
+                    title="Run API"
                     :visible.sync="dialogTreeVisible"
                     width="45%"
                 >
@@ -197,7 +197,7 @@
         },
         data() {
             return {
-                filterText:'',
+                filterText: '',
                 loading: false,
                 expand: '&#xe65f;',
                 dataTree: {},
@@ -219,7 +219,6 @@
             },
 
             run() {
-                this.dialogTreeVisible = true;
                 this.getTree();
             },
             back() {
@@ -267,6 +266,7 @@
                 if (!value) return true;
                 return data.label.indexOf(value) !== -1;
             },
+
             runTree() {
                 this.dialogTreeVisible = false;
                 const relation = this.$refs.tree.getCheckedKeys();
@@ -282,8 +282,16 @@
                         "relation": relation,
                         "config": this.config
                     }).then(resp => {
-                        this.summary = resp;
-                        this.dialogTableVisible = true;
+                        if (resp.hasOwnProperty("status")) {
+                            this.$message.error({
+                                message:"指定节点下没有找到接口",
+                                duration:1500
+                            });
+                        } else {
+                            this.summary = resp;
+                            this.dialogTableVisible = true;
+                        }
+
                     }).catch(resp => {
                         this.$message.error({
                             message: '服务器连接超时，请重试',
@@ -295,6 +303,7 @@
             getTree() {
                 this.$api.getTree(this.$route.params.id, {params: {type: 1}}).then(resp => {
                     this.dataTree = resp.tree;
+                    this.dialogTreeVisible = true;
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',
