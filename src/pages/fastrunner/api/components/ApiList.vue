@@ -32,32 +32,58 @@
                     width="45%"
                 >
                     <div>
-                        <el-input
-                            placeholder="输入关键字进行过滤"
-                            v-model="filterText"
-                            size="medium"
-                            clearable
-                            prefix-icon="el-icon-search"
-                        >
-                        </el-input>
+                        <div>
+                            <el-row :gutter="2">
+                                <el-col :span="8">
+                                    <el-switch
+                                        style="margin-top: 10px"
+                                        v-model="asyncs"
+                                        active-color="#13ce66"
+                                        inactive-color="#ff4949"
+                                        active-text="异步执行"
+                                        inactive-text="同步执行">
+                                    </el-switch>
+                                </el-col>
+                                <el-col :span="10">
+                                    <el-input
+                                        v-show="asyncs"
+                                        clearable
+                                        placeholder="请输入报告名称"
+                                        v-model="reportName"
+                                        :disabled="false">
+                                    </el-input>
 
-                        <el-tree
-                            :filter-node-method="filterNode"
-                            :data="dataTree"
-                            show-checkbox
-                            node-key="id"
-                            :expand-on-click-node="false"
-                            check-on-click-node
-                            :check-strictly="true"
-                            :highlight-current="true"
-                            ref="tree"
-                        >
+                                </el-col>
+                            </el-row>
+                        </div>
+                        <div style="margin-top: 20px">
+                            <el-input
+                                placeholder="输入节点名称进行过滤"
+                                v-model="filterText"
+                                size="medium"
+                                clearable
+                                prefix-icon="el-icon-search"
+                            >
+                            </el-input>
+
+                            <el-tree
+                                :filter-node-method="filterNode"
+                                :data="dataTree"
+                                show-checkbox
+                                node-key="id"
+                                :expand-on-click-node="false"
+                                check-on-click-node
+                                :check-strictly="true"
+                                :highlight-current="true"
+                                ref="tree"
+                            >
                             <span class="custom-tree-node"
                                   slot-scope="{ node, data }"
                             >
                                 <span><i class="iconfont" v-html="expand"></i>&nbsp;&nbsp;{{ node.label }}</span>
                             </span>
-                        </el-tree>
+                            </el-tree>
+                        </div>
 
                     </div>
                     <span slot="footer" class="dialog-footer">
@@ -197,6 +223,8 @@
         },
         data() {
             return {
+                reportName: '',
+                asyncs: false,
                 filterText: '',
                 loading: false,
                 expand: '&#xe65f;',
@@ -219,6 +247,8 @@
             },
 
             run() {
+                this.asyncs = false;
+                this.reportName = "";
                 this.getTree();
             },
             back() {
@@ -280,12 +310,14 @@
                     this.$api.runAPITree({
                         "project": this.project,
                         "relation": relation,
-                        "config": this.config
+                        "config": this.config,
+                        "async": this.asyncs,
+                        "name": this.reportName
                     }).then(resp => {
                         if (resp.hasOwnProperty("status")) {
-                            this.$message.error({
-                                message:"指定节点下没有找到接口",
-                                duration:1500
+                            this.$message.info({
+                                message: resp.msg,
+                                duration: 1500
                             });
                         } else {
                             this.summary = resp;
