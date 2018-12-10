@@ -166,6 +166,9 @@
                             <el-tab-pane label="Request">
                                 <pre class="code-block" v-html="handleRequest(props.row.meta_data.request)"></pre>
                             </el-tab-pane>
+                            <el-tab-pane label="Content">
+                                <pre class="code-block" v-text="props.row.meta_data.response.content"></pre>
+                            </el-tab-pane>
                             <el-tab-pane label="Response">
                                 <pre class="code-block" v-text="handleResponse(props.row.meta_data.response)"></pre>
                             </el-tab-pane>
@@ -192,14 +195,17 @@
         methods: {
             handleRequest (request) {
                 const keys = ["start_timestamp"];
-                keys.forEach(function(item) {delete request[item]});
+                keys.forEach(function(item) {
+                    delete request[item];
+                });
                 return request
             },
 
             handleResponse (response) {
-                const keys = ["response_time_ms", "encoding", "ok", "reason", "url", "text", "json", "content_size", "content_type"];
-                keys.forEach(function(item) {delete response[item]});
-                try {response["content"] = JSON.parse(response["content"]);} catch (err) {}
+                const keys = ["response_time_ms", "encoding", "ok", "reason", "url", "text", "json", "content_size", "content_type","content"];
+                keys.forEach(function(item) {
+                    delete response[item];
+                });
                 return response
             }
         },
