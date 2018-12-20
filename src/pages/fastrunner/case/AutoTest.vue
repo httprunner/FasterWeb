@@ -160,6 +160,7 @@
                             highlight-current
                             :filter-node-method="filterNode"
                             ref="tree2"
+                            @node-drag-end="handleDragEnd"
                         >
                             <span class="custom-tree-node"
                                   slot-scope="{ node, data }"
@@ -262,6 +263,9 @@
             }
         },
         methods: {
+            handleDragEnd(){
+                this.updateTree(false);
+            },
             getConfig() {
                 this.$api.getAllConfig(this.$route.params.id).then(resp => {
                     this.configOptions = resp;

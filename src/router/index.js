@@ -14,7 +14,6 @@ import RecordConfig from '@/pages/fastrunner/config/RecordConfig'
 Vue.use(Router)
 
 export default new Router({
-    mode: 'history',
     routes: [
         {
             path: '/fastrunner/register',

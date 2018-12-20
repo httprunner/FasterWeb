@@ -131,6 +131,7 @@
                                 size="medium"
                                 @click="handleEdit(scope.$index, scope.row)">编辑
                             </el-button>
+
                             <el-dialog
                                 title="编辑项目"
                                 :visible.sync="editVisible"

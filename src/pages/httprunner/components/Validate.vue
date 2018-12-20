@@ -42,7 +42,7 @@
 
         <el-table-column
             label="期望类型"
-            width="120">
+            width="170">
             <template slot-scope="scope">
 
                 <el-select v-model="scope.row.type">
@@ -194,6 +194,10 @@
                             tempValue = false
                         }
                         break;
+                    case 7:
+                        tempValue = value;
+                        break;
+
                 }
 
                 if (tempValue !== 0 && !tempValue && type !== 4) {
@@ -254,6 +258,9 @@
                 }, {
                     label: 'Dict',
                     value: 6
+                }, {
+                    label: '$var or ${fun()}',
+                    value: 7
                 }],
 
                 validateOptions: [{
