@@ -194,9 +194,6 @@
                             tempValue = false
                         }
                         break;
-                    case 7:
-                        tempValue = value;
-                        break;
 
                 }
 
@@ -258,9 +255,6 @@
                 }, {
                     label: 'Dict',
                     value: 6
-                }, {
-                    label: '$var or ${fun()}',
-                    value: 7
                 }],
 
                 validateOptions: [{
