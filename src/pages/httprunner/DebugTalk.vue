@@ -134,10 +134,15 @@
     }
 </script>
 
-<style>
+<style scoped>
 
     .ace_editor {
-        font-size: 18px;
+        position: relative;
+        overflow: hidden;
+        font: 18px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+        direction: ltr;
+        text-align: left;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
 
 </style>
