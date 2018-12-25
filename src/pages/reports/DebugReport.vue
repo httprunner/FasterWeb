@@ -208,7 +208,7 @@
 
             handleContent(content) {
                 try {
-                     content = JSON.parse(request["body"])
+                     content = JSON.parse(content)
                 } catch (e) {
                 }
                 return content
