@@ -44,10 +44,10 @@
                                  label-width="100px"
                                  class="project">
                             <el-form-item label="项目名称" prop="name">
-                                <el-input v-model="projectForm.name"></el-input>
+                                <el-input v-model="projectForm.name" clearable></el-input>
                             </el-form-item>
                             <el-form-item label="项目描述" prop="desc">
-                                <el-input v-model="projectForm.desc"></el-input>
+                                <el-input v-model="projectForm.desc" clearable></el-input>
                             </el-form-item>
                         </el-form>
                         <span slot="footer" class="dialog-footer">
@@ -143,10 +143,10 @@
                                          label-width="100px"
                                          class="project">
                                     <el-form-item label="项目名称" prop="name">
-                                        <el-input v-model="projectForm.name"></el-input>
+                                        <el-input v-model="projectForm.name" clearable></el-input>
                                     </el-form-item>
                                     <el-form-item label="项目描述" prop="desc">
-                                        <el-input v-model="projectForm.desc"></el-input>
+                                        <el-input v-model="projectForm.desc" clearable></el-input>
                                     </el-form-item>
                                 </el-form>
                                 <span slot="footer" class="dialog-footer">

@@ -168,9 +168,6 @@
         },
 
         props: {
-            config: {
-                require: true
-            },
             nodeId: {
                 require: false
             },
@@ -286,7 +283,6 @@
                         method: this.method,
                         name: this.name,
                         times: this.times,
-                        config: this.config,
                         project: this.project
                     }).then(resp => {
                         this.summary = resp;

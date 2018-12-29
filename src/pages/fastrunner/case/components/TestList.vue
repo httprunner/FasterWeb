@@ -194,9 +194,6 @@
 
         props: {
             run: Boolean,
-            config: {
-                require: true
-            },
             back: Boolean,
             project: {
                 require: true
@@ -302,7 +299,6 @@
                     this.$api.runSuiteTree({
                         "project": this.project,
                         "relation": relation,
-                        "config": this.config,
                         "async": this.asyncs,
                         "name": this.reportName
                     }).then(resp => {
@@ -326,7 +322,7 @@
 
             handleRunTest(id) {
                 this.loading = true;
-                this.$api.runTestByPk(id, {params: {config: this.config, project: this.project}}).then(resp => {
+                this.$api.runTestByPk(id, {params: {project: this.project}}).then(resp => {
                     this.summary = resp;
                     this.dialogTableVisible = true;
                     this.loading = false;

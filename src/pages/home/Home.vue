@@ -9,7 +9,7 @@
                 <home-side></home-side>
             </el-aside>
 
-            <el-main style="padding: 0;">
+            <el-main>
                 <router-view></router-view>
             </el-main>
         </el-container>
@@ -33,5 +33,8 @@
 </script>
 
 <style scoped>
+    .el-main {
+        padding: 0px;
+    }
 
 </style>

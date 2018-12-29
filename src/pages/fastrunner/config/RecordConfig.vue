@@ -9,7 +9,7 @@
                         size="small"
                         icon="el-icon-circle-plus-outline"
                         @click="initResponse = true"
-                    >新增环境
+                    >新增配置
                     </el-button>
 
                     <el-button
@@ -17,7 +17,7 @@
                         plain
                         size="small"
                         icon="el-icon-upload"
-                    >导入环境
+                    >导入配置
                     </el-button>
 
                     <el-button
@@ -25,7 +25,7 @@
                         plain
                         size="small"
                         icon="el-icon-download"
-                    >导出环境
+                    >导出配置
                     </el-button>
 
                     <el-button

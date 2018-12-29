@@ -98,30 +98,6 @@
                     ></el-button>
 
 
-                    <el-tooltip
-                        class="item"
-                        effect="dark"
-                        content="环境信息"
-                        placement="top-start"
-                    >
-                        <el-button plain size="small" icon="el-icon-view"></el-button>
-                    </el-tooltip>
-
-
-                    <el-select
-                        placeholder="请选择"
-                        size="small"
-                        tyle="margin-left: -6px"
-                        v-model="currentConfig"
-                    >
-                        <el-option
-                            v-for="item in configOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-
                     <el-button
                         :disabled="addTestActivate"
                         type="text"
@@ -181,7 +157,6 @@
                     :project="$route.params.id"
                     :node="currentNode.id"
                     :del="del"
-                    :config="currentConfig"
                     v-on:testStep="handleTestStep"
                     :back="back"
                     :run="run"
@@ -194,7 +169,6 @@
                     :project="$route.params.id"
                     :node="currentNode.id"
                     :testStepResp="testStepResp"
-                    :config="currentConfig"
                     v-on:addSuccess="handleBackList"
                 >
                 </edit-test>
@@ -247,7 +221,6 @@
                 run:false,
                 radio: '根节点',
                 addTestActivate: true,
-                currentConfig: '',
                 treeId: '',
                 maxId: '',
                 dialogVisible: false,
@@ -265,17 +238,6 @@
         methods: {
             handleDragEnd(){
                 this.updateTree(false);
-            },
-            getConfig() {
-                this.$api.getAllConfig(this.$route.params.id).then(resp => {
-                    this.configOptions = resp;
-                    this.configOptions.push({"name": "请选择", id: ''})
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
-                })
             },
 
             handleBackList() {
@@ -385,7 +347,6 @@
         name: "AutoTest",
         mounted() {
             this.getTree();
-            this.getConfig();
         }
     }
 </script>

@@ -103,25 +103,6 @@
                     ></el-button>
 
 
-                    <el-tooltip class="item" effect="dark" content="环境信息" placement="top-start">
-                        <el-button plain size="small" icon="el-icon-view"></el-button>
-                    </el-tooltip>
-
-                    <el-select
-                        placeholder="请选择"
-                        size="small"
-                        tyle="margin-left: -6px"
-                        :disabled="currentNode === ''"
-                        v-model="currentConfig"
-                    >
-                        <el-option
-                            v-for="item in configOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-
                 </div>
             </div>
         </el-header>
@@ -168,7 +149,6 @@
                     :nodeId="currentNode.id"
                     :project="$route.params.id"
                     :response="response"
-                    :config="currentConfig"
                     v-on:addSuccess="handleAddSuccess"
                 >
                 </api-body>
@@ -182,7 +162,6 @@
                     :del="del"
                     :back="back"
                     :run="run"
-                    :config="currentConfig"
                 >
                 </api-list>
 
@@ -285,7 +264,6 @@
                 },
                 radio: '根节点',
                 addAPIFlag: false,
-                currentConfig: '',
                 treeId: '',
                 maxId: '',
                 dialogVisible: false,
@@ -294,7 +272,6 @@
                 filterText: '',
                 expand: '&#xe65f;',
                 dataTree: [],
-                configOptions: []
             }
         },
         methods: {
@@ -324,17 +301,6 @@
                 })
             },
 
-            getConfig() {
-                this.$api.getAllConfig(this.$route.params.id).then(resp => {
-                    this.configOptions = resp;
-                    this.configOptions.push({"name": "请选择", id: ''})
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
-                })
-            },
 
             updateTree(mode) {
                 this.$api.updateTree(this.treeId, {
@@ -422,7 +388,6 @@
         name: "RecordApi",
         mounted() {
             this.getTree();
-            this.getConfig();
         }
     }
 </script>

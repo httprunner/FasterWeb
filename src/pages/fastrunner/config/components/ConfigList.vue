@@ -33,7 +33,7 @@
                     </el-table-column>
 
                     <el-table-column
-                        label="环境名称"
+                        label="配置名称"
                         width="350"
                     >
                         <template slot-scope="scope">
@@ -43,7 +43,7 @@
 
                     <el-table-column
                         width="300"
-                        label="环境请求地址"
+                        label="配置请求地址"
                     >
                         <template slot-scope="scope">
                             <div v-text="scope.row.base_url === '' ? '无' : scope.row.base_url"></div>
@@ -128,7 +128,7 @@
 
             del () {
                 if (this.selectConfig.length !== 0) {
-                    this.$confirm('此操作将永久删除环境，是否继续?', '提示', {
+                    this.$confirm('此操作将永久删除配置，是否继续?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning',
@@ -145,7 +145,7 @@
                 }else {
                     this.$notify.warning({
                         title:'提示',
-                        message: '请至少选择一个环境',
+                        message: '请至少勾选一个配置',
                         duration:1000
                     })
                 }
@@ -175,7 +175,7 @@
 
             //删除api
             handleDelConfig(index) {
-                this.$confirm('此操作将永久删除该环境，是否继续?', '提示', {
+                this.$confirm('此操作将永久删除该配置，是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
@@ -200,10 +200,10 @@
             },
 
             handleCopyConfig(id) {
-                this.$prompt('请输入环境名称', '提示', {
+                this.$prompt('请输入配置名称', '提示', {
                     confirmButtonText: '确定',
                     inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
-                    inputErrorMessage: '环境名称不能为空'
+                    inputErrorMessage: '配置名称不能为空'
                 }).then(({ value }) => {
                     this.$api.copyConfig(id, {
                         'name': value

@@ -207,9 +207,6 @@
         },
         name: "ApiList",
         props: {
-            config: {
-                require: true
-            },
             run: Boolean,
             back: Boolean,
             node: {
@@ -310,7 +307,6 @@
                     this.$api.runAPITree({
                         "project": this.project,
                         "relation": relation,
-                        "config": this.config,
                         "async": this.asyncs,
                         "name": this.reportName
                     }).then(resp => {
@@ -430,7 +426,7 @@
             // 运行API
             handleRunAPI(id) {
                 this.loading = true;
-                this.$api.runAPIByPk(id, {params: {config: this.config}}).then(resp => {
+                this.$api.runAPIByPk(id).then(resp => {
                     this.summary = resp;
                     this.dialogTableVisible = true;
                     this.loading = false;

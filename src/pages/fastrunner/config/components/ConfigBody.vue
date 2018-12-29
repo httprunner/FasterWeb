@@ -3,11 +3,11 @@
         <div style="margin-top: 10px">
             <el-input
                 style="width: 600px"
-                placeholder="请输入环境名称"
+                placeholder="请输入配置名称"
                 v-model="name"
                 clearable
             >
-                <template slot="prepend">环境信息录入</template>
+                <template slot="prepend">配置信息录入</template>
 
                 <el-button
                     slot="append"
@@ -25,7 +25,7 @@
                 v-model="baseUrl"
                 clearable
             >
-                <template slot="prepend">环境请求地址</template>
+                <template slot="prepend">配置请求地址</template>
             </el-input>
         </div>
 
@@ -156,7 +156,7 @@
                     }).then(resp => {
                         if (resp.success) {
                             this.$message.success({
-                                message: '环境添加成功',
+                                message: '配置添加成功',
                                 duration: 1000
                             });
                             this.$emit("addSuccess");
@@ -188,7 +188,7 @@
                     }).then(resp => {
                         if (resp.success) {
                             this.$message.success({
-                                message: '环境更新成功',
+                                message: '配置更新成功',
                                 duration: 1000
                             });
                             this.$emit("addSuccess");
@@ -211,7 +211,7 @@
                 if (this.name === '') {
                     this.$notify.error({
                         title: '参数错误',
-                        message: '环境名称不能为空',
+                        message: '配置名称不能为空',
                         duration: 1500
                     });
                     return false;

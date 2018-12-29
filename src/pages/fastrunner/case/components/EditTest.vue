@@ -233,9 +233,6 @@
             Report
         },
         props: {
-            config: {
-                require: true
-            },
             project: {
                 require: true
             },
@@ -310,11 +307,11 @@
             },
 
             validateData() {
-                if (this.testName === '' || this.testName.length > 50) {
+                if (this.testName === '' || this.testName.length > 100) {
                     this.$notify.warning({
                         title: '提示',
                         duration: 1000,
-                        message: '用例集名称必填，不能超过50个字符'
+                        message: '用例集名称必填，不能超过100个字符'
                     });
                     return false
                 }
@@ -405,7 +402,6 @@
                     this.$api.runSingleTestSuite({
                         name: this.testName,
                         body: this.testData,
-                        config: this.config,
                         project: this.project
                     }).then(resp => {
                         this.suite_loading = false;
@@ -425,7 +421,6 @@
                 this.loading = true;
                 this.$api.runSingleTest({
                     body: this.testData[this.currentTest],
-                    config: this.config,
                     project: this.project
                 }).then(resp => {
                     this.loading = false;
