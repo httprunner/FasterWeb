@@ -82,59 +82,59 @@
             <div v-show="!editTestStepActivate" style="margin-top: 10px;">
                 <el-row :gutter="20">
                     <el-col :span="12">
-                            <div
-                                v-for="(item,index) in apiData.results"
-                                draggable='true'
-                                @dragstart="currentAPI = JSON.parse(JSON.stringify(item))"
-                                style="cursor: pointer; margin-top: 10px; overflow: auto"
-                                :key="index"
+                        <div
+                            v-for="(item,index) in apiData.results"
+                            draggable='true'
+                            @dragstart="currentAPI = JSON.parse(JSON.stringify(item))"
+                            style="cursor: pointer; margin-top: 10px; overflow: auto"
+                            :key="index"
 
-                            >
-                                <div class="block block_post" v-if="item.method.toUpperCase() === 'POST' ">
-                                    <span class="block-method block_method_post block_method_color">POST</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-
-                                </div>
-
-                                <div class="block block_get" v-if="item.method.toUpperCase() === 'GET' ">
-                                    <span class="block-method block_method_get block_method_color">GET</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_put" v-if="item.method.toUpperCase() === 'PUT' ">
-                                    <span class="block-method block_method_put block_method_color">PUT</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_delete" v-if="item.method.toUpperCase() === 'DELETE' ">
-                                    <span class="block-method block_method_delete block_method_color">DELETE</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_patch" v-if="item.method.toUpperCase() === 'PATCH' ">
-                                    <span class="block-method block_method_patch block_method_color">PATCH</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_head" v-if="item.method.toUpperCase() === 'HEAD' ">
-                                    <span class="block-method block_method_head block_method_color">HEAD</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
-
-                                <div class="block block_options"
-                                     v-if="item.method.toUpperCase()=== 'OPTIONS' ">
-                                    <span class="block-method block_method_options block_method_color">OPTIONS</span>
-                                    <span class="block-method block_url">{{item.url}}</span>
-                                    <span class="block-summary-description">{{item.name}}</span>
-                                </div>
+                        >
+                            <div class="block block_post" v-if="item.method.toUpperCase() === 'POST' ">
+                                <span class="block-method block_method_post block_method_color">POST</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
 
                             </div>
+
+                            <div class="block block_get" v-if="item.method.toUpperCase() === 'GET' ">
+                                <span class="block-method block_method_get block_method_color">GET</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                            <div class="block block_put" v-if="item.method.toUpperCase() === 'PUT' ">
+                                <span class="block-method block_method_put block_method_color">PUT</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                            <div class="block block_delete" v-if="item.method.toUpperCase() === 'DELETE' ">
+                                <span class="block-method block_method_delete block_method_color">DELETE</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                            <div class="block block_patch" v-if="item.method.toUpperCase() === 'PATCH' ">
+                                <span class="block-method block_method_patch block_method_color">PATCH</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                            <div class="block block_head" v-if="item.method.toUpperCase() === 'HEAD' ">
+                                <span class="block-method block_method_head block_method_color">HEAD</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                            <div class="block block_options"
+                                 v-if="item.method.toUpperCase()=== 'OPTIONS' ">
+                                <span class="block-method block_method_options block_method_color">OPTIONS</span>
+                                <span class="block-method block_url">{{item.url}}</span>
+                                <span class="block-summary-description">{{item.name}}</span>
+                            </div>
+
+                        </div>
 
                     </el-col>
                     <el-col :span="12">
@@ -150,18 +150,37 @@
                              @drop='drop($event)'
                              @dragover='allowDrop($event)'
                         >
-                            <div class='test-list' v-loading="loading">
+                            <div class='test-list'>
+                                <div
+                                    v-if="isConfigExist"
+                                    class="block block_test"
+                                    @mousemove="currentTest = -1"
+                                >
+                                    <span class="block-method block_method_test block_method_color">{{testData[0].body.method}}</span>
+                                    <input class="block-test-name" v-model="testData[0].body.name" disabled/>
+
+                                    <el-button
+                                        style="position: absolute; right: 12px; top: 8px"
+                                        v-show="currentTest === -1"
+                                        type="danger"
+                                        icon="el-icon-delete"
+                                        circle size="mini"
+                                        @click="testData.splice(index, 1)"
+                                    >
+                                    </el-button>
+                                </div>
                                 <draggable
                                     v-model="testData"
                                     @end="dragEnd"
                                     @start="length = testData.length"
-                                    :options="{animation:500}"
+                                    :options="{animation:200}"
                                 >
                                     <div
                                         v-for="(test, index) in testData"
                                         :key="index"
                                         class="block block_test"
                                         @mousemove="currentTest = index"
+                                        v-if="test.body.method !== 'config'"
                                     >
                                         <span
                                             class="block-method block_method_test block_method_color">{{test.body.method}}</span>
@@ -201,6 +220,7 @@
                                     </div>
                                 </draggable>
                             </div>
+
                         </div>
                     </el-col>
                 </el-row>
@@ -232,6 +252,16 @@
             HttpRunner,
             Report
         },
+        computed: {
+            isConfigExist: {
+                get() {
+                    if (this.testData.length > 0 && this.testData[0].body.method === "config") {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        },
         props: {
             config: {
                 require: true
@@ -250,6 +280,15 @@
 
         name: "EditTest",
         watch: {
+            config() {
+                const temp = {body: {name: this.config, method: 'config'}};
+                if (this.testData.length === 0 || this.testData[0].body.method !== 'config') {
+                    this.testData.splice(0, 0, temp)
+                } else {
+                    this.testData.splice(0, 1, temp)
+                }
+
+            },
             back() {
                 this.editTestStepActivate = false;
             },
@@ -297,6 +336,7 @@
             }
         },
         methods: {
+
             handleNewBody(body, newBody) {
                 this.editTestStepActivate = false;
                 const step = this.testData[this.currentTest].case;
@@ -310,11 +350,11 @@
             },
 
             validateData() {
-                if (this.testName === '' || this.testName.length > 50) {
+                if (this.testName === '' || this.testName.length > 100) {
                     this.$notify.warning({
                         title: '提示',
                         duration: 1000,
-                        message: '用例集名称必填，不能超过50个字符'
+                        message: '用例集名称必填，不能超过100个字符'
                     });
                     return false
                 }
@@ -328,12 +368,27 @@
                     return false
                 }
 
+                if (this.testData[0].body.method === "config" && this.testData.length === 1) {
+                    this.$notify.warning({
+                        title: '提示',
+                        duration: 1000,
+                        message: '测试用例集至少包含一个接口'
+                    });
+                    return false
+                }
+
+
                 return true;
             },
 
             addTestSuite() {
+                var length = this.testData.length;
+
+                if (this.testData[0].body.method === "config") {
+                    length -= 1;
+                }
                 this.$api.addTestCase({
-                    length: this.testData.length,
+                    length: length,
                     project: this.project,
                     relation: this.node,
                     name: this.testName,
@@ -362,8 +417,12 @@
             },
 
             updateTestSuite() {
+                var length = this.testData.length;
+                if (this.testData[0].body.method === "config") {
+                    length -= 1;
+                }
                 this.$api.updateTestCase(this.testId, {
-                    length: this.testData.length,
+                    length: length,
                     name: this.testName,
                     body: this.testData
                 }).then(resp => {
@@ -405,7 +464,6 @@
                     this.$api.runSingleTestSuite({
                         name: this.testName,
                         body: this.testData,
-                        config: this.config,
                         project: this.project
                     }).then(resp => {
                         this.suite_loading = false;
@@ -425,7 +483,6 @@
                 this.loading = true;
                 this.$api.runSingleTest({
                     body: this.testData[this.currentTest],
-                    config: this.config,
                     project: this.project
                 }).then(resp => {
                     this.loading = false;

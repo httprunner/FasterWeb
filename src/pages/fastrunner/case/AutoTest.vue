@@ -101,7 +101,7 @@
                     <el-tooltip
                         class="item"
                         effect="dark"
-                        content="环境信息"
+                        content="可选配置"
                         placement="top-start"
                     >
                         <el-button plain size="small" icon="el-icon-view"></el-button>
@@ -113,12 +113,13 @@
                         size="small"
                         tyle="margin-left: -6px"
                         v-model="currentConfig"
+                        :disabled="addTestActivate"
                     >
                         <el-option
                             v-for="item in configOptions"
                             :key="item.id"
                             :label="item.name"
-                            :value="item.id">
+                            :value="item.name">
                         </el-option>
                     </el-select>
 
@@ -181,7 +182,6 @@
                     :project="$route.params.id"
                     :node="currentNode.id"
                     :del="del"
-                    :config="currentConfig"
                     v-on:testStep="handleTestStep"
                     :back="back"
                     :run="run"
@@ -269,7 +269,6 @@
             getConfig() {
                 this.$api.getAllConfig(this.$route.params.id).then(resp => {
                     this.configOptions = resp;
-                    this.configOptions.push({"name": "请选择", id: ''})
                 }).catch(resp => {
                     this.$message.error({
                         message: '服务器连接超时，请重试',

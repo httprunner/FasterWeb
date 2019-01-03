@@ -169,9 +169,6 @@
         },
 
         props: {
-            config: {
-                require: true
-            },
             response: {
                 require: true
             }
@@ -228,7 +225,6 @@
                         this.loading = true;
                         this.$api.runSingleTest({
                             body: {newBody: this.tempBody},
-                            config: this.config,
                             project:this.$route.params.id
                         }).then(resp => {
                             this.summary = resp;

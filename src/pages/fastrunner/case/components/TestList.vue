@@ -154,7 +154,7 @@
                                     type="primary"
                                     icon="el-icon-caret-right"
                                     circle size="mini"
-                                    @click="handleRunTest(scope.row.id)"
+                                    @click="handleRunTest(scope.row.id, scope.row.name)"
                                 ></el-button>
 
                                 <el-button
@@ -194,9 +194,6 @@
 
         props: {
             run: Boolean,
-            config: {
-                require: true
-            },
             back: Boolean,
             project: {
                 require: true
@@ -302,7 +299,6 @@
                     this.$api.runSuiteTree({
                         "project": this.project,
                         "relation": relation,
-                        "config": this.config,
                         "async": this.asyncs,
                         "name": this.reportName
                     }).then(resp => {
@@ -324,9 +320,9 @@
                 }
             },
 
-            handleRunTest(id) {
+            handleRunTest(id, name) {
                 this.loading = true;
-                this.$api.runTestByPk(id, {params: {config: this.config, project: this.project}}).then(resp => {
+                this.$api.runTestByPk(id, {params: {project: this.project, name:name}}).then(resp => {
                     this.summary = resp;
                     this.dialogTableVisible = true;
                     this.loading = false;

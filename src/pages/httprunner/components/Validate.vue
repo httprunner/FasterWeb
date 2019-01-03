@@ -197,7 +197,7 @@
 
                 }
 
-                if (tempValue !== 0 && !tempValue && type !== 4) {
+                if (tempValue !== 0 && !tempValue && type !== 4 && type !== 1) {
                     this.$notify.error({
                         title: '类型转换错误',
                         message: msg,

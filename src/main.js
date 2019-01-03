@@ -42,16 +42,16 @@ Vue.filter('datetimeFormat', function (time, format = 'YY-MM-DD hh:mm:ss') {
 Vue.filter("timestampToTime", function (timestamp) {
     let date = new Date(timestamp * 1000);
     const Y = date.getFullYear() + '-';
-    const M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+    const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
     const D = date.getDate() + ' ';
     const h = date.getHours() + ':';
     const m = date.getMinutes() + ':';
     const s = date.getSeconds();
 
-    return Y+M+D+h+m+s;
-    
+    return Y + M + D + h + m + s;
+
 });
-Vue.prototype.setLocalValue = function(name, value) {
+Vue.prototype.setLocalValue = function (name, value) {
     if (window.localStorage) {
         localStorage.setItem(name, value);
     } else {
@@ -77,7 +77,7 @@ router.beforeEach((to, from, next) => {
         if (to.meta.requireAuth) {
             if (store.state.token !== '') {
                 next();
-            }else {
+            } else {
                 next({
                     name: 'Login',
                 })

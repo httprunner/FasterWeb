@@ -44,13 +44,18 @@
             </li>
 
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe6da;</i> &nbsp;{{projectInfo.case_count}} 个用例集</p>
+                <p class="title-p"><i class="iconfont">&#xe6da;</i> &nbsp;{{projectInfo.case_count}} 个用例</p>
                 <p class="desc-p">用例集总数</p>
             </li>
 
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xee32;</i> &nbsp;{{projectInfo.config_count}} 套环境</p>
-                <p class="desc-p">环境套数</p>
+                <p class="title-p"><i class="iconfont">&#xee32;</i> &nbsp;{{projectInfo.config_count}} 套配置</p>
+                <p class="desc-p">配置总数</p>
+            </li>
+
+            <li class="pull-left">
+                <p class="title-p"><i class="iconfont">&#xe63c;</i> &nbsp;{{projectInfo.variables_count}} 对全局变量</p>
+                <p class="desc-p">全局变量对数</p>
             </li>
         </ul>
 
@@ -200,11 +205,13 @@
 
     .project_detail {
         height: 100px;
+        margin-top: 20px;
     }
 
     .title-project {
         margin-top: 40px;
         margin-left: 10px;
+        padding-left: 50px;
     }
 
     ul li {
