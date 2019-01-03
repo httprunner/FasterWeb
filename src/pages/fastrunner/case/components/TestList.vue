@@ -154,7 +154,7 @@
                                     type="primary"
                                     icon="el-icon-caret-right"
                                     circle size="mini"
-                                    @click="handleRunTest(scope.row.id)"
+                                    @click="handleRunTest(scope.row.id, scope.row.name)"
                                 ></el-button>
 
                                 <el-button
@@ -320,9 +320,9 @@
                 }
             },
 
-            handleRunTest(id) {
+            handleRunTest(id, name) {
                 this.loading = true;
-                this.$api.runTestByPk(id, {params: {project: this.project}}).then(resp => {
+                this.$api.runTestByPk(id, {params: {project: this.project, name:name}}).then(resp => {
                     this.summary = resp;
                     this.dialogTableVisible = true;
                     this.loading = false;
