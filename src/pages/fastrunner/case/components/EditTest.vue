@@ -156,7 +156,7 @@
                                     class="block block_test"
                                     @mousemove="currentTest = -1"
                                 >
-                                    <span class="block-method block_method_test block_method_color">{{testData[0].body.method}}</span>
+                                    <span class="block-method block_method_config block_method_color">{{testData[0].body.method}}</span>
                                     <input class="block-test-name" v-model="testData[0].body.name" disabled/>
 
                                     <el-button
@@ -481,7 +481,12 @@
 
             handleSingleRun() {
                 this.loading = true;
+                var config = null;
+                if (this.testData.length > 0 && this.testData[0].body.method === "config") {
+                    config = this.testData[0].body;
+                }
                 this.$api.runSingleTest({
+                    config: config,
                     body: this.testData[this.currentTest],
                     project: this.project
                 }).then(resp => {
@@ -592,6 +597,10 @@
 
     .block_method_test {
         background-color: #909399;
+    }
+
+    .block_method_config {
+        background-color: red;
     }
 
     .block-test-name {
