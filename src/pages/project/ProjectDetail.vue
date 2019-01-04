@@ -66,7 +66,7 @@
             </li>
 
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe66e;</i> &nbsp;0 个报告</p>
+                <p class="title-p"><i class="iconfont">&#xe66e;</i> &nbsp;{{projectInfo.report_count}} 个报告</p>
                 <p class="desc-p">测试报告</p>
             </li>
 

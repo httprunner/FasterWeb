@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '../store/state'
 import router from '../router'
 
-let baseUrl = "http://localhost:8000";
+export const baseUrl = "http://localhost:8000";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = baseUrl;
@@ -248,4 +248,22 @@ export const delAllVariabels = params => {
     return axios.delete('/api/fastrunner/variables/', params).then(res => res.data)
 };
 
+export const reportList = params => {
+    return axios.get('/api/fastrunner/reports/', params).then(res => res.data)
+};
 
+export const deleteReports = url => {
+    return axios.delete('/api/fastrunner/reports/' + url + '/').then(res => res.data)
+};
+
+export const getReportsPaginationBypage = params => {
+    return axios.get('/api/fastrunner/reports/', params).then(res => res.data)
+};
+
+export const delAllReports = params => {
+    return axios.delete('/api/fastrunner/reports/', params).then(res => res.data)
+};
+
+export const watchSingleReports = url => {
+    return axios.get('/api/fastrunner/reports/' + url + '/').then(res => res.data)
+};

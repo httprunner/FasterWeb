@@ -10,6 +10,7 @@ import DebugTalk from '@/pages/httprunner/DebugTalk'
 import RecordApi from '@/pages/fastrunner/api/RecordApi'
 import AutoTest from '@/pages/fastrunner/case/AutoTest'
 import GlobalEnv from '@/pages/variables/GlobalEnv'
+import ReportList from '@/pages/reports/ReportList'
 import RecordConfig from '@/pages/fastrunner/config/RecordConfig'
 import Tasks from '@/pages/task/Tasks'
 Vue.use(Router)
@@ -31,7 +32,10 @@ export default new Router({
                 title: '用户登录'
             }
         },
+
+
         {
+
             path: '/fastrunner',
             name: 'Home',
             component: Home,
@@ -120,7 +124,7 @@ export default new Router({
                 {
                     name: 'Reports',
                     path:'reports/:id',
-                    component: RecordConfig,
+                    component: ReportList,
                     meta: {
                         title: '历史报告',
                         requireAuth: true

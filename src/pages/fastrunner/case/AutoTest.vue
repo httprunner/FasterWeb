@@ -341,7 +341,7 @@
                     const children = parent.data.children || parent.data;
                     const index = children.findIndex(d => d.id === this.currentNode.id);
                     children[index]["label"] = value
-                    this.updateTree(true);
+                    this.updateTree(false);
                 });
             },
 
