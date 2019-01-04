@@ -50,7 +50,19 @@
                     >删除分组
                     </el-button>
 
+
                     <el-button
+                        :disabled="currentNode === '' "
+                        type="info"
+                        size="small"
+                        icon="el-icon-edit-outline"
+                        @click="renameNode"
+                    >节点重命名
+                    </el-button>
+
+
+                    <el-button
+                        style="margin-left: 100px"
                         :disabled="currentNode === '' "
                         type="warning"
                         size="small"
@@ -108,7 +120,7 @@
         </el-header>
 
         <el-container>
-            <el-aside style="margin-top: 10px;" >
+            <el-aside style="margin-top: 10px;">
                 <div class="nav-api-side">
                     <div class="api-tree">
                         <el-input
@@ -275,7 +287,7 @@
             }
         },
         methods: {
-            handleDragEnd(){
+            handleDragEnd() {
                 this.updateTree(false);
             },
             handleAddSuccess() {
@@ -310,7 +322,6 @@
                     type: 1
                 }).then(resp => {
                     if (resp['success']) {
-                        this.$message.success(resp['msg']);
                         this.dataTree = resp['tree'];
                         this.maxId = resp['max'];
                     } else {
@@ -343,6 +354,22 @@
 
                 })
             },
+
+            renameNode() {
+                this.$prompt('请输入节点名', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    inputPattern:  /\S/,
+                    inputErrorMessage: '节点名称不能为空'
+                }).then(({ value }) => {
+                    const parent = this.data.parent;
+                    const children = parent.data.children || parent.data;
+                    const index = children.findIndex(d => d.id === this.currentNode.id);
+                    children[index]["label"] = value
+                    this.updateTree(true);
+                });
+            },
+
 
             handleConfirm(formName) {
                 this.$refs[formName].validate((valid) => {
