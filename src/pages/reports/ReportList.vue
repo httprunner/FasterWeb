@@ -17,6 +17,7 @@
                     </el-col>
                     <el-col :span="2">
                         <el-button
+                            v-show="reportData.count !== 0"
                             style="margin-left: 20px"
                             type="danger"
                             icon="el-icon-delete"
