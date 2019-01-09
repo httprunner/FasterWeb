@@ -5,7 +5,7 @@
             <div class="nav-api-header">
                 <div style="padding-top: 10px; margin-left: 20px">
                     <el-button
-                        type="warning"
+                        type="primary"
                         size="small"
                         icon="el-icon-circle-plus-outline"
                         @click="initResponse = true"

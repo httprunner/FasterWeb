@@ -87,11 +87,6 @@
             handleRunCode() {
                 this.$api.runDebugtalk(this.code).then(resp => {
                     this.resp = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -99,11 +94,6 @@
                 this.$api.updateDebugtalk(this.code).then(resp => {
                     this.getDebugTalk();
                     this.$message.success("代码保存成功");
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
             editorInit() {
@@ -115,11 +105,6 @@
             getDebugTalk() {
                 this.$api.getDebugtalk(this.$route.params.id).then(res => {
                     this.code = res;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             }
         },

@@ -76,18 +76,27 @@
         </el-header>
 
         <el-container>
-            <el-header style="padding: 0; height: 50px; margin-top: 10px">
-                <div style="padding-top: 8px; padding-left: 30px;">
-                    <el-pagination
-                        :page-size="11"
-                        v-show="variablesData.count !== 0 "
-                        background
-                        @current-change="handleCurrentChange"
-                        :current-page.sync="currentPage"
-                        layout="total, prev, pager, next, jumper"
-                        :total="variablesData.count"
-                    >
-                    </el-pagination>
+            <el-header style="padding: 0; height: 50px;">
+                <div style="padding-top: 8px; padding-left: 30px; overflow: hidden">
+                    <el-row :gutter="50">
+                        <el-col :span="6">
+                            <el-input placeholder="请输入变量名称" clearable v-model="search">
+                                <el-button slot="append" icon="el-icon-search" @click="getVariablesList"></el-button>
+                            </el-input>
+                        </el-col>
+                        <el-col :span="7">
+                            <el-pagination
+                                :page-size="11"
+                                v-show="variablesData.count !== 0 "
+                                background
+                                @current-change="handleCurrentChange"
+                                :current-page.sync="currentPage"
+                                layout="total, prev, pager, next, jumper"
+                                :total="variablesData.count"
+                            >
+                            </el-pagination>
+                        </el-col>
+                    </el-row>
                 </div>
             </el-header>
 
@@ -178,6 +187,7 @@
 
         data() {
             return {
+                search: '',
                 selectVariables: [],
                 currentRow: '',
                 currentPage: 1,
@@ -242,11 +252,6 @@
                         } else {
                             this.$message.error(resp.msg);
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 })
             },
@@ -262,11 +267,6 @@
                     }
                 }).then(resp => {
                     this.variablesData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
             delSelectionVariables() {
@@ -276,20 +276,15 @@
                         cancelButtonText: '取消',
                         type: 'warning',
                     }).then(() => {
-                        this.$api.delAllVariabels({data:this.selectVariables}).then(resp => {
+                        this.$api.delAllVariabels({data: this.selectVariables}).then(resp => {
                             this.getVariablesList();
-                        }).catch(resp => {
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
                         })
                     })
-                }else {
+                } else {
                     this.$notify.warning({
-                        title:'提示',
+                        title: '提示',
                         message: '请至少勾选一个全局变量',
-                        duration:1000
+                        duration: 1000
                     })
                 }
             },
@@ -309,11 +304,6 @@
                                 this.variablesForm.value = '';
                                 this.getVariablesList();
                             }
-                        }).catch(resp => {
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
                         })
 
                     }
@@ -334,11 +324,6 @@
                             } else {
                                 this.getVariablesList();
                             }
-                        }).catch(resp => {
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
                         })
                     }
                 });
@@ -346,13 +331,13 @@
             },
 
             getVariablesList() {
-                this.$api.variablesList({params: {project: this.variablesForm.project}}).then(resp => {
+                this.$api.variablesList({
+                    params: {
+                        project: this.variablesForm.project,
+                        search: this.search
+                    }
+                }).then(resp => {
                     this.variablesData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
         },

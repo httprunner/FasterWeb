@@ -227,12 +227,7 @@
                         } else {
                             this.failure(resp);
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
-                    });
+                    })
                 })
             },
             handleConfirm(formName) {
@@ -258,12 +253,7 @@
                             this.projectForm.name = '';
                             this.projectForm.desc = '';
                             this.projectForm.id = '';
-                        }).catch(resp => {
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
-                        });
+                        })
                     } else {
                         if (this.projectForm.id !== '') {
                             this.editVisible = true;
@@ -291,21 +281,11 @@
             getProjectList() {
                 this.$api.getProjectList().then(resp => {
                     this.projectData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
-                });
+                })
             },
             getPagination(url) {
                 this.$api.getPagination(url).then(resp => {
                     this.projectData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
         },

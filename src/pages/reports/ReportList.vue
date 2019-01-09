@@ -1,9 +1,28 @@
 <template>
     <el-container>
-        <el-header style="padding: 0; height: 40px; margin-top: 10px">
+        <el-header style="padding: 0; height: 50px; margin-top: 10px">
             <div style="padding-top: 8px; padding-left: 30px;">
+
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :span="6">
+                        <el-input placeholder="请输入报告名称" clearable v-model="search">
+                            <el-button slot="append" icon="el-icon-search" @click="getReportList"></el-button>
+                        </el-input>
+                    </el-col>
+
+                    <el-col :span="1">
+                        <el-button
+                            v-show="reportData.count !== 0"
+                            style="margin-left: 20px"
+                            type="danger"
+                            icon="el-icon-delete"
+                            circle
+                            size="mini"
+                            @click="delSelectionReports"
+                        ></el-button>
+                    </el-col>
+
+                    <el-col :span="7">
                         <el-pagination
                             :page-size="11"
                             v-show="reportData.count !== 0 "
@@ -15,17 +34,8 @@
                         >
                         </el-pagination>
                     </el-col>
-                    <el-col :span="2">
-                        <el-button
-                            v-show="reportData.count !== 0"
-                            style="margin-left: 20px"
-                            type="danger"
-                            icon="el-icon-delete"
-                            circle
-                            size="mini"
-                            @click="delSelectionReports"
-                        ></el-button>
-                    </el-col>
+
+
                 </el-row>
 
             </div>
@@ -187,6 +197,7 @@
 
         data() {
             return {
+                search: '',
                 selectReports: [],
                 currentRow: '',
                 currentPage: 1,
@@ -224,11 +235,6 @@
                     }
                 }).then(resp => {
                     this.reportData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -244,11 +250,6 @@
                         } else {
                             this.$message.error(resp.msg);
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 })
             },
@@ -262,11 +263,6 @@
                     }).then(() => {
                         this.$api.delAllReports({data: this.selectReports}).then(resp => {
                             this.getReportList();
-                        }).catch(resp => {
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
                         })
                     })
                 } else {
@@ -278,13 +274,13 @@
                 }
             },
             getReportList() {
-                this.$api.reportList({params: {project: this.$route.params.id}}).then(resp => {
+                this.$api.reportList({
+                    params: {
+                        project: this.$route.params.id,
+                        search: this.search
+                    }
+                }).then(resp => {
                     this.reportData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
         },

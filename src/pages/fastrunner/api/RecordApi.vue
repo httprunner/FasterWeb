@@ -305,11 +305,6 @@
                     this.dataTree = resp['tree'];
                     this.treeId = resp['id'];
                     this.maxId = resp['max'];
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -327,11 +322,6 @@
                     } else {
                         this.$message.error(resp['msg']);
                     }
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 

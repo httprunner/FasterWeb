@@ -340,21 +340,11 @@
             getDataBaseList() {
                 this.$api.getDataBaseList().then(resp => {
                     this.dataBaseData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message:'服务器连接超时，请重试',
-                        duration:1000
-                    })
-                });
+                })
             },
             getPagination(url) {
                 this.$api.getPagination(url).then(resp => {
                     this.dataBaseData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message:'服务器连接超时，请重试',
-                        duration:1000
-                    })
                 })
             },
         },

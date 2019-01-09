@@ -26,5 +26,8 @@ After Build
 3. 执行npm install, npm run build # 生成生产环境包
 3. docker build -t fasterweb:latest .    # 构建docker镜像
 4. docker run -d --name fasterweb --net=host --restart always fasterweb:latest  # 后台运行docker容器
-5. open url: http://localhost:8082/#/fastrunner/index
+5. open url: http://localhost:8082/#/fastrunner/register
 
+## 在线体验地址
+-------------
+[FasterRunner 接口自动化测试平台](http://39.108.239.78:8082/#/fastrunner/register)

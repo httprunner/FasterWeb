@@ -232,10 +232,6 @@
                             this.loading = false;
                         }).catch(resp => {
                             this.loading = false;
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
                         })
                     } else {
                         this.$emit('getNewBody', body, this.tempBody);
