@@ -3,7 +3,7 @@
         <el-header style="background: #F7F7F7; padding: 0; height: 50px">
             <div>
                 <div style="padding-top: 10px; margin-left: 10px;">
-                    <el-button type="success"
+                    <el-button type="primary"
                                size="small"
                                icon="el-icon-circle-plus"
                                @click="dialogVisible = true">
@@ -75,7 +75,6 @@
                         align="center"
                     >
                         <template slot-scope="scope">
-                            <i class="iconfont">&#xe64a;</i>
                             <span
                                 style="font-size: 18px; font-weight: bold; cursor: pointer;"
                                 @click="handleCellClick(scope.row)"
@@ -85,7 +84,7 @@
 
                     <el-table-column
                         label="负责人"
-                        width="150"
+                        width="200"
                         align="center"
                     >
                         <template slot-scope="scope">
@@ -108,7 +107,7 @@
                     </el-table-column>
 
                     <el-table-column
-                        label="最后修改时间"
+                        label="更新时间"
                         width="260"
                         align="center"
                     >
@@ -129,6 +128,13 @@
                         <template slot-scope="scope">
                             <el-button
                                 size="medium"
+                                type="primary"
+                                @click="handleCellClick(scope.row)">详情
+                            </el-button>
+
+                            <el-button
+                                size="medium"
+                                type="primary"
                                 @click="handleEdit(scope.$index, scope.row)">编辑
                             </el-button>
 
@@ -199,9 +205,7 @@
         },
         methods: {
             handleCellClick(row) {
-                this.$store.commit('changeBackButton');
-                this.$store.commit('changeSideMenu');
-                this.$store.commit('changeItemUrl', 'ProjectDetail');
+                this.$store.commit('changeBackButton', true);
                 this.$router.push({name: 'ProjectDetail', params: {id: row['id']}});
             },
             handleEdit(index, row) {

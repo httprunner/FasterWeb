@@ -17,7 +17,7 @@
 
         <el-container>
             <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
-                <div style="position: fixed; bottom: 0; right:0; left: 200px; top: 150px">
+                <div style="position: fixed; bottom: 0; right:0; left: 220px; top: 150px">
                 <el-table
                     :data="configData.results"
                     :show-header="configData.results.length !== 0 "

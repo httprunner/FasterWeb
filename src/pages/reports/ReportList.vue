@@ -1,7 +1,7 @@
 <template>
     <el-container>
         <el-header style="padding: 0; height: 40px; margin-top: 10px">
-            <div style="padding-top: 8px; padding-left: 10px;">
+            <div style="padding-top: 8px; padding-left: 30px;">
                 <el-row>
                     <el-col :span="8">
                         <el-pagination
@@ -33,7 +33,7 @@
 
         <el-container>
             <el-main style="padding: 0; margin-left: 10px;">
-                <div style="position: fixed; bottom: 0; right:0; left: 200px; top: 120px">
+                <div style="position: fixed; bottom: 0; right:0; left: 220px; top: 120px">
                     <el-table
                         :data="reportData.results"
                         :show-header="reportData.results.length !== 0 "

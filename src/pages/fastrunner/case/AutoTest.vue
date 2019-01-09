@@ -5,7 +5,7 @@
             <div class="nav-api-header">
                 <div style="padding-top: 10px; margin-left: 10px">
                     <el-button
-                        type="success"
+                        type="primary"
                         size="small"
                         icon="el-icon-circle-plus"
                         @click="dialogVisible = true"
@@ -62,7 +62,7 @@
 
 
                     <el-button
-                        type="warning"
+                        type="primary"
                         size="small"
                         style="margin-left: 100px"
                         icon="el-icon-circle-plus-outline"

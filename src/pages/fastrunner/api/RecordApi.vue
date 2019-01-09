@@ -5,7 +5,7 @@
             <div class="nav-api-header">
                 <div style="padding-top: 10px; margin-left: 10px">
                     <el-button
-                        type="success"
+                        type="primary"
                         size="small"
                         icon="el-icon-circle-plus"
                         @click="dialogVisible = true"
@@ -64,7 +64,7 @@
                     <el-button
                         style="margin-left: 100px"
                         :disabled="currentNode === '' "
-                        type="warning"
+                        type="primary"
                         size="small"
                         icon="el-icon-circle-plus-outline"
                         @click="initResponse = true"

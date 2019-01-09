@@ -5,7 +5,7 @@
             <div class="nav-api-header">
                 <div style="padding-top: 10px; margin-left: 20px">
                     <el-button
-                        type="warning"
+                        type="primary"
                         size="small"
                         icon="el-icon-circle-plus-outline"
                         @click="dialogVisible=true"
@@ -77,7 +77,7 @@
 
         <el-container>
             <el-header style="padding: 0; height: 50px; margin-top: 10px">
-                <div style="padding-top: 8px; padding-left: 10px;">
+                <div style="padding-top: 8px; padding-left: 30px;">
                     <el-pagination
                         :page-size="11"
                         v-show="variablesData.count !== 0 "
@@ -93,7 +93,7 @@
 
             <el-container>
                 <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
-                    <div style="position: fixed; bottom: 0; right:0; left: 200px; top: 150px">
+                    <div style="position: fixed; bottom: 0; right:0; left: 220px; top: 150px">
                         <el-table
                             :data="variablesData.results"
                             :show-header="variablesData.results.length !== 0 "

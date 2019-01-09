@@ -10,7 +10,7 @@
     >
         <el-table-column
             label="测试之前执行的方法"
-            width="450">
+            width="500">
             <template slot-scope="scope">
                 <el-input clearable
                           v-model="scope.row.setup"
@@ -22,7 +22,7 @@
 
         <el-table-column
             label="测试之后执行的方法"
-            width="450">
+            width="500">
             <template slot-scope="scope">
                 <el-input clearable
                           v-model="scope.row.teardown"
