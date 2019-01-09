@@ -1,14 +1,17 @@
 import axios from 'axios'
 import store from '../store/state'
 import router from '../router'
+import {Message} from 'element-ui';
 
-export const baseUrl = "http://39.108.239.78:8000";
+
+export const baseUrl = "http://127.0.0.1:8000";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = baseUrl;
 
 axios.interceptors.request.use(function (config) {
-    if (config.url.indexOf("/api/fastrunner/project/?cursor=") !== -1 || config.url.indexOf("/api/fastrunner/database/?cursor=") !== -1) {}
+    if (config.url.indexOf("/api/fastrunner/project/?cursor=") !== -1 || config.url.indexOf("/api/fastrunner/database/?cursor=") !== -1) {
+    }
     else if (!config.url.startsWith("/api/user/")) {
         config.url = config.url + "?token=" + store.token;
     }
@@ -20,9 +23,24 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-    if (error.response.status === 401) {
-        router.replace({
-            name: 'Login'
+    try {
+        if (error.response.status === 401) {
+            router.replace({
+                name: 'Login'
+            })
+        }
+
+        if (error.response.status === 500) {
+            Message.error({
+                message: '服务器内部异常, 请检查',
+                duration: 1000
+            })
+        }
+    }
+    catch (e) {
+        Message.error({
+            message: '服务器连接超时，请重试',
+            duration: 1000
         })
     }
 });

@@ -2,18 +2,29 @@
     <el-container>
         <el-header style="padding: 0; height: 50px;">
             <div style=" padding-left: 10px;">
-                <el-pagination
-                    :page-size="11"
-                    v-show="apiData.count !== 0 "
-                    background
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="currentPage"
-                    layout="total, prev, pager, next, jumper"
-                    :total="apiData.count"
-                >
-                </el-pagination>
-            </div>
+                <el-row :gutter="50">
+                    <el-col :span="6">
+                        <el-input placeholder="请输入接口名称" clearable v-model="search">
+                            <el-button slot="append" icon="el-icon-search" @click="searchAPI"></el-button>
+                        </el-input>
+                    </el-col>
 
+                    <el-col :span="7">
+                        <el-pagination
+                            style="margin-top: 5px"
+                            :page-size="11"
+                            v-show="apiData.count !== 0 "
+                            background
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="currentPage"
+                            layout="total, prev, pager, next, jumper"
+                            :total="apiData.count"
+                        >
+                        </el-pagination>
+                    </el-col>
+
+                </el-row>
+            </div>
         </el-header>
 
         <el-container>
@@ -220,6 +231,7 @@
         },
         data() {
             return {
+                search: '',
                 reportName: '',
                 asyncs: false,
                 filterText: '',
@@ -271,11 +283,6 @@
                     }).then(() => {
                         this.$api.delAllAPI({data: this.selectAPI}).then(resp => {
                             this.getAPIList();
-                        }).catch(resp => {
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
                         })
                     })
                 } else {
@@ -320,11 +327,6 @@
                             this.dialogTableVisible = true;
                         }
 
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 }
             },
@@ -332,11 +334,6 @@
                 this.$api.getTree(this.$route.params.id, {params: {type: 1}}).then(resp => {
                     this.dataTree = resp.tree;
                     this.dialogTreeVisible = true;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -360,11 +357,6 @@
                     }
                 }).then(res => {
                     this.apiData = res;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -378,11 +370,6 @@
                     }
                 }).then(res => {
                     this.apiData = res;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -399,11 +386,6 @@
                         } else {
                             this.$message.error(resp.msg);
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 })
             },
@@ -416,11 +398,6 @@
                     } else {
                         this.$message.error(resp.msg)
                     }
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
             // 运行API
@@ -432,10 +409,6 @@
                     this.loading = false;
                 }).catch(resp => {
                     this.loading = false;
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -446,6 +419,27 @@
             cellMouseLeave(row) {
                 this.currentRow = '';
             },
+            searchAPI() {
+                this.$api.apiList({
+                    params: {
+                        node: '',
+                        project: this.project,
+                        search: this.search
+                    }
+                }).then(res => {
+                    this.apiData = res;
+                })
+            },
+        },
+        mounted() {
+            this.$api.apiList({
+                params: {
+                    node: '',
+                    project: this.project
+                }
+            }).then(res => {
+                this.apiData = res;
+            })
         }
     }
 </script>

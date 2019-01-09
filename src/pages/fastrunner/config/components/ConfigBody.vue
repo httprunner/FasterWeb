@@ -166,11 +166,6 @@
                                 duration: 1000
                             })
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 }
             },
@@ -198,11 +193,6 @@
                                 duration: 1000
                             })
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 }
             },

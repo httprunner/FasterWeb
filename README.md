@@ -28,3 +28,6 @@ After Build
 4. docker run -d --name fasterweb --net=host --restart always fasterweb:latest  # 后台运行docker容器
 5. open url: http://localhost:8082/#/fastrunner/register
 
+## 在线体验地址
+-------------
+[FasterRunner 接口自动化测试平台](http://39.108.239.78:8082/#/fastrunner/register)

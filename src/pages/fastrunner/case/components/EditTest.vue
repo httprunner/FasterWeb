@@ -35,7 +35,7 @@
         </el-aside>
 
         <el-main>
-            <div v-show="!editTestStepActivate" style="margin-top: 10px; ">
+            <div v-show="!editTestStepActivate">
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-pagination
@@ -408,11 +408,6 @@
                             duration: 1000
                         });
                     }
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -440,11 +435,6 @@
                             duration: 1000
                         });
                     }
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -471,10 +461,6 @@
                         this.dialogTableVisible = true;
                     }).catch(resp => {
                         this.suite_loading = false;
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 }
             },
@@ -495,10 +481,6 @@
                     this.dialogTableVisible = true;
                 }).catch(resp => {
                     this.loading = false;
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -511,11 +493,6 @@
                     }
                 }).then(res => {
                     this.apiData = res;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -527,11 +504,6 @@
                     }
                 }).then(res => {
                     this.apiData = res;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -542,11 +514,6 @@
                     }
                 }).then(resp => {
                     this.dataTree = resp['tree'];
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -583,7 +550,7 @@
     }
 </script>
 
-<style>
+<style scoped>
 
     .test-list {
         height: 590px;

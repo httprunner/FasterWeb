@@ -71,7 +71,8 @@
             </li>
 
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe63b;</i> &nbsp;{{projectInfo.update_time | datetimeFormat}}</p>
+                <p class="title-p"><i class="iconfont">&#xe63b;</i> &nbsp;{{projectInfo.update_time | datetimeFormat}}
+                </p>
                 <p class="desc-p">最后更新时间</p>
             </li>
         </ul>
@@ -126,11 +127,6 @@
                     this.projectForm.name = res['name'];
                     this.projectForm.desc = res['desc'];
                     this.projectForm.id = pk;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -148,12 +144,7 @@
 
                             this.projectForm.name = this.projectInfo['name'];
                             this.projectForm.desc = this.projectInfo['desc'];
-                        }).catch(resp => {
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
-                        });
+                        })
                     } else {
                         this.dialogVisible = true;
                         return false;

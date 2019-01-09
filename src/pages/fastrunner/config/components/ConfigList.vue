@@ -1,99 +1,108 @@
 <template>
     <el-container>
-        <el-header style="padding: 0; height: 50px;">
-            <div style="padding-top: 8px; padding-left: 10px;">
-                <el-pagination
-                    :page-size="11"
-                    v-show="configData.count !== 0 "
-                    background
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="currentPage"
-                    layout="total, prev, pager, next, jumper"
-                    :total="configData.count"
-                >
-                </el-pagination>
+        <el-header style="padding-top: 10px; height: 50px;">
+            <div>
+                <el-row :gutter="50">
+                    <el-col :span="6">
+                        <el-input placeholder="请输入配置名称" clearable v-model="search">
+                            <el-button slot="append" icon="el-icon-search" @click="getConfigList"></el-button>
+                        </el-input>
+                    </el-col>
+                    <el-col :span="7">
+                        <el-pagination
+                            :page-size="11"
+                            v-show="configData.count !== 0 "
+                            background
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="currentPage"
+                            layout="total, prev, pager, next, jumper"
+                            :total="configData.count"
+                        >
+                        </el-pagination>
+                    </el-col>
+                </el-row>
             </div>
         </el-header>
 
         <el-container>
             <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
                 <div style="position: fixed; bottom: 0; right:0; left: 220px; top: 150px">
-                <el-table
-                    :data="configData.results"
-                    :show-header="configData.results.length !== 0 "
-                    stripe
-                    height="calc(100%)"
-                    @cell-mouse-enter="cellMouseEnter"
-                    @cell-mouse-leave="cellMouseLeave"
-                    @selection-change="handleSelectionChange"
-                >
-                    <el-table-column
-                        type="selection"
-                        width="55">
-                    </el-table-column>
-
-                    <el-table-column
-                        label="配置名称"
-                        width="350"
+                    <el-table
+                        :data="configData.results"
+                        :show-header="configData.results.length !== 0 "
+                        stripe
+                        height="calc(100%)"
+                        @cell-mouse-enter="cellMouseEnter"
+                        @cell-mouse-leave="cellMouseLeave"
+                        @selection-change="handleSelectionChange"
                     >
-                        <template slot-scope="scope">
-                            <div>{{scope.row.name}}</div>
-                        </template>
-                    </el-table-column>
+                        <el-table-column
+                            type="selection"
+                            width="55">
+                        </el-table-column>
 
-                    <el-table-column
-                        width="300"
-                        label="配置请求地址"
-                    >
-                        <template slot-scope="scope">
-                            <div v-text="scope.row.base_url === '' ? '无' : scope.row.base_url"></div>
+                        <el-table-column
+                            label="配置名称"
+                            width="350"
+                        >
+                            <template slot-scope="scope">
+                                <div>{{scope.row.name}}</div>
+                            </template>
+                        </el-table-column>
 
-                        </template>
-                    </el-table-column>
+                        <el-table-column
+                            width="300"
+                            label="配置请求地址"
+                        >
+                            <template slot-scope="scope">
+                                <div v-text="scope.row.base_url === '' ? '无' : scope.row.base_url"></div>
 
-                    <el-table-column
-                        width="300"
-                        label="更新时间"
-                    >
-                        <template slot-scope="scope">
-                            <div>{{scope.row.update_time|datetimeFormat}}</div>
+                            </template>
+                        </el-table-column>
 
-                        </template>
-                    </el-table-column>
+                        <el-table-column
+                            width="300"
+                            label="更新时间"
+                        >
+                            <template slot-scope="scope">
+                                <div>{{scope.row.update_time|datetimeFormat}}</div>
 
-                    <el-table-column
-                        width="300"
-                    >
-                        <template slot-scope="scope">
-                            <el-row v-show="currentRow === scope.row">
-                                <el-button
-                                    type="info"
-                                    icon="el-icon-edit"
-                                    circle size="mini"
-                                    @click="handleEditConfig(scope.row)"
-                                ></el-button>
+                            </template>
+                        </el-table-column>
 
-                                <el-button
-                                    type="success"
-                                    icon="el-icon-document"
-                                    circle size="mini"
-                                    @click="handleCopyConfig(scope.row.id)"
-                                >
-                                </el-button>
+                        <el-table-column
+                            width="300"
+                        >
+                            <template slot-scope="scope">
+                                <el-row v-show="currentRow === scope.row">
+                                    <el-button
+                                        type="info"
+                                        icon="el-icon-edit"
+                                        circle size="mini"
+                                        @click="handleEditConfig(scope.row)"
+                                    ></el-button>
 
-                                <el-button
-                                    type="danger"
-                                    icon="el-icon-delete"
-                                    circle size="mini"
-                                    @click="handleDelConfig(scope.row.id)"
-                                >
-                                </el-button>
-                            </el-row>
-                        </template>
+                                    <el-button
+                                        type="success"
+                                        icon="el-icon-document"
+                                        circle size="mini"
+                                        @click="handleCopyConfig(scope.row.id)"
+                                    >
+                                    </el-button>
 
-                    </el-table-column>
+                                    <el-button
+                                        type="danger"
+                                        icon="el-icon-delete"
+                                        circle size="mini"
+                                        @click="handleDelConfig(scope.row.id)"
+                                    >
+                                    </el-button>
+                                </el-row>
+                            </template>
 
-                </el-table>
+                        </el-table-column>
+
+                    </el-table>
                 </div>
             </el-main>
         </el-container>
@@ -104,7 +113,7 @@
     export default {
         name: "ConfigList",
         props: {
-            back:Boolean,
+            back: Boolean,
             project: {
                 require: true
             },
@@ -112,6 +121,7 @@
         },
         data() {
             return {
+                search: '',
                 selectConfig: [],
                 currentRow: '',
                 currentPage: 1,
@@ -122,31 +132,26 @@
             }
         },
         watch: {
-            back (){
+            back() {
                 this.getConfigList();
             },
 
-            del () {
+            del() {
                 if (this.selectConfig.length !== 0) {
                     this.$confirm('此操作将永久删除配置，是否继续?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning',
                     }).then(() => {
-                        this.$api.delAllConfig({data:this.selectConfig}).then(resp => {
+                        this.$api.delAllConfig({data: this.selectConfig}).then(resp => {
                             this.getConfigList();
-                        }).catch(resp => {
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
                         })
                     })
-                }else {
+                } else {
                     this.$notify.warning({
-                        title:'提示',
+                        title: '提示',
                         message: '请至少勾选一个配置',
-                        duration:1000
+                        duration: 1000
                     })
                 }
             }
@@ -165,11 +170,6 @@
                     }
                 }).then(resp => {
                     this.configData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -186,11 +186,6 @@
                         } else {
                             this.$message.error(resp.msg);
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 })
             },
@@ -204,20 +199,15 @@
                     confirmButtonText: '确定',
                     inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
                     inputErrorMessage: '配置名称不能为空'
-                }).then(({ value }) => {
+                }).then(({value}) => {
                     this.$api.copyConfig(id, {
                         'name': value
                     }).then(resp => {
                         if (resp.success) {
                             this.getConfigList();
-                        }else {
+                        } else {
                             this.$message.error(resp.msg);
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 })
             },
@@ -231,24 +221,23 @@
             },
 
             getConfigList() {
-                this.$api.configList({params:{project: this.project}}).then(resp => {
+                this.$api.configList({
+                    params: {
+                        project: this.project,
+                        search: this.search
+                    }
+                }).then(resp => {
                     this.configData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
         },
         mounted() {
-           this.getConfigList();
+            this.getConfigList();
         }
     }
 </script>
 
 <style scoped>
-
 
 
 </style>

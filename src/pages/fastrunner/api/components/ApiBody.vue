@@ -260,11 +260,6 @@
                                 duration: 1000
                             })
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 }
             },
@@ -288,11 +283,6 @@
                         this.summary = resp;
                         this.dialogTableVisible = true;
                         this.loading = false;
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 }
             },
@@ -326,11 +316,6 @@
                                 duration: 1000
                             })
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 }
             }
@@ -358,7 +343,7 @@
                 validate: [],
                 variables: [],
                 hooks: [],
-                method: 'POST',
+                method: 'GET',
                 dialogTableVisible: false,
                 save: false,
                 run: false,

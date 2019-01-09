@@ -135,11 +135,6 @@
                     }).then(() => {
                         this.$api.delAllConfig({data:this.selectConfig}).then(resp => {
                             this.getConfigList();
-                        }).catch(resp => {
-                            this.$message.error({
-                                message: '服务器连接超时，请重试',
-                                duration: 1000
-                            })
                         })
                     })
                 }else {
@@ -165,11 +160,6 @@
                     }
                 }).then(resp => {
                     this.configData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
 
@@ -186,11 +176,6 @@
                         } else {
                             this.$message.error(resp.msg);
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 })
             },
@@ -213,11 +198,6 @@
                         }else {
                             this.$message.error(resp.msg);
                         }
-                    }).catch(resp => {
-                        this.$message.error({
-                            message: '服务器连接超时，请重试',
-                            duration: 1000
-                        })
                     })
                 })
             },
@@ -233,11 +213,6 @@
             getConfigList() {
                 this.$api.configList({params:{project: this.project}}).then(resp => {
                     this.configData = resp;
-                }).catch(resp => {
-                    this.$message.error({
-                        message: '服务器连接超时，请重试',
-                        duration: 1000
-                    })
                 })
             },
         },
