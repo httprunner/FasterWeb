@@ -3,7 +3,7 @@
         <el-header style="background: #F7F7F7; padding: 0; height: 50px">
             <div class="apiData">
                 <div style="padding-top: 10px; margin-left: 10px">
-                    <el-button type="success"
+                    <el-button type="primary"
                                size="small"
                                icon="el-icon-circle-plus"
                                @click="dialogVisible = true">

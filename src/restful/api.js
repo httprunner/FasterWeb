@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '../store/state'
 import router from '../router'
 
-export const baseUrl = "http://localhost:8000";
+export const baseUrl = "http://39.108.239.78:8000";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = baseUrl;

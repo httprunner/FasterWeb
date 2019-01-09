@@ -93,7 +93,7 @@
                 </el-dialog>
 
 
-                <div style="position: fixed; bottom: 0; right:0; left: 480px; top: 160px">
+                <div style="position: fixed; bottom: 0; right:0; left: 500px; top: 160px">
                     <el-table
                         height="calc(100%)"
                         ref="multipleTable"

@@ -13,6 +13,7 @@ import GlobalEnv from '@/pages/variables/GlobalEnv'
 import ReportList from '@/pages/reports/ReportList'
 import RecordConfig from '@/pages/fastrunner/config/RecordConfig'
 import Tasks from '@/pages/task/Tasks'
+
 Vue.use(Router)
 
 export default new Router({
@@ -31,21 +32,19 @@ export default new Router({
             meta: {
                 title: '用户登录'
             }
-        },
-
-
-        {
+        }, {
 
             path: '/fastrunner',
-            name: 'Home',
+            name: 'Index',
             component: Home,
             meta: {
                 title: '首页',
+                requireAuth: true
             },
             children: [
                 {
                     name: 'ProjectList',
-                    path: 'index',
+                    path: 'project_list',
                     component: ProjectList,
                     meta: {
                         title: '项目列表',
@@ -53,17 +52,8 @@ export default new Router({
                     }
                 },
                 {
-                    name: 'DataBase',
-                    path: 'database',
-                    component: DataBase,
-                    meta: {
-                        title: '数据库',
-                        requireAuth: true,
-                    }
-                },
-                {
                     name: 'ProjectDetail',
-                    path:'project/:id/dashbord',
+                    path: 'project/:id/dashbord',
                     component: ProjectDetail,
                     meta: {
                         title: '项目预览',
@@ -73,7 +63,7 @@ export default new Router({
                 },
                 {
                     name: 'DebugTalk',
-                    path:'debugtalk/:id',
+                    path: 'debugtalk/:id',
                     component: DebugTalk,
                     meta: {
                         title: '编辑驱动',
@@ -83,7 +73,7 @@ export default new Router({
                 },
                 {
                     name: 'RecordApi',
-                    path:'api_record/:id',
+                    path: 'api_record/:id',
                     component: RecordApi,
                     meta: {
                         title: '接口模板',
@@ -93,7 +83,7 @@ export default new Router({
                 },
                 {
                     name: 'AutoTest',
-                    path:'auto_test/:id',
+                    path: 'auto_test/:id',
                     component: AutoTest,
                     meta: {
                         title: '自动化测试',
@@ -103,7 +93,7 @@ export default new Router({
                 },
                 {
                     name: 'RecordConfig',
-                    path:'record_config/:id',
+                    path: 'record_config/:id',
                     component: RecordConfig,
                     meta: {
                         title: '环境管理',
@@ -113,7 +103,7 @@ export default new Router({
                 },
                 {
                     name: 'GlobalEnv',
-                    path:'global_env/:id',
+                    path: 'global_env/:id',
                     component: GlobalEnv,
                     meta: {
                         title: '全局变量',
@@ -123,7 +113,7 @@ export default new Router({
                 },
                 {
                     name: 'Reports',
-                    path:'reports/:id',
+                    path: 'reports/:id',
                     component: ReportList,
                     meta: {
                         title: '历史报告',
@@ -133,7 +123,7 @@ export default new Router({
                 },
                 {
                     name: 'Task',
-                    path:'tasks/:id',
+                    path: 'tasks/:id',
                     component: Tasks,
                     meta: {
                         title: '定时任务',
@@ -143,16 +133,27 @@ export default new Router({
                 },
                 {
                     name: 'Pressure',
-                    path:'pressure/:id',
+                    path: 'pressure/:id',
                     component: RecordConfig,
                     meta: {
                         title: '压力测试',
                         requireAuth: true
                     }
 
+                },
+                {
+                    name: 'DataBase',
+                    path: 'database',
+                    component: DataBase,
+                    meta: {
+                        title: '数据库管理',
+                        requireAuth: true
+                    }
+
                 }
             ]
-        }
+        },
+
     ]
 })
 

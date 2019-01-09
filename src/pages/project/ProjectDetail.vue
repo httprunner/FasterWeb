@@ -211,7 +211,6 @@
     .title-project {
         margin-top: 40px;
         margin-left: 10px;
-        padding-left: 50px;
     }
 
     ul li {
