@@ -166,7 +166,8 @@
                 this.$api.getConfigPaginationBypage({
                     params: {
                         page: this.currentPage,
-                        project: this.project
+                        project: this.project,
+                        search: this.search
                     }
                 }).then(resp => {
                     this.configData = resp;

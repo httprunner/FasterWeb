@@ -330,7 +330,8 @@
                     params: {
                         page: this.currentPage,
                         project: this.project,
-                        node: this.node
+                        node: this.node,
+                        search: this.search
                     }
                 }).then(resp => {
                     this.testData = resp;
@@ -386,7 +387,8 @@
                 this.$api.testList({
                     params: {
                         project: this.project,
-                        node: this.node
+                        node: this.node,
+                        search: this.search
                     }
                 }).then(resp => {
                     this.testData = resp;
@@ -398,24 +400,14 @@
 
             cellMouseLeave(row) {
                 this.currentRow = '';
-            },
-            searchTest() {
-                this.$api.testList({
-                    params: {
-                        project: this.project,
-                        node: '',
-                        search: this.search
-                    }
-                }).then(resp => {
-                    this.testData = resp;
-                })
             }
         },
         mounted() {
             this.$api.testList({
                 params: {
                     project: this.project,
-                    node: ''
+                    node: '',
+                    search: this.search
                 }
             }).then(resp => {
                 this.testData = resp;

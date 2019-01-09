@@ -263,7 +263,8 @@
                 this.$api.getVariablesPaginationBypage({
                     params: {
                         page: this.currentPage,
-                        project: this.variablesForm.project
+                        project: this.variablesForm.project,
+                        search: this.search
                     }
                 }).then(resp => {
                     this.variablesData = resp;

@@ -231,7 +231,8 @@
                 this.$api.getReportsPaginationBypage({
                     params: {
                         page: this.currentPage,
-                        project: this.$route.params.id
+                        project: this.$route.params.id,
+                        search: this.search
                     }
                 }).then(resp => {
                     this.reportData = resp;

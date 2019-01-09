@@ -5,7 +5,7 @@
                 <el-row :gutter="50">
                     <el-col :span="6">
                         <el-input placeholder="请输入接口名称" clearable v-model="search">
-                            <el-button slot="append" icon="el-icon-search" @click="searchAPI"></el-button>
+                            <el-button slot="append" icon="el-icon-search" @click="getAPIList"></el-button>
                         </el-input>
                     </el-col>
 
@@ -353,7 +353,8 @@
                 this.$api.apiList({
                     params: {
                         node: this.node,
-                        project: this.project
+                        project: this.project,
+                        search: this.search
                     }
                 }).then(res => {
                     this.apiData = res;
@@ -366,7 +367,8 @@
                     params: {
                         page: this.currentPage,
                         node: this.node,
-                        project: this.project
+                        project: this.project,
+                        search:this.search
                     }
                 }).then(res => {
                     this.apiData = res;
@@ -418,24 +420,14 @@
 
             cellMouseLeave(row) {
                 this.currentRow = '';
-            },
-            searchAPI() {
-                this.$api.apiList({
-                    params: {
-                        node: '',
-                        project: this.project,
-                        search: this.search
-                    }
-                }).then(res => {
-                    this.apiData = res;
-                })
-            },
+            }
         },
         mounted() {
             this.$api.apiList({
                 params: {
                     node: '',
-                    project: this.project
+                    project: this.project,
+                    search: this.search
                 }
             }).then(res => {
                 this.apiData = res;
