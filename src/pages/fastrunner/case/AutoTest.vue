@@ -191,7 +191,7 @@
                 <test-list
                     v-show="addTestActivate"
                     :project="$route.params.id"
-                    :node="currentNode.id"
+                    :node="currentNode !== '' ? currentNode.id : '' "
                     :del="del"
                     v-on:testStep="handleTestStep"
                     :back="back"

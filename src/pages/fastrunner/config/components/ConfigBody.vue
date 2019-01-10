@@ -155,10 +155,6 @@
 
                     }).then(resp => {
                         if (resp.success) {
-                            this.$message.success({
-                                message: '配置添加成功',
-                                duration: 1000
-                            });
                             this.$emit("addSuccess");
                         } else {
                             this.$message.error({
@@ -182,10 +178,6 @@
                         name: this.name,
                     }).then(resp => {
                         if (resp.success) {
-                            this.$message.success({
-                                message: '配置更新成功',
-                                duration: 1000
-                            });
                             this.$emit("addSuccess");
                         } else {
                             this.$message.error({

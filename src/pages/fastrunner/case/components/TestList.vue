@@ -5,7 +5,7 @@
                 <el-row :gutter="50">
                     <el-col :span="6">
                         <el-input placeholder="请输入用例集名称" clearable v-model="search">
-                            <el-button slot="append" icon="el-icon-search" @click="searchTest"></el-button>
+                            <el-button slot="append" icon="el-icon-search" @click="getTestList"></el-button>
                         </el-input>
                     </el-col>
                     <el-col :span="7">
@@ -224,6 +224,7 @@
                 this.getTree();
             },
             node() {
+                this.search = '';
                 this.getTestList();
             },
 
@@ -403,15 +404,7 @@
             }
         },
         mounted() {
-            this.$api.testList({
-                params: {
-                    project: this.project,
-                    node: '',
-                    search: this.search
-                }
-            }).then(resp => {
-                this.testData = resp;
-            })
+           this.getTestList()
         }
     }
 </script>

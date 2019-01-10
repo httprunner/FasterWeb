@@ -264,6 +264,7 @@
                 this.getAPIList();
             },
             node() {
+                this.search = '';
                 this.getAPIList();
             },
             checked() {
@@ -423,15 +424,7 @@
             }
         },
         mounted() {
-            this.$api.apiList({
-                params: {
-                    node: '',
-                    project: this.project,
-                    search: this.search
-                }
-            }).then(res => {
-                this.apiData = res;
-            })
+            this.getAPIList();
         }
     }
 </script>
