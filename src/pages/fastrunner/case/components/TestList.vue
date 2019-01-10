@@ -3,7 +3,7 @@
         <el-header style="padding-top: 10px; height: 50px;">
             <div style="overflow: hidden">
                 <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :span="6" v-if="testData.count > 11">
                         <el-input placeholder="请输入用例集名称" clearable v-model="search">
                             <el-button slot="append" icon="el-icon-search" @click="getTestList"></el-button>
                         </el-input>

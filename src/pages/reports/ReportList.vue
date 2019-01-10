@@ -4,7 +4,7 @@
             <div style="padding-top: 8px; padding-left: 30px;">
 
                 <el-row>
-                    <el-col :span="6">
+                    <el-col :span="6" v-if="reportData.count > 11">
                         <el-input placeholder="请输入报告名称" clearable v-model="search">
                             <el-button slot="append" icon="el-icon-search" @click="getReportList"></el-button>
                         </el-input>

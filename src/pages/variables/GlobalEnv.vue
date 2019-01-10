@@ -80,7 +80,7 @@
                 <div style="padding-top: 8px; padding-left: 30px; overflow: hidden">
                     <el-row :gutter="50">
                         <el-col :span="6">
-                            <el-input placeholder="请输入变量名称" clearable v-model="search">
+                            <el-input placeholder="请输入变量名称" v-if="variablesData.count > 11" clearable v-model="search">
                                 <el-button slot="append" icon="el-icon-search" @click="getVariablesList"></el-button>
                             </el-input>
                         </el-col>

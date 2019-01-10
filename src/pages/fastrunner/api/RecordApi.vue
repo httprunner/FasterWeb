@@ -88,6 +88,30 @@
                     >导出接口
                     </el-button>
 
+                    <el-tooltip
+                        class="item"
+                        effect="dark"
+                        content="可选配置"
+                        placement="top-start"
+                    >
+                        <el-button plain size="small" icon="el-icon-view"></el-button>
+                    </el-tooltip>
+
+
+                    <el-select
+                        placeholder="请选择"
+                        size="small"
+                        tyle="margin-left: -6px"
+                        v-model="currentConfig"
+                    >
+                        <el-option
+                            v-for="item in configOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.name">
+                        </el-option>
+                    </el-select>
+
                     <el-checkbox
                         v-model="checked"
                         style="margin-left: 40px;"
@@ -162,6 +186,7 @@
                     :project="$route.params.id"
                     :response="response"
                     v-on:addSuccess="handleAddSuccess"
+                    :config="currentConfig"
                 >
                 </api-body>
 
@@ -171,6 +196,7 @@
                     v-on:api="handleAPI"
                     :node="currentNode !== '' ? currentNode.id : '' "
                     :project="$route.params.id"
+                    :config="currentConfig"
                     :del="del"
                     :back="back"
                     :run="run"
@@ -211,7 +237,7 @@
                             name: '',
                             times: 1,
                             url: '',
-                            method: 'POST',
+                            method: 'GET',
                             header: [{
                                 key: "",
                                 value: "",
@@ -260,6 +286,8 @@
         },
         data() {
             return {
+                configOptions: [],
+                currentConfig: '请选择',
                 back: false,
                 checked: false,
                 del: false,
@@ -307,8 +335,14 @@
                     this.maxId = resp['max'];
                 })
             },
-
-
+            getConfig() {
+                this.$api.getAllConfig(this.$route.params.id).then(resp => {
+                    this.configOptions = resp;
+                    this.configOptions.push({
+                        name: '请选择'
+                    })
+                })
+            },
             updateTree(mode) {
                 this.$api.updateTree(this.treeId, {
                     body: this.dataTree,
@@ -349,9 +383,9 @@
                 this.$prompt('请输入节点名', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
-                    inputPattern:  /\S/,
+                    inputPattern: /\S/,
                     inputErrorMessage: '节点名称不能为空'
-                }).then(({ value }) => {
+                }).then(({value}) => {
                     const parent = this.data.parent;
                     const children = parent.data.children || parent.data;
                     const index = children.findIndex(d => d.id === this.currentNode.id);
@@ -405,6 +439,7 @@
         name: "RecordApi",
         mounted() {
             this.getTree();
+            this.getConfig();
         }
     }
 </script>

@@ -255,10 +255,10 @@
                 },
                 back: false,
                 del: false,
-                run:false,
+                run: false,
                 radio: '根节点',
                 addTestActivate: true,
-                currentConfig: '',
+                currentConfig: '请选择',
                 treeId: '',
                 maxId: '',
                 dialogVisible: false,
@@ -267,19 +267,19 @@
                 filterText: '',
                 expand: '&#xe65f;',
                 dataTree: [],
-                configOptions: [{
-                    value: '测试环境',
-                    label: '测试环境'
-                }]
+                configOptions: []
             }
         },
         methods: {
-            handleDragEnd(){
+            handleDragEnd() {
                 this.updateTree(false);
             },
             getConfig() {
                 this.$api.getAllConfig(this.$route.params.id).then(resp => {
                     this.configOptions = resp;
+                    this.configOptions.push({
+                        name: '请选择'
+                    })
                 })
             },
 
@@ -319,9 +319,9 @@
                 this.$prompt('请输入节点名', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
-                    inputPattern:  /\S/,
+                    inputPattern: /\S/,
                     inputErrorMessage: '节点名称不能为空'
-                }).then(({ value }) => {
+                }).then(({value}) => {
                     const parent = this.data.parent;
                     const children = parent.data.children || parent.data;
                     const index = children.findIndex(d => d.id === this.currentNode.id);

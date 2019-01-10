@@ -3,7 +3,7 @@
         <el-header style="padding: 0; height: 50px;">
             <div style=" padding-left: 10px;">
                 <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :span="6" v-if="apiData.count > 11">
                         <el-input placeholder="请输入接口名称" clearable v-model="search">
                             <el-button slot="append" icon="el-icon-search" @click="getAPIList"></el-button>
                         </el-input>
@@ -218,6 +218,9 @@
         },
         name: "ApiList",
         props: {
+            config: {
+                require: true
+            },
             run: Boolean,
             back: Boolean,
             node: {
@@ -316,7 +319,8 @@
                         "project": this.project,
                         "relation": relation,
                         "async": this.asyncs,
-                        "name": this.reportName
+                        "name": this.reportName,
+                        "config": this.config
                     }).then(resp => {
                         if (resp.hasOwnProperty("status")) {
                             this.$message.info({
@@ -369,7 +373,7 @@
                         page: this.currentPage,
                         node: this.node,
                         project: this.project,
-                        search:this.search
+                        search: this.search
                     }
                 }).then(res => {
                     this.apiData = res;
@@ -406,7 +410,11 @@
             // 运行API
             handleRunAPI(id) {
                 this.loading = true;
-                this.$api.runAPIByPk(id).then(resp => {
+                this.$api.runAPIByPk(id, {
+                    params: {
+                        config: this.config
+                    }
+                }).then(resp => {
                     this.summary = resp;
                     this.dialogTableVisible = true;
                     this.loading = false;

@@ -174,6 +174,9 @@
             project: {
                 require: false
             },
+            config: {
+                require: false
+            },
             response: {
                 require: false
             }
@@ -274,7 +277,8 @@
                         method: this.method,
                         name: this.name,
                         times: this.times,
-                        project: this.project
+                        project: this.project,
+                        config: this.config
                     }).then(resp => {
                         this.summary = resp;
                         this.dialogTableVisible = true;
