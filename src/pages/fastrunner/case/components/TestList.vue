@@ -31,6 +31,7 @@
                         v-if="dialogTableVisible"
                         :visible.sync="dialogTableVisible"
                         width="70%"
+                        :modal-append-to-body="false"
                     >
                         <report :summary="summary"></report>
                     </el-dialog>
@@ -39,6 +40,7 @@
                         title="Run TestSuite"
                         :visible.sync="dialogTreeVisible"
                         width="45%"
+                        :modal-append-to-body="false"
                     >
                         <div>
                             <div>

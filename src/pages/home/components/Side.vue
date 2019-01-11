@@ -45,7 +45,7 @@
         name: "Side",
         data() {
             return {
-                defaultIndex: "Index",
+                defaultIndex: "ProjectDetail",
                 side_menu: [
                     {name: "项目概况", url: "ProjectDetail", code: "&#xe64a;"},
                     {name: "驱动代码", url: "DebugTalk", code: "&#xe7ca;"},
