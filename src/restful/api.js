@@ -217,8 +217,8 @@ export const runSingleAPI = params => {
     return axios.post('/api/fastrunner/run_api/', params).then(res => res.data)
 };
 
-export const runAPIByPk = url => {
-    return axios.get('/api/fastrunner/run_api_pk/' + url + '/').then(res => res.data)
+export const runAPIByPk = (url, params) => {
+    return axios.get('/api/fastrunner/run_api_pk/' + url + '/', params).then(res => res.data)
 };
 
 export const runAPITree = params => {
