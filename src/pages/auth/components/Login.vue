@@ -21,8 +21,8 @@
                     </div>
 
                 </el-col>
-                <el-col :span="10">
-                    <div style="position: fixed; left: 650px">
+                <el-col :span="24">
+                    <div>
                         <div id="form-title">FasterRunner接口测试平台</div>
                         <form id="submit-form">
                             <div id="form-content">
