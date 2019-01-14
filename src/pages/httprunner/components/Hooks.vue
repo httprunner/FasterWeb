@@ -33,8 +33,7 @@
         </el-table-column>
 
 
-        <el-table-column
-            width="130">
+        <el-table-column>
             <template slot-scope="scope">
                 <el-row v-show="scope.row === currentRow">
                     <el-button

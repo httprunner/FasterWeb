@@ -36,7 +36,7 @@
 
         <el-table-column
             label="变量值"
-            width="350">
+            width="400">
             <template slot-scope="scope">
                 <el-input clearable v-model="scope.row.value" placeholder="Value"></el-input>
             </template>
@@ -50,8 +50,7 @@
             </template>
         </el-table-column>
 
-        <el-table-column
-            width="130">
+        <el-table-column>
             <template slot-scope="scope">
                 <el-row v-show="scope.row === currentRow">
                     <el-button

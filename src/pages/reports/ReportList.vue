@@ -55,12 +55,13 @@
                     >
                         <el-table-column
                             type="selection"
-                            width="55">
+                            width="55"
+                        >
                         </el-table-column>
 
                         <el-table-column
-                            width="100"
                             label="报告类型"
+                            width="100"
                         >
                             <template slot-scope="scope">
                                 <el-tag color="#2C3E50" style="color: white">{{ scope.row.type }}</el-tag>
@@ -69,7 +70,6 @@
 
                         <el-table-column
                             label="报告名称"
-                            width="200"
                         >
                             <template slot-scope="scope">
                                 <div>{{scope.row.name}}</div>
@@ -77,7 +77,6 @@
                         </el-table-column>
 
                         <el-table-column
-                            width="200"
                             label="测试时间"
                         >
                             <template slot-scope="scope">
@@ -87,7 +86,6 @@
                         </el-table-column>
 
                         <el-table-column
-                            width="150"
                             label="持续时间"
                         >
                             <template slot-scope="scope">
@@ -97,7 +95,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            width="120"
+                            width="80"
                             label="总计用例"
                         >
                             <template slot-scope="scope">
@@ -106,7 +104,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            width="120"
+                            width="80"
                             label="通过个数"
                         >
                             <template slot-scope="scope">
@@ -115,7 +113,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            width="120"
+                            width="80"
                             label="失败个数"
                         >
                             <template slot-scope="scope">
@@ -124,7 +122,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            width="120"
+                            width="80"
                             label="异常个数"
                         >
                             <template slot-scope="scope">
@@ -133,7 +131,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            width="120"
+                            width="80"
                             label="跳过个数"
                         >
                             <template slot-scope="scope">
@@ -142,7 +140,6 @@
                         </el-table-column>
 
                         <el-table-column
-                            width="250"
                             label="系统信息"
                         >
                             <template slot-scope="scope">
@@ -157,9 +154,7 @@
                         </el-table-column>
 
 
-                        <el-table-column
-                            width="250"
-                        >
+                        <el-table-column>
                             <template slot-scope="scope">
                                 <el-row v-show="currentRow === scope.row">
                                     <el-button

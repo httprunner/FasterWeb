@@ -124,7 +124,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            min-width="800"
+                            min-width="600"
                             align="center"
                         >
                             <template slot-scope="scope">
@@ -173,8 +173,7 @@
                             </template>
                         </el-table-column>
 
-                        <el-table-column
-                            width="140">
+                        <el-table-column>
                             <template slot-scope="scope">
                                 <el-row v-show="currentRow === scope.row">
                                     <el-button

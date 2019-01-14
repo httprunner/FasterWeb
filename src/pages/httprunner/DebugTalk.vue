@@ -85,6 +85,7 @@
         name: "DebugTalk",
         methods: {
             handleRunCode() {
+                this.resp.msg = '';
                 this.$api.runDebugtalk(this.code).then(resp => {
                     this.resp = resp;
                 })

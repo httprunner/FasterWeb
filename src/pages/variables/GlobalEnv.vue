@@ -114,12 +114,12 @@
                         >
                             <el-table-column
                                 type="selection"
-                                width="55">
+                                width="55"
+                            >
                             </el-table-column>
 
                             <el-table-column
                                 label="变量名"
-                                width="350"
                             >
                                 <template slot-scope="scope">
                                     <div>{{scope.row.key}}</div>
@@ -127,7 +127,6 @@
                             </el-table-column>
 
                             <el-table-column
-                                width="450"
                                 label="变量值"
                             >
                                 <template slot-scope="scope">
@@ -137,7 +136,6 @@
                             </el-table-column>
 
                             <el-table-column
-                                width="300"
                                 label="更新时间"
                             >
                                 <template slot-scope="scope">
@@ -146,9 +144,7 @@
                                 </template>
                             </el-table-column>
 
-                            <el-table-column
-                                width="250"
-                            >
+                            <el-table-column>
                                 <template slot-scope="scope">
                                     <el-row v-show="currentRow === scope.row">
                                         <el-button
