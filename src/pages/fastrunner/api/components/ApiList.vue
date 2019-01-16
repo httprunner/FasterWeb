@@ -124,7 +124,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            min-width="600"
+                            min-width="450"
                             align="center"
                         >
                             <template slot-scope="scope">
@@ -182,6 +182,14 @@
                                         circle size="mini"
                                         @click="handleRowClick(scope.row)"
                                     ></el-button>
+
+                                    <el-button
+                                        type="success"
+                                        icon="el-icon-document"
+                                        circle size="mini"
+                                        @click="handleCopyAPI(scope.row.id)"
+                                    >
+                                    </el-button>
 
                                     <el-button
                                         type="primary"
@@ -299,6 +307,23 @@
         },
 
         methods: {
+            handleCopyAPI(id) {
+                this.$prompt('请输入接口名称', '提示', {
+                    confirmButtonText: '确定',
+                    inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
+                    inputErrorMessage: '接口名称不能为空'
+                }).then(({value}) => {
+                    this.$api.copyAPI(id, {
+                        'name': value
+                    }).then(resp => {
+                        if (resp.success) {
+                            this.getAPIList();
+                        } else {
+                            this.$message.error(resp.msg);
+                        }
+                    })
+                })
+            },
             filterNode(value, data) {
                 if (!value) return true;
                 return data.label.indexOf(value) !== -1;
