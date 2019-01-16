@@ -3,7 +3,7 @@
 ![LICENSE](https://img.shields.io/github/license/yinquanwang/FasterRunner.svg)
 > FasterWeb that depends FasterRunner
 
-## Build Development
+## 本地开发环境部署
 
 ``` bash
 # install dependencies
@@ -14,12 +14,12 @@ npm run dev
 
 ```
 
-After Build
+测试
 -----------
 
 1. open url(recommend chrome): http://localhost:8080/#/fastrunner/register
 
-## Docker 部署
+## Docker 部署 nginx模式
 --------------
 1. 修改default.conf配置文件 server_name的ip, 注意为当前docker服务宿主机的ip地址！！！
 2. 修改/src/restful/api.js baseUrl地址, 即为fastrunner容器运行的宿主机地址
@@ -28,6 +28,6 @@ After Build
 4. docker run -d --name fasterweb --net=host --restart always fasterweb:latest  # 后台运行docker容器
 5. open url: http://localhost:8082/#/fastrunner/register
 
-## 在线体验地址
+## 在线体验地址 注意可能不是git最新代码部署，建议docker环境自己部署
 -------------
 [FasterRunner 接口自动化测试平台](http://39.108.239.78:8082/#/fastrunner/register)
