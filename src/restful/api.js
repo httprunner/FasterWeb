@@ -4,7 +4,7 @@ import router from '../router'
 import {Message} from 'element-ui';
 
 
-export const baseUrl = "http://39.108.239.78:8000";
+export const baseUrl = "http://localhost:8000";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = baseUrl;
@@ -170,6 +170,10 @@ export const delAllTest = params => {
 
 export const coptTest = (url, params) => {
     return axios.post('/api/fastrunner/test/' + url + '/', params).then(res => res.data)
+};
+
+export const copyAPI = (url, params) => {
+    return axios.post('/api/fastrunner/api/' + url + '/', params).then(res => res.data)
 };
 
 export const editTest = url => {
