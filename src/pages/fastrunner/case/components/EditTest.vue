@@ -479,7 +479,8 @@
                     params: {
                         page: this.currentPage,
                         node: this.currentNode.id,
-                        project: this.project
+                        project: this.project,
+                        search: ''
                     }
                 }).then(res => {
                     this.apiData = res;

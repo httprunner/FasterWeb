@@ -163,7 +163,7 @@
                             <el-tab-pane label="Request">
                                 <pre class="code-block" v-html="handleRequest(props.row.meta_data.request)"></pre>
                             </el-tab-pane>
-                            <el-tab-pane label="Content">
+                            <el-tab-pane label="Content" v-if="props.row.meta_data.response.content !== null">
                                 <pre class="code-block" v-text="handleContent(props.row.meta_data.response.content)"></pre>
                             </el-tab-pane>
                             <el-tab-pane label="Response">
@@ -172,7 +172,7 @@
                             <el-tab-pane label="Validators" v-if="props.row.meta_data.validators.length !== 0">
                                 <pre class="code-block" v-html="props.row.meta_data.validators"></pre>
                             </el-tab-pane>
-                            <el-tab-pane label="Attachment" v-if="props.row.attachment !== ''">
+                            <el-tab-pane label="Exception" v-if="props.row.attachment !== ''">
                                 <pre class="code-block" v-html="props.row.attachment"></pre>
                             </el-tab-pane>
                         </el-tabs>
@@ -210,7 +210,7 @@
                 return content
             },
             handleResponse(response) {
-                const keys = ["response_time_ms", "encoding", "ok", "reason", "url", "text", "json", "content_size", "content_type", "content"];
+                const keys = ["response_time_ms", "encoding", "ok", "reason", "url", "text", "json", "content_size", "content_type"];
                 keys.forEach(function (item) {
                     delete response[item];
                 });
