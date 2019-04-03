@@ -47,10 +47,7 @@
                 <p class="desc-p">测试报告总数</p>
             </li>
 
-            <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe61f;</i> &nbsp;{{projectInfo.plan_count}} 个计划</p>
-                <p class="desc-p">集成计划个数</p>
-            </li>
+          
         </ul>
 
 
