@@ -11,21 +11,14 @@
                         @click="addTasks=true"
                     >添加任务
                     </el-button>
-                    <el-button
-                        style="margin-left: 20px"
-                        type="danger"
-                        icon="el-icon-delete"
-                        circle
-                        size="mini"
-                    ></el-button>
 
                     <el-button
                         :disabled="!addTasks"
                         type="text"
                         style="position: absolute; right: 30px;"
+                        @click="addTasks=false"
                     >返回列表
                     </el-button>
-                    还在开发中！！！
 
                 </div>
             </div>
@@ -47,25 +40,21 @@
                 </div>
             </el-header>
             <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
-                <div style="position: fixed; bottom: 0; right:0; left: 220px; top: 150px">
+                <div style="position: fixed; bottom: 0; right:0; left: 230px; top: 160px">
                     <el-table
                         v-if="!addTasks"
                         :data="tasksData.results"
                         :show-header="tasksData.results.length !== 0 "
                         stripe
+                        highlight-current-row
                         height="calc(100%)"
                         @cell-mouse-enter="cellMouseEnter"
                         @cell-mouse-leave="cellMouseLeave"
-                        @selection-change="handleSelectionChange"
                     >
-                        <el-table-column
-                            type="selection"
-                            width="55">
-                        </el-table-column>
 
                         <el-table-column
                             label="任务名称"
-                            width="250"
+                            width="240"
                         >
                             <template slot-scope="scope">
                                 <div>{{scope.row.name}}</div>
@@ -74,11 +63,11 @@
 
 
                         <el-table-column
-                            width="200"
+                            width="120"
                             label="时间配置"
                         >
                             <template slot-scope="scope">
-                                <div>{{scope.row.time}}</div>
+                                <div>{{scope.row.kwargs.corntab}}</div>
                             </template>
                         </el-table-column>
 
@@ -87,17 +76,8 @@
                             label="邮件策略"
                         >
                             <template slot-scope="scope">
-                                <div>{{scope.row.sene_type}}</div>
+                                <div>{{scope.row.kwargs.strategy}}</div>
 
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column
-                            width="100"
-                            label="用例个数"
-                        >
-                            <template slot-scope="scope">
-                                <div>{{scope.row.length}}</div>
                             </template>
                         </el-table-column>
 
@@ -107,7 +87,12 @@
                             label="状态"
                         >
                             <template slot-scope="scope">
-                                <div>{{scope.row.status}}</div>
+                                <el-switch
+                                    disabled
+                                    v-model="scope.row.enabled"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949">
+                                </el-switch>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -115,15 +100,15 @@
                             label="接收人"
                         >
                             <template slot-scope="scope">
-                                <div>{{scope.row.receiver}}</div>
+                                <div>{{scope.row.kwargs.receiver}}</div>
                             </template>
                         </el-table-column>
                         <el-table-column
-                            width="300"
+                            width="320"
                             label="抄送人"
                         >
                             <template slot-scope="scope">
-                                <div>{{scope.row.copy}}</div>
+                                <div>{{scope.row.kwargs.copy}}</div>
                             </template>
                         </el-table-column>
 
@@ -141,6 +126,7 @@
                                         type="danger"
                                         icon="el-icon-delete"
                                         circle size="mini"
+                                        @click="delTasks(scope.row.id)"
                                     >
                                     </el-button>
                                 </el-row>
@@ -153,6 +139,7 @@
             </el-main>
             <add-tasks
                 v-if="addTasks"
+                v-on:changeStatus="changeStatus"
             >
             </add-tasks>
         </el-container>
@@ -162,8 +149,9 @@
 
 <script>
     import AddTasks from './AddTasks'
+
     export default {
-        components:{
+        components: {
             AddTasks
         },
         data() {
@@ -172,23 +160,45 @@
                 currentPage: 1,
                 currentRow: '',
                 tasksData: {
-                    count: 1,
-                    results: [
-                        {
-                            name: 'tasks name',
-                            send_type: '始终发送',
-                            status: true,
-                            length: 2,
-                            time: '11',
-                            receiver: '1263374981@qq.com',
-                            copy: 'copy@lexinfintech.com'
-
-                        }
-                    ]
+                    count: 0,
+                    results: []
                 },
             }
         },
         methods: {
+            delTasks(id) {
+                this.$confirm('此操作将永久删除该定时任务，是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                }).then(() => {
+                    this.$api.deleteTasks(id).then(resp => {
+                        if (resp.success) {
+                            this.getTaskList();
+                        }
+                    })
+                })
+            },
+            handleCurrentChange(val) {
+                this.$api.getTaskPaginationBypage({
+                    params: {
+                        page: this.currentPage,
+                        project: this.$route.params.id
+                    }
+                }).then(resp => {
+                    this.tasksData = resp;
+                })
+            },
+
+            changeStatus(value) {
+                this.getTaskList();
+                this.addTasks = value;
+            },
+            getTaskList() {
+                this.$api.taskList({params: {project: this.$route.params.id}}).then(resp => {
+                    this.tasksData = resp
+                })
+            },
             cellMouseEnter(row) {
                 this.currentRow = row;
             },
@@ -199,7 +209,7 @@
         },
         name: "Tasks",
         mounted() {
-
+            this.getTaskList();
         }
     }
 </script>

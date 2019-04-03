@@ -1,8 +1,9 @@
 <template>
     <el-table
+        highlight-current-row
         :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
         strpe
-        height="460"
+        :height="height"
         :data="tableData"
         style="width: 100%;"
         @cell-mouse-enter="cellMouseEnter"
@@ -66,7 +67,11 @@
                 require: false
             }
         },
-
+        computed:{
+            height() {
+                return window.screen.height - 440
+            }
+        },
         watch: {
             save: function () {
                 this.$emit('hooks', this.parse_hooks(), this.tableData);

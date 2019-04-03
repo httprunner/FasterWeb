@@ -7,8 +7,7 @@ export default {
     setUser(state, value) {
         state.user = value;
     },
-
-    changeBackButton(state, value) {
-        state.backButton = value
+    setRouterName(state, value) {
+        state.routerName = value
     }
 }

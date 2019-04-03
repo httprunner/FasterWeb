@@ -12,9 +12,10 @@
         </div>
         <div style="margin-top: 5px">
             <el-table
+                highlight-current-row
                 :cell-style="{paddingTop: '4px', paddingBottom: '4px'}"
                 strpe
-                height="436"
+                :height="height"
                 :data="dataType === 'data' ? formData: paramsData"
                 style="width: 100%;"
                 @cell-mouse-enter="cellMouseEnter"
@@ -130,7 +131,7 @@
                     lang="json"
                     theme="github"
                     width="100%"
-                    height="400"
+                    :height="height"
                     v-show="dataType === 'json' "
             >
             </editor>
@@ -148,6 +149,11 @@
             save: Boolean,
             request: {
                 require: false
+            }
+        },
+        computed:{
+            height() {
+                return window.screen.height - 464
             }
         },
 
@@ -404,7 +410,7 @@
                     label: 'params',
                     value: 'params'
                 }],
-                dataType: 'data'
+                dataType: 'json'
             }
         }
     }

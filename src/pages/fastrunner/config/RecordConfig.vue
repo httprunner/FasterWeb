@@ -12,7 +12,7 @@
                     >新增配置
                     </el-button>
 
-                    <el-button
+                  <!--  <el-button
                         type="primary"
                         plain
                         size="small"
@@ -26,7 +26,7 @@
                         size="small"
                         icon="el-icon-download"
                     >导出配置
-                    </el-button>
+                    </el-button>-->
 
                     <el-button
                         style="margin-left: 20px"

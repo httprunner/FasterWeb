@@ -1,5 +1,5 @@
 export default {
-    backButton: false,
+    routerName: null,
     token:null,
     user: null
 

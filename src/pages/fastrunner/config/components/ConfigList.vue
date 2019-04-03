@@ -28,6 +28,7 @@
             <el-main style="padding: 0; margin-left: 10px; margin-top: 10px;">
                 <div style="position: fixed; bottom: 0; right:0; left: 220px; top: 150px">
                     <el-table
+                        highlight-current-row
                         :data="configData.results"
                         :show-header="configData.results.length !== 0 "
                         stripe
@@ -53,7 +54,7 @@
 
                         <el-table-column
 
-                            label="配置请求地址"
+                            label="基本请求地址"
                         >
                             <template slot-scope="scope">
                                 <div v-text="scope.row.base_url === '' ? '无' : scope.row.base_url"></div>

@@ -4,11 +4,11 @@
             <div>
                 <el-input
                     style="width: 600px"
-                    placeholder="请输入用例名称"
+                    placeholder="请输入接口名称"
                     v-model="name"
                     clearable
                 >
-                    <template slot="prepend">用例信息录入</template>
+                    <template slot="prepend">接口信息录入</template>
 
                     <el-button
                         slot="append"
@@ -17,21 +17,22 @@
                         @click="save = !save"
                     >Save
                     </el-button>
-                    <el-button
-                        slot="append"
-                        type="warning"
-                        plain
-                        @click="esc = !esc"
-                    >Back
-                    </el-button>
+
                 </el-input>
 
                 <el-button
+                    slot="append"
+                    type="danger"
+                    @click="esc = !esc"
+                >Back
+                </el-button>
+
+               <!-- <el-button
                     type="primary"
                     @click="handleRun"
                     v-loading="loading"
                 >Run
-                </el-button>
+                </el-button>-->
 
             </div>
             <div>
@@ -171,14 +172,17 @@
         props: {
             response: {
                 require: true
+            },
+            host: {
+                require: true
             }
         },
         methods: {
-            handleRun() {
+          /*  handleRun() {
                 this.run = true;
                 this.save = !this.save;
             },
-
+*/
             handleHeader(header, value) {
                 this.header = value;
                 this.tempBody.header = header;
@@ -221,21 +225,7 @@
                         name: this.name,
                         times: this.times
                     };
-                    if (this.run === true) {
-                        this.loading = true;
-                        this.$api.runSingleTest({
-                            body: {newBody: this.tempBody},
-                            project:this.$route.params.id
-                        }).then(resp => {
-                            this.summary = resp;
-                            this.dialogTableVisible = true;
-                            this.loading = false;
-                        }).catch(resp => {
-                            this.loading = false;
-                        })
-                    } else {
-                        this.$emit('getNewBody', body, this.tempBody);
-                    }
+                    this.$emit('getNewBody', body, this.tempBody);
                     this.run = false;
                 }
 
@@ -254,7 +244,7 @@
                 if (this.name === '') {
                     this.$notify.error({
                         title: 'name错误',
-                        message: '用例名称不能为空',
+                        message: '接口名称不能为空',
                         duration: 1500
                     });
                     return false;
@@ -270,7 +260,7 @@
         },
         data() {
             return {
-                loading:false,
+                loading: false,
                 run: false,
                 esc: false,
                 times: this.response.body.times,
@@ -287,7 +277,7 @@
                 save: false,
                 summary: {},
                 dialogTableVisible: false,
-                activeTag: 'first',
+                activeTag: 'second',
                 httpOptions: [{
                     label: 'GET',
                 }, {

@@ -9,23 +9,13 @@
                         size="small"
                         icon="el-icon-circle-plus-outline"
                         @click="dialogVisible=true"
-                    >新增变量
+                    >新增环境
                     </el-button>
 
-                    <el-button
-                        v-show="variablesData.count !== 0 "
-                        style="margin-left: 20px"
-                        type="danger"
-                        icon="el-icon-delete"
-                        circle
-                        size="mini"
-                        @click="delSelectionVariables"
-                    ></el-button>
-
                     <el-dialog
-                        title="添加变量"
+                        title="添加环境"
                         :visible.sync="dialogVisible"
-                        width="30%"
+                        width="35%"
                         align="center"
                     >
                         <el-form
@@ -34,11 +24,18 @@
                             ref="variablesForm"
                             label-width="100px"
                             class="project">
-                            <el-form-item label="变量名" prop="key">
-                                <el-input v-model="variablesForm.key" clearable placeholder="请输入变量名"></el-input>
+                            <el-form-item label="环境名" prop="name">
+                                <el-input resize v-model="variablesForm.name" clearable placeholder="请输入环境名"></el-input>
                             </el-form-item>
-                            <el-form-item label="变量值" prop="value">
-                                <el-input v-model="variablesForm.value" clearable placeholder="请输入变量值"></el-input>
+                            <el-form-item label="IP列表" prop="value">
+                                <el-input
+                                    v-model="variablesForm.value"
+                                    type="textarea"
+                                    :autosize="{ minRows: 10, maxRows: 16}"
+                                    placeholder="127.0.0.1 localhost
+192.168.0.1 gateway"
+                                    clearable
+                                ></el-input>
                             </el-form-item>
                         </el-form>
                         <span slot="footer" class="dialog-footer">
@@ -48,9 +45,9 @@
                     </el-dialog>
 
                     <el-dialog
-                        title="编辑变量"
+                        title="编辑环境"
                         :visible.sync="editdialogVisible"
-                        width="30%"
+                        width="35%"
                         align="center"
                     >
                         <el-form
@@ -59,11 +56,19 @@
                             ref="editVariablesForm"
                             label-width="100px"
                             class="project">
-                            <el-form-item label="变量名" prop="key">
-                                <el-input v-model="editVariablesForm.key" clearable placeholder="请输入变量名"></el-input>
+                            <el-form-item label="环境名" prop="name">
+                                <el-input resize v-model="editVariablesForm.name" clearable
+                                          placeholder="请输入环境名"></el-input>
                             </el-form-item>
-                            <el-form-item label="变量值" prop="value">
-                                <el-input v-model="editVariablesForm.value" clearable placeholder="请输入变量值"></el-input>
+                            <el-form-item label="IP列表" prop="value">
+                                <el-input
+                                    v-model="editVariablesForm.value"
+                                    type="textarea"
+                                    :autosize="{ minRows: 10, maxRows: 16}"
+                                    placeholder="127.0.0.1 localhost
+192.168.0.1 gateway"
+                                    clearable
+                                ></el-input>
                             </el-form-item>
                         </el-form>
                         <span slot="footer" class="dialog-footer">
@@ -79,25 +84,17 @@
         <el-container>
             <el-header style="padding: 0; height: 50px;">
                 <div style="padding-top: 8px; padding-left: 30px; overflow: hidden">
-                    <el-row :gutter="50">
-                        <el-col :span="6">
-                            <el-input placeholder="请输入变量名称" v-if="variablesData.count > 11" clearable v-model="search">
-                                <el-button slot="append" icon="el-icon-search" @click="getVariablesList"></el-button>
-                            </el-input>
-                        </el-col>
-                        <el-col :span="7">
-                            <el-pagination
-                                :page-size="11"
-                                v-show="variablesData.count !== 0 "
-                                background
-                                @current-change="handleCurrentChange"
-                                :current-page.sync="currentPage"
-                                layout="total, prev, pager, next, jumper"
-                                :total="variablesData.count"
-                            >
-                            </el-pagination>
-                        </el-col>
-                    </el-row>
+                    <el-pagination
+                        :page-size="11"
+                        v-show="hostIPData.count !== 0 "
+                        background
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        layout="total, prev, pager, next, jumper"
+                        :total="hostIPData.count"
+                    >
+                    </el-pagination>
+
                 </div>
             </el-header>
 
@@ -106,34 +103,32 @@
                     <div style="position: fixed; bottom: 0; right:0; left: 220px; top: 150px">
                         <el-table
                             highlight-current-row
-                            :data="variablesData.results"
-                            :show-header="variablesData.results.length !== 0 "
+                            :data="hostIPData.results"
+                            :show-header="hostIPData.results.length !== 0 "
                             stripe
                             height="calc(100%)"
                             @cell-mouse-enter="cellMouseEnter"
                             @cell-mouse-leave="cellMouseLeave"
-                            @selection-change="handleSelectionChange"
                         >
                             <el-table-column
-                                type="selection"
-                                width="55"
-                            >
-                            </el-table-column>
-
-                            <el-table-column
-                                label="变量名"
+                                label="环境名"
                             >
                                 <template slot-scope="scope">
-                                    <div>{{scope.row.key}}</div>
+                                    <div>{{scope.row.name}}</div>
                                 </template>
                             </el-table-column>
 
                             <el-table-column
-                                label="变量值"
+                                label="Host列表"
                             >
                                 <template slot-scope="scope">
-                                    <div>{{scope.row.value}}</div>
-
+                                    <el-input
+                                        v-model="scope.row.value"
+                                        type="textarea"
+                                        :autosize="{ minRows: 1, maxRows: 5}"
+                                        clearable
+                                        disabled
+                                    ></el-input>
                                 </template>
                             </el-table-column>
 
@@ -153,16 +148,16 @@
                                             type="info"
                                             icon="el-icon-edit"
                                             circle size="mini"
-                                            @click="handleEditVariables(scope.row)"
+                                            @click="handleEditHostIP(scope.row)"
                                         ></el-button>
 
 
                                         <el-button
-                                            v-show="variablesData.count !== 0"
+                                            v-show="hostIPData.count !== 0"
                                             type="danger"
                                             icon="el-icon-delete"
                                             circle size="mini"
-                                            @click="handleDelVariables(scope.row.id)"
+                                            @click="handleDelHost(scope.row.id)"
                                         >
                                         </el-button>
                                     </el-row>
@@ -183,39 +178,36 @@
 
     export default {
 
-
         data() {
             return {
                 search: '',
-                selectVariables: [],
                 currentRow: '',
                 currentPage: 1,
-                variablesData: {
+                hostIPData: {
                     count: 0,
                     results: []
                 },
                 editdialogVisible: false,
                 dialogVisible: false,
                 variablesForm: {
-                    key: '',
+                    name: '',
                     value: '',
                     project: this.$route.params.id
                 },
 
                 editVariablesForm: {
-                    key: '',
+                    name: '',
                     value: '',
                     id: ''
                 },
 
                 rules: {
-                    key: [
+                    name: [
                         {required: true, message: '请输入变量名', trigger: 'blur'},
                         {min: 1, max: 100, message: '最多不超过100个字符', trigger: 'blur'}
                     ],
                     value: [
-                        {required: true, message: '请输入变量值', trigger: 'blur'},
-                        {min: 1, max: 1024, message: '最多不超过1024个字符', trigger: 'blur'}
+                        {required: true, message: '请输入变量值', trigger: 'blur'}
                     ]
                 }
             }
@@ -229,9 +221,9 @@
                 this.currentRow = '';
             },
 
-            handleEditVariables(row) {
+            handleEditHostIP(row) {
                 this.editVariablesForm = {
-                    key: row.key,
+                    name: row.name,
                     value: row.value,
                     id: row.id
                 };
@@ -239,70 +231,47 @@
                 this.editdialogVisible = true;
             },
 
-            handleDelVariables(index) {
-                this.$confirm('此操作将永久删除该全局变量，是否继续?', '提示', {
+            handleDelHost(index) {
+                this.$confirm('此操作将永久删除该域名，是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
                 }).then(() => {
-                    this.$api.deleteVariables(index).then(resp => {
+                    this.$api.deleteHost(index).then(resp => {
                         if (resp.success) {
-                            this.getVariablesList();
+                            this.getHostIPList();
                         } else {
                             this.$message.error(resp.msg);
                         }
                     })
                 })
             },
-            handleSelectionChange(val) {
-                this.selectVariables = val;
-            },
 
             handleCurrentChange(val) {
-                this.$api.getVariablesPaginationBypage({
+                this.$api.getHostPaginationBypage({
                     params: {
                         page: this.currentPage,
-                        project: this.variablesForm.project,
-                        search: this.search
+                        project: this.variablesForm.project
                     }
                 }).then(resp => {
-                    this.variablesData = resp;
+                    this.hostIPData = resp;
                 })
-            },
-            delSelectionVariables() {
-                if (this.selectVariables.length !== 0) {
-                    this.$confirm('此操作将永久删除勾选的全局变量，是否继续?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning',
-                    }).then(() => {
-                        this.$api.delAllVariabels({data: this.selectVariables}).then(resp => {
-                            this.getVariablesList();
-                        })
-                    })
-                } else {
-                    this.$notify.warning({
-                        title: '提示',
-                        message: '请至少勾选一个全局变量',
-                        duration: 1000
-                    })
-                }
             },
 
             handleConfirm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.dialogVisible = false;
-                        this.$api.addVariables(this.variablesForm).then(resp => {
+                        this.$api.addHostIP(this.variablesForm).then(resp => {
                             if (!resp.success) {
                                 this.$message.info({
                                     message: resp.msg,
                                     duration: 1000
                                 })
                             } else {
-                                this.variablesForm.key = '';
+                                this.variablesForm.name = '';
                                 this.variablesForm.value = '';
-                                this.getVariablesList();
+                                this.getHostIPList();
                             }
                         })
 
@@ -315,14 +284,14 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.editdialogVisible = false;
-                        this.$api.updateVariables(this.editVariablesForm.id, this.editVariablesForm).then(resp => {
+                        this.$api.updateHost(this.editVariablesForm.id, this.editVariablesForm).then(resp => {
                             if (!resp.success) {
                                 this.$message.info({
                                     message: resp.msg,
                                     duration: 1000
                                 })
                             } else {
-                                this.getVariablesList();
+                                this.getHostIPList();
                             }
                         })
                     }
@@ -330,20 +299,19 @@
 
             },
 
-            getVariablesList() {
-                this.$api.variablesList({
+            getHostIPList() {
+                this.$api.hostList({
                     params: {
-                        project: this.variablesForm.project,
-                        search: this.search
+                        project: this.variablesForm.project
                     }
                 }).then(resp => {
-                    this.variablesData = resp;
+                    this.hostIPData = resp;
                 })
             },
         },
-        name: "GlobalEnv",
+        name: "HostAddress",
         mounted() {
-            this.getVariablesList();
+            this.getHostIPList();
         }
     }
 </script>

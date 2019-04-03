@@ -1,45 +1,17 @@
 <template>
 
-    <div>
-        <el-dialog
-            title="编辑项目"
-            :visible.sync="dialogVisible"
-            width="30%"
-            align="center"
-        >
-            <el-form
-                :model="projectForm"
-                :rules="rules"
-                ref="projectForm"
-                label-width="100px"
-            >
-                <el-form-item label="项目名称" prop="name">
-                    <el-input v-model="projectForm.name"></el-input>
-                </el-form-item>
-
-                <el-form-item label="项目描述" prop="desc">
-                    <el-input v-model="projectForm.desc"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                        <el-button @click="dialogVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="handleConfirm('projectForm')">确 定</el-button>
-                      </span>
-        </el-dialog>
+    <div >
         <ul class="title-project">
             <li class="title-li" title="Test API Project">
                 <b>{{projectInfo.name}}</b>
                 <b class="desc-li">{{projectInfo.desc}}</b>
-                <a @click="dialogVisible = true" style="cursor: pointer">
-                    <i class="iconfont">&#xe67d;</i>修改
-                </a>
 
             </li>
         </ul>
 
         <ul class="project_detail">
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe74a;</i> &nbsp;{{projectInfo.api_count}} 个API</p>
+                <p class="title-p"><i class="iconfont">&#xe74a;</i> &nbsp;{{projectInfo.api_count}} 个接口</p>
                 <p class="desc-p">接口总数</p>
             </li>
 
@@ -54,26 +26,30 @@
             </li>
 
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe63c;</i> &nbsp;{{projectInfo.variables_count}} 对全局变量</p>
+                <p class="title-p"><i class="iconfont">&#xe692;</i> &nbsp;{{projectInfo.variables_count}} 对变量</p>
                 <p class="desc-p">全局变量对数</p>
             </li>
         </ul>
 
         <ul class="project_detail">
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe61e;</i> &nbsp;0 项task</p>
-                <p class="desc-p">定时任务</p>
+                <p class="title-p"><i class="iconfont">&#xe609;</i> &nbsp;{{projectInfo.host_count}} 套环境</p>
+                <p class="desc-p">环境总数</p>
+            </li>
+
+            <li class="pull-left">
+                <p class="title-p"><i class="iconfont">&#xe61e;</i> &nbsp;{{projectInfo.task_count}} 项任务</p>
+                <p class="desc-p">定时任务个数</p>
             </li>
 
             <li class="pull-left">
                 <p class="title-p"><i class="iconfont">&#xe66e;</i> &nbsp;{{projectInfo.report_count}} 个报告</p>
-                <p class="desc-p">测试报告</p>
+                <p class="desc-p">测试报告总数</p>
             </li>
 
             <li class="pull-left">
-                <p class="title-p"><i class="iconfont">&#xe63b;</i> &nbsp;{{projectInfo.update_time | datetimeFormat}}
-                </p>
-                <p class="desc-p">最后更新时间</p>
+                <p class="title-p"><i class="iconfont">&#xe61f;</i> &nbsp;{{projectInfo.plan_count}} 个计划</p>
+                <p class="desc-p">集成计划个数</p>
             </li>
         </ul>
 
@@ -86,23 +62,7 @@
         name: "ProjectDetail",
         data() {
             return {
-                dialogVisible: false,
-                projectInfo: {},
-                projectForm: {
-                    name: '',
-                    desc: '',
-                    id: ''
-                },
-                rules: {
-                    name: [
-                        {required: true, message: '请输入项目名称', trigger: 'blur'},
-                        {min: 1, max: 50, message: '最多不超过50个字符', trigger: 'blur'}
-                    ],
-                    desc: [
-                        {required: true, message: '简要描述下该项目', trigger: 'blur'},
-                        {min: 1, max: 100, message: '最多不超过100个字符', trigger: 'blur'}
-                    ]
-                }
+                projectInfo: {}
             }
         },
         methods: {
@@ -115,7 +75,7 @@
             },
             failure(resp) {
                 this.$notify.error({
-                    message: resp["msg"],
+                    message: resp.msg,
                     duration: 1000
                 });
             },
@@ -123,34 +83,9 @@
             getProjectDetail() {
                 const pk = this.$route.params.id;
                 this.$api.getProjectDetail(pk).then(res => {
-                    this.projectInfo = res;
-                    this.projectForm.name = res['name'];
-                    this.projectForm.desc = res['desc'];
-                    this.projectForm.id = pk;
+                    this.projectInfo = res
                 })
-            },
-
-            handleConfirm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        this.dialogVisible = false;
-                        this.$api.updateProject(this.projectForm).then(resp => {
-                            if (resp["success"]) {
-                                this.success(resp);
-                                this.getProjectDetail();
-                            } else {
-                                this.failure(resp);
-                            }
-
-                            this.projectForm.name = this.projectInfo['name'];
-                            this.projectForm.desc = this.projectInfo['desc'];
-                        })
-                    } else {
-                        this.dialogVisible = true;
-                        return false;
-                    }
-                });
-            },
+            }
         },
         mounted() {
             this.getProjectDetail();

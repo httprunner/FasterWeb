@@ -62,6 +62,7 @@
         <el-container>
             <el-main style="padding: 0; margin-left: 10px">
                 <el-table
+                    highlight-current-row
                     :data="projectData.results"
                     border
                     stripe
@@ -88,9 +89,7 @@
                         align="center"
                     >
                         <template slot-scope="scope">
-                            <div slot="reference" class="name-wrapper">
-                                <el-tag style="font-size: 16px;">{{ scope.row.responsible }}</el-tag>
-                            </div>
+                            <span>{{ scope.row.responsible }}</span>
                         </template>
                     </el-table-column>
 
@@ -100,9 +99,7 @@
                         align="center"
                     >
                         <template slot-scope="scope">
-                            <div slot="reference" class="name-wrapper">
-                                <el-tag type="info" style="font-size: 16px;">{{ scope.row.desc }}</el-tag>
-                            </div>
+                            <span>{{ scope.row.desc }}</span>
                         </template>
                     </el-table-column>
 
@@ -112,11 +109,7 @@
                         align="center"
                     >
                         <template slot-scope="scope">
-                            <div slot="reference" class="name-wrapper">
-                                <el-tag type="info" style="font-size: 16px;">{{ scope.row.update_time | datetimeFormat
-                                    }}
-                                </el-tag>
-                            </div>
+                            <span>{{ scope.row.update_time | datetimeFormat }}</span>
                         </template>
                     </el-table-column>
 
@@ -128,7 +121,6 @@
                         <template slot-scope="scope">
                             <el-button
                                 size="medium"
-                                type="primary"
                                 @click="handleCellClick(scope.row)">详情
                             </el-button>
 
@@ -205,7 +197,8 @@
         },
         methods: {
             handleCellClick(row) {
-                this.$store.commit('changeBackButton', true);
+                this.$store.commit('setRouterName', 'ProjectDetail');
+                this.setLocalValue("routerName",'ProjectDetail');
                 this.$router.push({name: 'ProjectDetail', params: {id: row['id']}});
             },
             handleEdit(index, row) {

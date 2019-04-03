@@ -1,104 +1,93 @@
 <template>
     <el-container>
-        <el-aside style="margin-top: 10px;">
-            <div class="nav-api-side">
-                <div class="api-tree">
-                    <el-input
-                        placeholder="输入关键字进行过滤"
-                        v-model="filterText"
-                        size="medium"
-                        clearable
-                        prefix-icon="el-icon-search"
-                    >
-                    </el-input>
-
-                    <el-tree
-                        @node-click="handleNodeClick"
-                        :data="dataTree"
-                        node-key="id"
-                        :default-expand-all="false"
-                        :expand-on-click-node="false"
-                        highlight-current
-                        :filter-node-method="filterNode"
-                        ref="tree2"
-                    >
-                            <span class="custom-tree-node"
-                                  slot-scope="{ node, data }"
-                            >
-                                <span><i class="iconfont" v-html="expand"></i>&nbsp;&nbsp;{{ node.label }}</span>
-                            </span>
-                    </el-tree>
-                </div>
-
-            </div>
-
-        </el-aside>
-
-        <el-main style="padding-top: 0">
-            <div style="margin-top: 10px;">
-                <el-row :gutter="40">
-                    <el-col :span="10">
+        <template v-if="!next">
+            <el-main style="padding-top: 0">
+                <div style="margin-top: 10px;">
+                    <el-col :span="12">
                         <el-form
                             :model="ruleForm"
                             :rules="rules"
                             ref="ruleForm"
-                            label-width="80px"
+                            label-width="100px"
                         >
                             <el-form-item label="任务名称" prop="name">
-                                <el-input v-model="ruleForm.name" ></el-input>
-                            </el-form-item>
-                            <el-form-item label="运行环境" prop="region">
-                                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-                                    <el-option label="区域一" value="shanghai"></el-option>
-                                    <el-option label="区域二" value="beijing"></el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="时间配置" required>
-                                <el-col :span="11">
-                                    <el-form-item prop="date1">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1"
-                                                        style="width: 100%;"></el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col class="line" :span="2">-</el-col>
-                                <el-col :span="11">
-                                    <el-form-item prop="date2">
-                                        <el-time-picker type="fixed-time" placeholder="选择时间" v-model="ruleForm.date2"
-                                                        style="width: 100%;"></el-time-picker>
-                                    </el-form-item>
-                                </el-col>
-
-                            </el-form-item>
-                            <el-form-item label="任务状态" prop="delivery">
-                                <el-switch v-model="ruleForm.delivery"></el-switch>
+                                <el-input v-model="ruleForm.name" placeholder="请输入任务名称" clearable=""></el-input>
                             </el-form-item>
 
-                            <el-form-item label="邮件策略" prop="resource">
-                                <el-radio-group v-model="ruleForm.resource">
+                            <el-form-item label="时间配置" prop="corntab">
+                                <el-input clearable v-model="ruleForm.corntab" placeholder="请输入cortab表达式，例如 2 12 * * *"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="任务状态" prop="switch">
+                                <el-switch v-model="ruleForm.switch"></el-switch>
+                            </el-form-item>
+
+                            <el-form-item label="邮件策略" prop="strategy">
+                                <el-radio-group v-model="ruleForm.strategy">
                                     <el-radio label="始终发送"></el-radio>
                                     <el-radio label="仅失败发送"></el-radio>
                                     <el-radio label="从不发送"></el-radio>
                                 </el-radio-group>
                             </el-form-item>
 
-                            <el-form-item label="邮件接收人列表" prop="desc">
-                                <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+                            <el-form-item label="邮件接收人列表" prop="receiver">
+                                <el-input type="textarea" v-model="ruleForm.receiver"
+                                          placeholder="多个接收人以;分隔" clearable></el-input>
                             </el-form-item>
 
-                            <el-form-item label="邮件抄送人列表" prop="desc">
-                                <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+                            <el-form-item label="邮件抄送人列表" prop="copy">
+                                <el-input type="textarea" v-model="ruleForm.copy"
+                                          placeholder="多个抄送人以;分隔" clearable></el-input>
                             </el-form-item>
 
                             <el-form-item>
-                                <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                                <el-button type="primary" @click="submitForm('ruleForm')">下一步</el-button>
                                 <el-button @click="resetForm('ruleForm')">重置</el-button>
                             </el-form-item>
                         </el-form>
 
                     </el-col>
-                    <el-col :span="14">
-                        <div style="max-height: 700px; overflow: auto"
+
+                </div>
+            </el-main>
+        </template>
+        <template v-if="next">
+            <el-aside style="margin-top: 10px;">
+                <div class="nav-api-side">
+                    <div class="api-tree">
+                        <el-input
+                            placeholder="输入关键字进行过滤"
+                            v-model="filterText"
+                            size="medium"
+                            clearable
+                            prefix-icon="el-icon-search"
                         >
+                        </el-input>
+                        <el-tree
+                            @node-click="handleNodeClick"
+                            :data="dataTree"
+                            node-key="id"
+                            :default-expand-all="false"
+                            :expand-on-click-node="false"
+                            highlight-current
+                            :filter-node-method="filterNode"
+                            ref="tree2"
+                        >
+                            <span class="custom-tree-node"
+                                  slot-scope="{ node, data }"
+                            >
+                                <span><i class="iconfont" v-html="expand"></i>&nbsp;&nbsp;{{ node.label }}</span>
+                            </span>
+                        </el-tree>
+                    </div>
+
+                </div>
+
+            </el-aside>
+            <el-main style="padding-top: 0px">
+                <div>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
                             <el-pagination
                                 :page-size="11"
                                 v-show="suiteData.count !== 0"
@@ -110,36 +99,87 @@
                                 style="text-align: center"
                             >
                             </el-pagination>
-                            <div class='test-list'>
-                                <div
-                                    v-for="(test, index) in suiteData.results"
-                                    :key="index"
-                                    class="block block_test"
-                                >
-                                        <span
-                                            class="block-method block_method_test block_method_color">Suite</span>
-                                    <input class="block-test-name"
-                                           v-model="test.name"
-                                    />
+                        </el-col>
+                        <el-col :span="12">
+                            <el-button type="primary" v-if="testData.length > 0" @click="saveTask">保存</el-button>
+                            <el-button v-if="testData.length > 0" @click="next=false">上一步</el-button>
+                        </el-col>
+
+
+                    </el-row>
+                </div>
+
+                <div>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <div
+                                v-for="(item,index) in suiteData.results"
+                                draggable='true'
+                                @dragstart="currentSuite = JSON.parse(JSON.stringify(item))"
+                                style="cursor: pointer; margin-top: 10px; overflow: auto"
+                                :key="index"
+
+                            >
+                                <div class="block block_options">
+                                    <span class="block-method block_method_options block_method_color">Case</span>
+                                    <span class="block_name">{{item.name}}</span>
                                 </div>
                             </div>
+                        </el-col>
+                        <el-col :span="12">
 
-                        </div>
+                            <div style="max-height: 600px; overflow: auto"
+                                 @drop='drop($event)'
+                                 @dragover='allowDrop($event)'
+                            >
+                                <span
+                                    v-if="testData.length ===0"
+                                    style="color: red">温馨提示：<br/>选择左侧相应用例节点显示可拖拽的用例<br/>从左边拖拽用例至此区域组成任务列表<br/>
+                                    上下拖动此区域任务调整监控调用顺序
+                                </span>
+                                <div class='test-list'>
+                                    <draggable
+                                        v-model="testData"
+                                        @end="dragEnd"
+                                        @start="length = testData.length"
+                                        :options="{animation:200}"
+                                    >
+                                        <div
+                                            v-for="(test, index) in testData"
+                                            :key="index"
+                                            class="block block_test"
+                                            @mousemove="currentTest = index"
+                                        >
+                                        <span
+                                            class="block-method block_method_test block_method_color">Tasks</span>
+                                            <span class="block-test-name">{{test.name}}</span>
 
-                    </el-col>
+                                            <el-button
+                                                style="position: absolute; right: 12px; top: 8px"
+                                                v-show="currentTest === index"
+                                                type="danger"
+                                                icon="el-icon-delete"
+                                                circle size="mini"
+                                                @click="testData.splice(index, 1)"
+                                            >
+                                            </el-button>
+                                        </div>
+                                    </draggable>
+                                </div>
 
-                </el-row>
-            </div>
-
-
-        </el-main>
-
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-main>
+        </template>
     </el-container>
 
 
 </template>
 
 <script>
+    import draggable from 'vuedraggable'
 
     export default {
 
@@ -149,10 +189,19 @@
                 this.$refs.tree2.filter(val);
             },
         },
+        components: {
+            draggable
+        },
 
         data() {
             return {
-                currentNode: '',
+                currentTest: '',
+                length: 0,
+                testData: [],
+                currentSuite: '',
+                search: '',
+                next: false,
+                node: '',
                 currentPage: 1,
                 filterText: '',
                 expand: '&#xe65f;',
@@ -163,47 +212,82 @@
                 },
                 ruleForm: {
                     name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: true,
-                    type: [],
-                    resource: '',
-                    desc: ''
+                    switch: true,
+                    corntab: '',
+                    strategy: '始终发送',
+                    receiver: '',
+                    copy: ''
                 },
                 rules: {
                     name: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' },
-                        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                        {required: true, message: '请输入任务名称', trigger: 'blur'},
+                        {min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur'}
                     ],
-                    region: [
-                        { required: true, message: '请选择活动区域', trigger: 'change' }
-                    ],
-                    date1: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-                    ],
-                    date2: [
-                        { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-                    ],
-                    type: [
-                        { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-                    ],
-                    resource: [
-                        { required: true, message: '请选择活动资源', trigger: 'change' }
-                    ],
-                    desc: [
-                        { required: true, message: '请填写活动形式', trigger: 'blur' }
+                    corntab: [
+                        {required: true, message: '请输入正确的corntab表达式', trigger: 'blur'}
                     ]
+
                 }
             }
         },
         methods: {
+            saveTask(){
+                var task = [];
+                for(let value of this.testData){
+                    task.push(value.id);
+                }
+                var form = this.ruleForm;
+                form["data"] = task ;
+                form["project"] = this.$route.params.id;
+                this.$api.addTask(form).then(resp => {
+                    if(!resp.success){
+                        this.$message.error(resp.msg)
+                    }else{
+                        this.$emit("changeStatus", false);
+                    }
+                })
+            },
+            dragEnd(event) {
+                if (this.testData.length > this.length) {
+                    this.testData.splice(this.length, 1)
+                }
+            },
+            drop(event) {
+                event.preventDefault();
+                this.testData.push(this.currentSuite);
+            },
+            allowDrop(event) {
+                event.preventDefault();
+            },
+            handlePageChange(val) {
+                this.$api.getTestPaginationBypage({
+                    params: {
+                        page: this.currentPage,
+                        node: this.node,
+                        project: this.$route.params.id,
+                        search: ''
+                    }
+                }).then(res => {
+                    this.suiteData = res;
+                })
+            },
+            handleCurrentChange(val) {
+                this.$api.getTestPaginationBypage({
+                    params: {
+                        page: this.currentPage,
+                        project: this.$route.params.id,
+                        node: this.node,
+                        search: this.search
+                    }
+                }).then(resp => {
+                    this.suiteData = resp;
+                })
+            },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        this.next = true;
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
@@ -221,26 +305,26 @@
                 })
             },
 
-            handleNodeClick(node, data) {
-                this.currentNode = node;
-                this.data = data;
+            handleNodeClick(node) {
+                this.node = node.id;
                 this.getTestList();
 
             },
-
             getTestList() {
                 this.$api.testList({
                     params: {
                         project: this.$route.params.id,
-                        node: this.currentNode.id
+                        node: this.node,
+                        search: this.search
                     }
                 }).then(resp => {
                     this.suiteData = resp;
                 })
-            },
+            }
         },
         mounted() {
             this.getTree();
+            this.getTestList();
         }
     }
 </script>

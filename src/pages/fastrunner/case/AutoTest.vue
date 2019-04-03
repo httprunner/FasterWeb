@@ -57,68 +57,32 @@
                         size="small"
                         icon="el-icon-edit-outline"
                         @click="renameNode"
-                    >节点重命名
+                    >重命名
                     </el-button>
-
 
                     <el-button
                         type="primary"
                         size="small"
-                        style="margin-left: 100px"
                         icon="el-icon-circle-plus-outline"
                         @click="buttonActivate=false"
                         :disabled="buttonActivate"
-                    >添加用例集
+                    >添加用例
                     </el-button>
-
-                    <el-button
-                        type="primary"
-                        plain
+                    &nbsp环境:
+                    <el-select
+                        placeholder="请选择"
                         size="small"
-                        icon="el-icon-upload"
-                        :disabled="buttonActivate"
-                    >导入用例
-                    </el-button>
-
-                    <el-button
-                        type="info"
-                        plain
-                        size="small"
-                        icon="el-icon-download"
-                        :disabled="buttonActivate"
-                    >导出用例
-                    </el-button>
-
-                    <el-button
-                        style="margin-left: 20px"
-                        type="primary"
-                        icon="el-icon-caret-right"
-                        circle
-                        size="mini"
-                        @click="run = !run"
-                    ></el-button>
-
-                    <el-button
-                        style="margin-left: 20px"
-                        type="danger"
-                        icon="el-icon-delete"
-                        circle
-                        size="mini"
-                        :disabled="buttonActivate"
-                        @click="del = !del"
-                    ></el-button>
-
-
-                    <el-tooltip
-                        class="item"
-                        effect="dark"
-                        content="可选配置"
-                        placement="top-start"
+                        tyle="margin-left: -6px"
+                        v-model="currentHost"
                     >
-                        <el-button plain size="small" icon="el-icon-view"></el-button>
-                    </el-tooltip>
-
-
+                        <el-option
+                            v-for="item in hostOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.name">
+                        </el-option>
+                    </el-select>
+                    &nbsp配置:
                     <el-select
                         placeholder="请选择"
                         size="small"
@@ -130,9 +94,31 @@
                             v-for="item in configOptions"
                             :key="item.id"
                             :label="item.name"
-                            :value="item.name">
+                            :value="item.name"
+                        >
                         </el-option>
                     </el-select>
+
+
+                    <el-button
+                        v-if="addTestActivate"
+                        style="margin-left: 20px"
+                        type="primary"
+                        icon="el-icon-caret-right"
+                        circle
+                        size="mini"
+                        @click="run = !run"
+                    ></el-button>
+
+                    <el-button
+                        v-if="addTestActivate"
+                        style="margin-left: 20px"
+                        type="danger"
+                        icon="el-icon-delete"
+                        circle
+                        size="mini"
+                        @click="del = !del"
+                    ></el-button>
 
                     <el-button
                         :disabled="addTestActivate"
@@ -196,6 +182,7 @@
                     v-on:testStep="handleTestStep"
                     :back="back"
                     :run="run"
+                    :host="currentHost"
                 >
                 </test-list>
 
@@ -206,6 +193,7 @@
                     :node="currentNode.id"
                     :testStepResp="testStepResp"
                     :config="currentConfig"
+                    :host="currentHost"
                     v-on:addSuccess="handleBackList"
                 >
                 </edit-test>
@@ -253,12 +241,14 @@
                         {min: 1, max: 50, message: '最多不超过50个字符', trigger: 'blur'}
                     ]
                 },
+                hostOptions:[],
                 back: false,
                 del: false,
                 run: false,
                 radio: '根节点',
                 addTestActivate: true,
                 currentConfig: '请选择',
+                currentHost:'请选择',
                 treeId: '',
                 maxId: '',
                 dialogVisible: false,
@@ -387,13 +377,22 @@
                     this.$set(data, 'children', []);
                 }
                 data.children.push(newChild);
-            }
+            },
+            getHost() {
+                this.$api.getAllHost(this.$route.params.id).then(resp => {
+                    this.hostOptions = resp;
+                    this.hostOptions.push({
+                        name: '请选择'
+                    })
+                })
+            },
 
         },
         name: "AutoTest",
         mounted() {
             this.getTree();
             this.getConfig();
+            this.getHost();
         }
     }
 </script>

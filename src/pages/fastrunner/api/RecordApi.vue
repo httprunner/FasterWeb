@@ -57,12 +57,11 @@
                         size="small"
                         icon="el-icon-edit-outline"
                         @click="renameNode"
-                    >节点重命名
+                    >重命名
                     </el-button>
 
 
                     <el-button
-                        style="margin-left: 100px"
                         :disabled="currentNode === '' "
                         type="primary"
                         size="small"
@@ -70,34 +69,21 @@
                         @click="initResponse = true"
                     >添加接口
                     </el-button>
-
-                    <el-button
-                        type="primary"
-                        plain
+                    &nbsp环境:
+                    <el-select
+                        placeholder="请选择"
                         size="small"
-                        icon="el-icon-upload"
-                        :disabled="currentNode === '' "
-                    >导入接口
-                    </el-button>
-                    <el-button
-                        type="info"
-                        plain
-                        size="small"
-                        icon="el-icon-download"
-                        :disabled="currentNode === '' "
-                    >导出接口
-                    </el-button>
-
-                    <el-tooltip
-                        class="item"
-                        effect="dark"
-                        content="可选配置"
-                        placement="top-start"
+                        tyle="margin-left: -6px"
+                        v-model="currentHost"
                     >
-                        <el-button plain size="small" icon="el-icon-view"></el-button>
-                    </el-tooltip>
-
-
+                        <el-option
+                            v-for="item in hostOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.name">
+                        </el-option>
+                    </el-select>
+                    &nbsp配置:
                     <el-select
                         placeholder="请选择"
                         size="small"
@@ -112,14 +98,8 @@
                         </el-option>
                     </el-select>
 
-                    <el-checkbox
-                        v-model="checked"
-                        style="margin-left: 40px;"
-                        :disabled="currentNode === ''"
-                    >全选
-                    </el-checkbox>
-
                     <el-button
+                        v-if="!addAPIFlag"
                         style="margin-left: 20px"
                         type="primary"
                         icon="el-icon-caret-right"
@@ -130,11 +110,11 @@
 
 
                     <el-button
+                        v-if="!addAPIFlag"
                         type="danger"
                         icon="el-icon-delete"
                         circle
                         size="mini"
-                        :disabled="currentNode === ''"
                         @click="del = !del"
                     ></el-button>
 
@@ -187,16 +167,17 @@
                     :response="response"
                     v-on:addSuccess="handleAddSuccess"
                     :config="currentConfig"
+                    :host="currentHost"
                 >
                 </api-body>
 
                 <api-list
                     v-show="!addAPIFlag"
-                    :checked="checked"
                     v-on:api="handleAPI"
                     :node="currentNode !== '' ? currentNode.id : '' "
                     :project="$route.params.id"
                     :config="currentConfig"
+                    :host="currentHost"
                     :del="del"
                     :back="back"
                     :run="run"
@@ -237,7 +218,7 @@
                             name: '',
                             times: 1,
                             url: '',
-                            method: 'GET',
+                            method: 'POST',
                             header: [{
                                 key: "",
                                 value: "",
@@ -287,9 +268,10 @@
         data() {
             return {
                 configOptions: [],
+                hostOptions: [],
                 currentConfig: '请选择',
+                currentHost: '请选择',
                 back: false,
-                checked: false,
                 del: false,
                 run: false,
                 response: '',
@@ -312,6 +294,7 @@
                 filterText: '',
                 expand: '&#xe65f;',
                 dataTree: [],
+
             }
         },
         methods: {
@@ -343,6 +326,16 @@
                     })
                 })
             },
+
+            getHost() {
+                this.$api.getAllHost(this.$route.params.id).then(resp => {
+                    this.hostOptions = resp;
+                    this.hostOptions.push({
+                        name: '请选择'
+                    })
+                })
+            },
+
             updateTree(mode) {
                 this.$api.updateTree(this.treeId, {
                     body: this.dataTree,
@@ -440,6 +433,7 @@
         mounted() {
             this.getTree();
             this.getConfig();
+            this.getHost();
         }
     }
 </script>

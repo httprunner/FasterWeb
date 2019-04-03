@@ -2,25 +2,32 @@
     <el-container>
         <el-header style="background-color: #F7F7F7;; padding: 0; height: 50px;">
             <div style="padding-top: 10px; margin-left: 10px; ">
-                <el-button
-                    type="primary"
-                    size="small"
-                    icon="el-icon-circle-check-outline"
-                    @click="handleConfirm"
-                    round
-                >
-                    点击保存
-                </el-button>
+                <el-row>
+                    <el-col :span="15">
+                        <el-button
+                            type="primary"
+                            size="small"
+                            icon="el-icon-circle-check-outline"
+                            @click="handleConfirm"
+                            round
+                        >
+                            点击保存
+                        </el-button>
 
-                <el-button
-                    icon="el-icon-caret-right"
-                    type="info"
-                    size="small"
-                    @click="handleRunCode"
-                    round
-                >
-                    在线运行
-                </el-button>
+                        <el-button
+                            icon="el-icon-caret-right"
+                            type="info"
+                            size="small"
+                            @click="handleRunCode"
+                            round
+                        >
+                            在线运行
+                       </el-button>
+                    </el-col>
+                    <el-col :span="9">
+                        <h2>调试控制台</h2>
+                    </el-col>
+                </el-row>
             </div>
 
         </el-header>
@@ -28,7 +35,7 @@
         <el-container>
             <el-main style="padding: 0; margin-left: 10px">
                 <el-row>
-                    <el-col>
+                    <el-col :span="15">
                         <editor
                             v-model="code.code"
                             @init="editorInit"
@@ -45,22 +52,20 @@
                         </editor>
                     </el-col>
 
-
-                </el-row>
-                <div style="border: 1px solid #ddd"></div>
-
-                <el-row>
-                    <el-col>
+                    <el-col :span="9">
                         <editor
                             v-model="resp.msg"
                             lang="text"
                             theme="monokai"
                             width="100%"
-                            :height="consoleHeight"
+                            :height="codeHeight"
                         >
                         </editor>
                     </el-col>
+
+
                 </el-row>
+
             </el-main>
         </el-container>
     </el-container>
@@ -72,7 +77,6 @@
         data() {
             return {
                 codeHeight: 500,
-                consoleHeight: 100,
                 code: {
                     code: '',
                     id: ''
@@ -98,10 +102,10 @@
                 })
             },
             editorInit() {
-                require('brace/ext/language_tools')
-                require('brace/mode/python')
-                require('brace/theme/monokai')
-                require('brace/snippets/python')
+                require('brace/ext/language_tools');
+                require('brace/mode/python');
+                require('brace/theme/monokai');
+                require('brace/snippets/python');
             },
             getDebugTalk() {
                 this.$api.getDebugtalk(this.$route.params.id).then(res => {
@@ -114,8 +118,7 @@
         },
         mounted() {
             this.getDebugTalk();
-            this.codeHeight = window.screen.height / 2;
-            this.consoleHeight = window.screen.height /2 - 250;
+            this.codeHeight = window.screen.height - 248;
         }
     }
 </script>

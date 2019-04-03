@@ -214,7 +214,7 @@
                 hooks: [],
                 parameters: [],
                 save: false,
-                activeTag: 'first',
+                activeTag: 'third',
             }
         },
         name: "ConfigBody"

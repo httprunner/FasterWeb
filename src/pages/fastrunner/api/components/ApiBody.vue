@@ -85,9 +85,9 @@
             >
                 <el-tab-pane label="Header" name="first">
                     <headers
-                            :save="save"
-                             v-on:header="handleHeader"
-                             :header="response ? response.body.header: [] ">
+                        :save="save"
+                        v-on:header="handleHeader"
+                        :header="response ? response.body.header: [] ">
                     </headers>
                 </el-tab-pane>
 
@@ -140,7 +140,7 @@
             </el-tabs>
 
         </div>
-        
+
 
     </div>
 
@@ -168,6 +168,9 @@
         },
 
         props: {
+            host: {
+                require: false
+            },
             nodeId: {
                 require: false
             },
@@ -278,10 +281,13 @@
                         name: this.name,
                         times: this.times,
                         project: this.project,
-                        config: this.config
+                        config: this.config,
+                        host:this.host
                     }).then(resp => {
                         this.summary = resp;
                         this.dialogTableVisible = true;
+                        this.loading = false;
+                    }).catch(resp => {
                         this.loading = false;
                     })
                 }
@@ -344,7 +350,7 @@
                 save: false,
                 run: false,
                 summary: {},
-                activeTag: 'first',
+                activeTag: 'second',
                 httpOptions: [{
                     label: 'GET',
                 }, {

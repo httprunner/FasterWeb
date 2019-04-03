@@ -1,6 +1,7 @@
 <template>
     <el-table
-        height="460"
+        highlight-current-row
+        :height="height"
         :data="tableData"
         style="width: 100%;"
         :border="false"
@@ -10,23 +11,35 @@
     >
         <el-table-column
             label="数据Key"
-            width="300">
+            width="400">
             <template slot-scope="scope">
-                <el-input clearable v-model="scope.row.key" placeholder="key 、 key-key1"></el-input>
+                <el-input
+                    type="textarea"
+                    :autosize="{ minRows: 2, maxRows: 8}"
+                    clearable
+                    v-model="scope.row.key"
+                    placeholder="key 、 key-key1"
+                ></el-input>
             </template>
         </el-table-column>
 
         <el-table-column
             label="数据内容"
-            width="650">
+            width="700">
             <template slot-scope="scope">
-                <el-input clearable v-model="scope.row.value" placeholder="${ fun() } 、 [ value ] 、 [ [ value1, value2 ] ]"></el-input>
+                <el-input
+                    type="textarea"
+                    :autosize="{ minRows: 2, maxRows: 8}"
+                    clearable
+                    v-model="scope.row.value"
+                    placeholder="${ fun() } 、 [ value ] 、 [ [ value1, value2 ] ]"
+                ></el-input>
             </template>
         </el-table-column>
 
         <el-table-column
             label="参数描述"
-            width="220">
+            width="250">
             <template slot-scope="scope">
                 <el-input clearable v-model="scope.row.desc" placeholder="参数简要描述"></el-input>
             </template>
@@ -63,6 +76,11 @@
             save: Boolean,
             parameters: {
                 require: false
+            }
+        },
+        computed:{
+            height() {
+                return window.screen.height - 440
             }
         },
         methods: {

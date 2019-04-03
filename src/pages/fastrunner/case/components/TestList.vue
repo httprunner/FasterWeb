@@ -4,7 +4,7 @@
             <div style="overflow: hidden">
                 <el-row :gutter="50">
                     <el-col :span="6" v-if="testData.count > 11">
-                        <el-input placeholder="请输入用例集名称" clearable v-model="search">
+                        <el-input placeholder="请输入用例名称" clearable v-model="search">
                             <el-button slot="append" icon="el-icon-search" @click="getTestList"></el-button>
                         </el-input>
                     </el-col>
@@ -37,7 +37,7 @@
                     </el-dialog>
 
                     <el-dialog
-                        title="Run TestSuite"
+                        title="Run Case"
                         :visible.sync="dialogTreeVisible"
                         width="45%"
                         :modal-append-to-body="false"
@@ -103,6 +103,7 @@
                   </span>
                     </el-dialog>
                     <el-table
+                        highlight-current-row
                         v-loading="loading"
                         ref="multipleTable"
                         :data="testData.results"
@@ -120,7 +121,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            label="用例集名称"
+                            label="用例名称"
                         >
                             <template slot-scope="scope">
                                 <div>{{scope.row.name}}</div>
@@ -132,6 +133,16 @@
                         >
                             <template slot-scope="scope">
                                 <div>{{scope.row.length}} 个</div>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            label="用例类型"
+                        >
+                            <template slot-scope="scope">
+                                <el-tag v-if="scope.row.tag==='冒烟用例'">{{scope.row.tag}}</el-tag>
+                                <el-tag v-if="scope.row.tag==='集成用例'" type="success">{{scope.row.tag}}</el-tag>
+                                <el-tag v-if="scope.row.tag==='监控脚本'" type="danger">{{scope.row.tag}}</el-tag>
                             </template>
                         </el-table-column>
 
@@ -204,6 +215,9 @@
             run: Boolean,
             back: Boolean,
             project: {
+                require: true
+            },
+            host: {
                 require: true
             },
             node: {
@@ -297,6 +311,7 @@
                     });
                 } else {
                     this.$api.runSuiteTree({
+                        "host":this.host,
                         "project": this.project,
                         "relation": relation,
                         "async": this.asyncs,
@@ -317,7 +332,7 @@
 
             handleRunTest(id, name) {
                 this.loading = true;
-                this.$api.runTestByPk(id, {params: {project: this.project, name: name}}).then(resp => {
+                this.$api.runTestByPk(id, {params: {project: this.project, name: name,host:this.host}}).then(resp => {
                     this.summary = resp;
                     this.dialogTableVisible = true;
                     this.loading = false;

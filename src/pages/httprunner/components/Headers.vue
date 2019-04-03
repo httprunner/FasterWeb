@@ -1,8 +1,9 @@
 <template>
     <el-table
-        height="460"
+        highlight-current-row
         :data="tableData"
-        style="width: 100%;"
+        :height="height"
+        style='width: 100%;'
         :border="false"
         @cell-mouse-enter="cellMouseEnter"
         @cell-mouse-leave="cellMouseLeave"
@@ -130,6 +131,11 @@
                 if (this.header.length !== 0) {
                     this.tableData = this.header;
                 }
+            }
+        },
+        computed:{
+            height() {
+                return window.screen.height - 440
             }
         },
         data() {
