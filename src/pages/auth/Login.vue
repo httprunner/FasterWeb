@@ -47,7 +47,7 @@
                                     </div>
                                 </div>
                                 <div class="form-foot">
-                                    <span>没有账户，<router-link to="/auto_api/register">立即注册</router-link></span>
+                                    <span>没有账户，<router-link to="/fastrunner/register">立即注册</router-link></span>
                                 </div>
 
                             </div>

@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                                 <div class="form-foot">
-                                    <span>已有账户，<router-link to="/auto_api/login">立即登陆</router-link></span>
+                                    <span>已有账户，<router-link to="/fastrunner/login">立即登陆</router-link></span>
                                 </div>
 
                             </div>
@@ -142,7 +142,7 @@
 
             handleRegisterSuccess(resp) {
                 if (resp['success']) {
-                    this.$router.push('/auto_api/login')
+                    this.$router.push('/fastrunner/login')
                 } else {
                     this.$message.error({
                         message: resp["msg"],
