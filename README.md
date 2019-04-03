@@ -17,7 +17,7 @@ npm run dev
 测试
 -----------
 
-1. open url(recommend chrome): http://localhost:8080/#/fastrunner/register
+1. open url(recommend chrome): http://localhost:8080/fastrunner/register
 
 ## Docker 部署 nginx模式
 --------------
